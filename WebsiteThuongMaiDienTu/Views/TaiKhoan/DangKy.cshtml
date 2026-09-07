@@ -1,0 +1,365 @@
+﻿@{
+    ViewBag.Title = "Đăng ký tài khoản";
+}
+
+<style>
+    .register-container {
+        max-width: 600px;
+        margin: 40px auto;
+    }
+
+    .register-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        padding: 40px;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .register-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--brand-dark);
+        margin-bottom: 8px;
+    }
+
+    .register-header p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .form-section {
+        margin-bottom: 32px;
+    }
+
+    .form-section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--brand-dark);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--brand-yellow);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .form-group label .required {
+        color: var(--brand-red);
+        margin-left: 4px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--brand-yellow);
+        box-shadow: 0 0 0 3px rgba(251, 216, 8, 0.1);
+    }
+
+    .form-control::placeholder {
+        color: #999;
+    }
+
+    .form-text {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 6px;
+        display: block;
+    }
+
+    .alert {
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+    }
+
+    .alert-danger {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef5350;
+    }
+
+    .alert-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #66bb6a;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 14px;
+        background: var(--brand-yellow);
+        color: var(--brand-dark);
+        border: none;
+        border-radius: 8px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-register:hover {
+        background: var(--brand-yellow-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(251, 216, 8, 0.4);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #eee;
+        color: #666;
+    }
+
+    .login-link a {
+        color: var(--brand-dark);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        color: var(--brand-red);
+        text-decoration: underline;
+    }
+
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 1.1rem;
+    }
+
+    .input-icon .form-control {
+        padding-left: 45px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .register-container {
+            margin: 20px auto;
+        }
+
+        .register-card {
+            padding: 24px;
+        }
+
+        .register-header h2 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <h2><i class="bi bi-person-plus-fill" style="color: var(--brand-yellow);"></i> Đăng ký tài khoản</h2>
+            <p>Tạo tài khoản mới để bắt đầu mua sắm</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.Error
+            </div>
+        }
+
+        @if (ViewBag.Success != null)
+        {
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle-fill"></i> @ViewBag.Success
+            </div>
+        }
+
+        <form method="post" action="@Url.Action("DangKy", "TaiKhoan")">
+            @Html.AntiForgeryToken()
+
+            <!-- Thông tin tài khoản -->
+            <div class="form-section">
+                <h3 class="form-section-title">
+                    <i class="bi bi-shield-lock"></i> Thông tin đăng nhập
+                </h3>
+
+                <div class="form-group">
+                    <label for="tendangnhap">
+                        Tên đăng nhập <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-person"></i>
+                        <input type="text"
+                               class="form-control"
+                               id="tendangnhap"
+                               name="tendangnhap"
+                               placeholder="Nhập tên đăng nhập"
+                               required
+                               maxlength="50" />
+                    </div>
+                    <small class="form-text">Tên đăng nhập dùng để truy cập hệ thống</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="matkhau">
+                        Mật khẩu <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-lock"></i>
+                        <input type="password"
+                               class="form-control"
+                               id="matkhau"
+                               name="matkhau"
+                               placeholder="Nhập mật khẩu"
+                               required
+                               minlength="6" />
+                    </div>
+                    <small class="form-text">Mật khẩu phải có ít nhất 6 ký tự</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="xacnhanmatkhau">
+                        Xác nhận mật khẩu <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-lock-fill"></i>
+                        <input type="password"
+                               class="form-control"
+                               id="xacnhanmatkhau"
+                               name="xacnhanmatkhau"
+                               placeholder="Nhập lại mật khẩu"
+                               required />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin cá nhân -->
+            <div class="form-section">
+                <h3 class="form-section-title">
+                    <i class="bi bi-person-vcard"></i> Thông tin cá nhân
+                </h3>
+
+                <div class="form-group">
+                    <label for="hoten">
+                        Họ và tên <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-person-badge"></i>
+                        <input type="text"
+                               class="form-control"
+                               id="hoten"
+                               name="hoten"
+                               placeholder="Nhập họ và tên"
+                               required
+                               maxlength="100" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sodienthoai">
+                        Số điện thoại <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-telephone"></i>
+                        <input type="tel"
+                               class="form-control"
+                               id="sodienthoai"
+                               name="sodienthoai"
+                               placeholder="Nhập số điện thoại"
+                               required
+                               pattern="[0-9]{10,11}"
+                               maxlength="15" />
+                    </div>
+                    <small class="form-text">Nhập 10-11 chữ số</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Nhập địa chỉ email" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="diachi">
+                        Địa chỉ <span class="required">*</span>
+                    </label>
+                    <div class="input-icon">
+                        <i class="bi bi-geo-alt"></i>
+                        <textarea class="form-control"
+                                  id="diachi"
+                                  name="diachi"
+                                  rows="3"
+                                  placeholder="Nhập địa chỉ chi tiết"
+                                  required
+                                  maxlength="200"
+                                  style="padding-left: 45px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">
+                <i class="bi bi-check-circle"></i> Đăng ký tài khoản
+            </button>
+        </form>
+
+        <div class="login-link">
+            Đã có tài khoản? <a href="@Url.Action("DangNhap", "TaiKhoan")">Đăng nhập ngay</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Validate password confirmation
+        document.getElementById('xacnhanmatkhau').addEventListener('input', function() {
+            var password = document.getElementById('matkhau').value;
+            var confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.setCustomValidity('Mật khẩu xác nhận không khớp');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        // Validate phone number
+        document.getElementById('sodienthoai').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+}

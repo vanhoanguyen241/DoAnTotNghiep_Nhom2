@@ -1,0 +1,316 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@{
+    // Lấy danh sách loại sản phẩm cho navbar
+    var db = new QLBanHang_Model();
+    var danhMucNavbar = db.loaisanphams.OrderBy(l => l.tenloaisanpham).Take(8).ToList();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - QLBanHang</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+        :root {
+            --brand-yellow: #FBD808;
+            --brand-yellow-dark: #F0C400;
+            --brand-dark: #1A1A1A;
+            --brand-red: #D32F2F;
+        }
+
+        body {
+            padding-top: 0; /* header không cố định theo Bootstrap mặc định, tự quản lý bên dưới */
+        }
+
+        .site-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* ===== Header trên cùng (nền vàng) ===== */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .header-top {
+            background: var(--brand-yellow);
+            padding: 10px 0;
+        }
+
+        .header-top-inner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--brand-dark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .search-form {
+            flex: 1 1 auto;
+            max-width: 640px;
+        }
+
+            .search-form .input-group {
+                border-radius: 6px;
+                overflow: hidden;
+            }
+
+        .search-input {
+            border: none;
+            height: 42px;
+            padding-left: 16px;
+        }
+
+            .search-input:focus {
+                box-shadow: none;
+                outline: none;
+            }
+
+        .search-btn {
+            background: var(--brand-dark);
+            color: var(--brand-yellow);
+            border: none;
+            width: 48px;
+        }
+
+            .search-btn:hover {
+                background: #000;
+                color: var(--brand-yellow);
+            }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+            .header-actions li {
+                margin-left: 22px;
+            }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--brand-dark);
+            text-decoration: none;
+            font-size: .78rem;
+            line-height: 1.15;
+            position: relative;
+            white-space: nowrap;
+        }
+
+            .action-item:hover {
+                color: #000;
+            }
+
+            .action-item i {
+                font-size: 1.15rem;
+                margin-bottom: 2px;
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -12px;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: .65rem;
+            padding: 1px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* ===== Thanh danh mục sản phẩm ===== */
+        .category-nav {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 1px 3px rgba(0,0,0,.05);
+        }
+
+            .category-nav ul {
+                display: flex;
+                gap: 4px;
+                margin: 0;
+                padding: 4px 0;
+                overflow-x: auto;
+                scrollbar-width: thin;
+            }
+
+            .category-nav a {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 12px;
+                color: #333;
+                text-decoration: none;
+                font-size: .9rem;
+                white-space: nowrap;
+                border-radius: 6px;
+                transition: background .15s ease, color .15s ease;
+            }
+
+                .category-nav a:hover {
+                    background: #FFF8E1;
+                    color: #B8860B;
+                }
+
+                .category-nav a i {
+                    color: #F2B600;
+                    font-size: 1rem;
+                }
+
+        /* ===== Responsive ===== */
+        @@media (max-width: 767px) {
+            .header-top-inner {
+                flex-wrap: wrap;
+                row-gap: 8px;
+            }
+
+            .search-form {
+                order: 3;
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .header-actions li {
+                margin-left: 14px;
+            }
+
+            .action-item span.action-label {
+                display: none; /* trên mobile chỉ hiện icon cho gọn */
+            }
+        }
+
+        .body-content {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+
+        <!-- Hàng 1: Logo + Tìm kiếm + Tài khoản/Giỏ hàng -->
+        <div class="header-top">
+            <div class="site-container header-top-inner">
+
+                <a href="@Url.Action("Index", "Home")" class="logo">
+                    <span class="logo-icon"><img src="~/Content/images/logo.png" /></span>
+                </a>
+
+                <form class="search-form" role="search" action="@Url.Action("DanhSach", "SanPham")" method="get">
+                    <div class="input-group">
+                        <input type="text" name="tukhoa" class="form-control search-input"
+                               placeholder="Bạn muốn mua gì hôm nay?" />
+                        <button class="btn search-btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <ul class="header-actions list-unstyled mb-0">
+
+                    <li>
+                        <a href="@Url.Action("Index", "GioHang")" class="action-item">
+                            <i class="bi bi-cart3"></i>
+                            <span class="cart-badge">0</span>
+                            <span class="action-label">Giỏ hàng</span>
+                        </a>
+                    </li>
+
+                    @if (Session["TenDangNhap"] != null)
+                    {
+                        <li>
+                            <a href="@Url.Action("ThongTin", "TaiKhoan")" class="action-item">
+                                <i class="bi bi-person-circle"></i>
+                                <span class="action-label">@Session["TenDangNhap"]</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("DangXuat", "TaiKhoan")" class="action-item">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span class="action-label">Đăng xuất</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="@Url.Action("DangNhap", "TaiKhoan")" class="action-item">
+                                <i class="bi bi-person"></i>
+                                <span class="action-label">Đăng nhập</span>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+        </div>
+
+        <!-- Hàng 2: Danh mục sản phẩm -->
+        <nav class="category-nav">
+            <div class="site-container">
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("DanhSach", "SanPham")"><i class="bi bi-grid-3x3-gap"></i> Tất cả sản phẩm</a></li>
+                    @foreach (var danhmuc in danhMucNavbar)
+                    {
+                        <li>
+                            <a href="@Url.Action("DanhSach", "SanPham", new { maloai = danhmuc.maloaisanpham })">
+                                <i class="bi bi-box"></i> @danhmuc.tenloaisanpham
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+
+    </header>
+
+    <div class="site-container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - QLBanHang</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
