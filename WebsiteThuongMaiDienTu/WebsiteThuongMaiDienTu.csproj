@@ -130,14 +130,18 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
+    <Compile Include="Filters\KhachHangOnlyAttribute.cs" />
+    <Compile Include="Filters\NhanVienOnlyAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\chitiethoadon.cs" />
     <Compile Include="Models\chuyenhang.cs" />
     <Compile Include="Models\donvisanxuat.cs" />
+    <Compile Include="Models\GioHangItem.cs" />
     <Compile Include="Models\hoadon.cs" />
     <Compile Include="Models\khachhang.cs" />
     <Compile Include="Models\loaisanpham.cs" />
@@ -164,9 +168,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\images\banner\banner1.png" />
-    <Content Include="Content\images\banner\banner2.png" />
-    <Content Include="Content\images\banner\banner3.png" />
+    <Content Include="Content\images\banner1.png" />
+    <Content Include="Content\images\banner2.png" />
+    <Content Include="Content\images\banner3.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -225,10 +229,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
     <Content Include="Views\SanPham\DanhSach.cshtml" />
+    <Content Include="Views\Shared\_DanhMucNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\images\sanpham\" />
+    <Folder Include="Views\Layout\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

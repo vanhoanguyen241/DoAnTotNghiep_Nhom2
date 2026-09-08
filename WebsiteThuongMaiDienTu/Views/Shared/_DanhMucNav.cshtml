@@ -1,0 +1,16 @@
+﻿@model IEnumerable<WebsiteThuongMaiDienTu.Models.loaisanpham>
+
+@* Partial view hiển thị danh mục sản phẩm trên thanh điều hướng.
+    Được gọi từ _Layout.cshtml bằng @Html.Action("DanhMucNav", "Layout").
+    Giữ nguyên cấu trúc HTML/class CSS cũ để không phá vỡ style đã có sẵn trong _Layout.cshtml. *@
+<ul class="list-unstyled">
+    <li><a href="@Url.Action("DanhSach", "SanPham")"><i class="bi bi-grid-3x3-gap"></i> Tất cả sản phẩm</a></li>
+    @foreach (var danhmuc in Model)
+    {
+        <li>
+            <a href="@Url.Action("DanhSach", "SanPham", new { maloai = danhmuc.maloaisanpham })">
+                <i class="bi bi-box"></i> @danhmuc.tenloaisanpham
+            </a>
+        </li>
+    }
+</ul>

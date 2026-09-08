@@ -1,9 +1,4 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
-@{
-    // Lấy danh sách loại sản phẩm cho navbar
-    var db = new QLBanHang_Model();
-    var danhMucNavbar = db.loaisanphams.OrderBy(l => l.tenloaisanpham).Take(8).ToList();
-}
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,12 +36,14 @@
 
         .header-top {
             background: var(--brand-yellow);
-            padding: 10px 0;
+            height: 56px;                /* chiều cao cố định — logo sẽ tràn xuống */
+            overflow: visible;           /* cho phép logo nhô ra */
         }
 
         .header-top-inner {
             display: flex;
             align-items: center;
+            height: 100%;
             gap: 20px;
         }
 
@@ -60,22 +57,25 @@
             color: var(--brand-dark);
             white-space: nowrap;
             flex-shrink: 0;
+            position: relative;
+            z-index: 1040;               /* logo phủ lên category-nav */
         }
 
         .logo-icon {
-            width: 180px;
-            height: 180px;
+            width: 120px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,.1));
         }
 
-        .logo-icon img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+            .logo-icon img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
 
         .search-form {
             flex: 1 1 auto;
@@ -159,13 +159,14 @@
             background: #fff;
             border-bottom: 1px solid #eee;
             box-shadow: 0 1px 3px rgba(0,0,0,.05);
+            position: relative;          /* nằm dưới logo */
         }
 
             .category-nav ul {
                 display: flex;
                 gap: 4px;
                 margin: 0;
-                padding: 4px 0;
+                padding: 4px 0 4px 140px; /* 120px logo + 20px gap */
                 overflow-x: auto;
                 scrollbar-width: thin;
             }
@@ -200,6 +201,15 @@
                 row-gap: 8px;
             }
 
+            .logo-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            .category-nav ul {
+                padding-left: 0;          /* mobile: không cần nhường chỗ logo */
+            }
+
             .search-form {
                 order: 3;
                 flex: 1 1 100%;
@@ -221,6 +231,11 @@
     </style>
 </head>
 <body>
+
+    @{
+        var gioHang = Session["GioHang"] as List<WebsiteThuongMaiDienTu.Models.GioHangItem>;
+        int soLuongGioHang = gioHang != null ? gioHang.Sum(x => x.SoLuong) : 0;
+    }
 
     <header class="site-header">
 
@@ -247,7 +262,7 @@
                     <li>
                         <a href="@Url.Action("Index", "GioHang")" class="action-item">
                             <i class="bi bi-cart3"></i>
-                            <span class="cart-badge">0</span>
+                            <span class="cart-badge">@soLuongGioHang</span>
                             <span class="action-label">Giỏ hàng</span>
                         </a>
                     </li>
@@ -285,17 +300,7 @@
         <!-- Hàng 2: Danh mục sản phẩm -->
         <nav class="category-nav">
             <div class="site-container">
-                <ul class="list-unstyled">
-                    <li><a href="@Url.Action("DanhSach", "SanPham")"><i class="bi bi-grid-3x3-gap"></i> Tất cả sản phẩm</a></li>
-                    @foreach (var danhmuc in danhMucNavbar)
-                    {
-                        <li>
-                            <a href="@Url.Action("DanhSach", "SanPham", new { maloai = danhmuc.maloaisanpham })">
-                                <i class="bi bi-box"></i> @danhmuc.tenloaisanpham
-                            </a>
-                        </li>
-                    }
-                </ul>
+                @Html.Action("DanhMucNav", "Layout")
             </div>
         </nav>
 
