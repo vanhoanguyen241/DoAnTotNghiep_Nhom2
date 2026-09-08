@@ -188,8 +188,8 @@ body {
 /* Mobile: ≤576px */
 @media (max-width: 576px) {
     .header-top {
-        height: auto;              /* cho phép header nở theo nội dung */
-        padding: 8px 0;
+        height: auto; /* cho phép header nở theo nội dung */
+        padding: 2px 0;
     }
 
     .header-top-inner {
@@ -198,29 +198,29 @@ body {
     }
 
     .logo-icon {
-        width: 48px;
-        height: 48px;
+        width: 100px;
+        height: 50px;
     }
 
     /* Chuyển search xuống hàng riêng */
     .search-form {
-        order: 10;                 /* đẩy xuống cuối */
+        order: 10; /* đẩy xuống cuối */
         flex: 1 1 100%;
         max-width: 100%;
         margin-right: 0;
     }
 
     .category-nav ul {
-        padding-left: 0;           /* không cần nhường chỗ logo */
+        padding-left: 0px; /* không cần nhường chỗ logo */
     }
 
-    .header-actions li {
-        margin-left: 14px;
+    .header-actions {
+        margin-left: 20%;
     }
 
-    .action-item span.action-label {
-        display: none;             /* chỉ hiện icon */
-    }
+        .header-actions li {
+            margin-left: 14px;
+        }
 }
 
 /* Tablet: 577px-768px */

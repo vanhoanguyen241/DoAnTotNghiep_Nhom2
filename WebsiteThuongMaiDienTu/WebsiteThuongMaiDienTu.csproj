@@ -129,10 +129,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
+    <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\KhachHangController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
-    <Compile Include="Controllers\SanPhamController.cs" />
+    <Compile Include="Controllers\SanPhamCongKhaiController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Filters\KhachHangOnlyAttribute.cs" />
     <Compile Include="Filters\NhanVienOnlyAttribute.cs" />
@@ -204,6 +208,13 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\LoaiSanPham\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\LoaiSanPham\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\LoaiSanPham\TaoMoi.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -229,14 +240,15 @@
     <Content Include="Views\TaiKhoan\DangNhap.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
-    <Content Include="Views\SanPham\DanhSach.cshtml" />
+    <Content Include="Views\SanPhamCongKhai\DanhSach.cshtml" />
     <Content Include="Views\Shared\_DanhMucNav.cshtml" />
-    <Content Include="Views\KhachHang\Index.cshtml" />
-    <Content Include="Views\KhachHang\TaoMoi.cshtml" />
-    <Content Include="Views\KhachHang\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\KhachHang\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\KhachHang\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\KhachHang\Sua.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Content\images\sanpham\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>

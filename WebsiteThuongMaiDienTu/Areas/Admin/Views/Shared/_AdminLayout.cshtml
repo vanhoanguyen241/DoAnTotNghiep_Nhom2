@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Quản trị QLBanHang</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="admin-wrapper d-flex">
+        <nav class="admin-sidebar">
+            <div class="admin-brand">QLBanHang <span>Admin</span></div>
+            <ul class="list-unstyled">
+                <li><a href="@Url.Action("Index", "Home", new { area = "Admin" })"><i class="bi bi-speedometer2"></i> Trang chủ</a></li>
+                <li><a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })"><i class="bi bi-people"></i> Khách hàng</a></li>
+                <li><a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })"><i class="bi bi-tags"></i> Loại sản phẩm</a></li>
+                <li><a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })"><i class="bi bi-building"></i> Nhà sản xuất</a></li>
+                <li><a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"><i class="bi bi-box-seam"></i> Sản phẩm</a></li>
+                <li><a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })"><i class="bi bi-clipboard-check"></i> Duyệt đơn</a></li>
+                <li><a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"><i class="bi bi-credit-card"></i> Thanh toán</a></li>
+                <li><a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })"><i class="bi bi-truck"></i> Giao hàng</a></li>
+                <li><a href="@Url.Action("DangXuat", "TaiKhoan", new { area = "" })"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a></li>
+            </ul>
+        </nav>
+        <main class="admin-content flex-grow-1">
+            <header class="admin-topbar">Xin chào, <strong>@Session["TenDangNhap"]</strong></header>
+            <div class="admin-body p-4">@RenderBody()</div>
+        </main>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

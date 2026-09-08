@@ -45,14 +45,16 @@ namespace WebsiteThuongMaiDienTu.Controllers
             {
                 Session["LoaiTaiKhoan"] = "NhanVien";
                 Session["MaNV"] = taikhoan.manv;
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
             else if (taikhoan.makh != null)
             {
                 Session["LoaiTaiKhoan"] = "KhachHang";
                 Session["MaKH"] = taikhoan.makh;
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         // GET: TaiKhoan/DangKy
@@ -121,7 +123,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 db.SaveChanges();
 
                 ViewBag.Success = "Đăng ký thành công! Vui lòng đăng nhập.";
-                return RedirectToAction("DangNhap");
+                return RedirectToAction("DangNhap", new { area = "" });
             }
             catch (Exception ex)
             {
@@ -134,7 +136,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
         public ActionResult DangXuat()
         {
             Session.Clear();
-            return RedirectToAction("DangNhap");
+            return RedirectToAction("DangNhap", new { area = "" });
         }
 
         protected override void Dispose(bool disposing)

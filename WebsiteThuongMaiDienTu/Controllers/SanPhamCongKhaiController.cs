@@ -7,7 +7,7 @@ using WebsiteThuongMaiDienTu.Models;
 
 namespace WebsiteThuongMaiDienTu.Controllers
 {
-    public class SanPhamController : Controller
+    public class SanPhamCongKhaiController : Controller
     {
         private QLBanHang_Model db = new QLBanHang_Model();
 

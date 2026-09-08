@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Filters;
 using WebsiteThuongMaiDienTu.Models;
 
-namespace WebsiteThuongMaiDienTu.Controllers
+namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 {
     // Module 2 — Quản lý khách hàng. Chỉ Nhân viên mới được truy cập toàn bộ Controller này.
     [NhanVienOnly]
