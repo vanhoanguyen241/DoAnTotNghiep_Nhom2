@@ -130,6 +130,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
@@ -230,6 +231,9 @@
     <Content Include="Views\TaiKhoan\DangKy.cshtml" />
     <Content Include="Views\SanPham\DanhSach.cshtml" />
     <Content Include="Views\Shared\_DanhMucNav.cshtml" />
+    <Content Include="Views\KhachHang\Index.cshtml" />
+    <Content Include="Views\KhachHang\TaoMoi.cshtml" />
+    <Content Include="Views\KhachHang\Sua.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
