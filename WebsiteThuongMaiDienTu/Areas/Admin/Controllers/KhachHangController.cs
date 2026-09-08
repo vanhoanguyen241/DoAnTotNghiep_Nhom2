@@ -1,169 +1,93 @@
 ﻿using System;
-using System.Data.Entity.Infrastructure;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
 namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 {
-    // Module 2 — Quản lý khách hàng. Chỉ Nhân viên mới được truy cập toàn bộ Controller này.
     public class KhachHangController : BaseAdminController
     {
-        private QLBanHang_Model db = new QLBanHang_Model();
+        QLBanHang_Model db = new QLBanHang_Model();
 
-        // GET: KhachHang
-        public ActionResult Index(string tukhoa, int? page)
+        // GET: Admin/KhachHang
+        public ActionResult Index()
         {
-            int pageSize = 10;
-            int pageNumber = page ?? 1;
-
-            var khachhangs = db.khachhangs.AsQueryable();
-
-            if (!string.IsNullOrEmpty(tukhoa))
-            {
-                khachhangs = khachhangs.Where(kh =>
-                    kh.hoten.Contains(tukhoa) ||
-                    (kh.SDT != null && kh.SDT.Contains(tukhoa)));
-                ViewBag.TuKhoa = tukhoa;
-            }
-
-            khachhangs = khachhangs.OrderByDescending(kh => kh.makh);
-
-            int tongSo = khachhangs.Count();
-            int tongSoTrang = (int)Math.Ceiling((double)tongSo / pageSize);
-
-            ViewBag.TongSo = tongSo;
-            ViewBag.TongSoTrang = tongSoTrang;
-            ViewBag.TrangHienTai = pageNumber;
-
-            var danhSach = khachhangs
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            return View(danhSach);
+            var listkh = db.khachhangs.ToList();
+            return View(listkh);
         }
 
-        // GET: KhachHang/TaoMoi
+        // GET: Admin/KhachHang/TaoMoi
+        [HttpGet]
         public ActionResult TaoMoi()
         {
             return View();
         }
 
-        // POST: KhachHang/TaoMoi
+        // POST: Admin/KhachHang/TaoMoi
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult TaoMoi(khachhang model)
+        public ActionResult TaoMoi(FormCollection collection)
         {
-            ValidateSDT(model);
+            khachhang kh = new khachhang();
+            kh.makh = int.Parse(collection["txt_makh"]);
+            kh.hoten = collection["txt_hoten"];
+            kh.diachi = collection["txt_diachi"];
+            kh.SDT = collection["txt_sdt"];
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            db.khachhangs.Add(model);
+            db.khachhangs.Add(kh);
             db.SaveChanges();
-
-            TempData["ThongBao"] = "Thêm khách hàng thành công.";
             return RedirectToAction("Index");
         }
 
-        // GET: KhachHang/Sua/5
+        // GET: Admin/KhachHang/Sua/5
+        [HttpGet]
         public ActionResult Sua(int id)
         {
-            var khachhang = db.khachhangs.Find(id);
-            if (khachhang == null)
+            var kh = db.khachhangs.Find(id);
+            if (kh == null)
             {
                 return HttpNotFound();
             }
-
-            return View(khachhang);
+            return View(kh);
         }
 
-        // POST: KhachHang/Sua/5
+        // POST: Admin/KhachHang/Sua/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Sua(int id, khachhang model)
+        public ActionResult Sua(FormCollection collection)
         {
-            if (id != model.makh)
+            int id = int.Parse(collection["txt_makh"]);
+            var sua_kh = db.khachhangs.Find(id);
+
+            if (sua_kh != null)
             {
-                return HttpNotFound();
+                sua_kh.hoten = collection["txt_hoten"];
+                sua_kh.diachi = collection["txt_diachi"];
+                sua_kh.SDT = collection["txt_sdt"];
+                db.SaveChanges();
             }
-
-            ValidateSDT(model);
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var khachhang = db.khachhangs.Find(id);
-            if (khachhang == null)
-            {
-                return HttpNotFound();
-            }
-
-            khachhang.hoten = model.hoten;
-            khachhang.diachi = model.diachi;
-            khachhang.SDT = model.SDT;
-
-            db.SaveChanges();
-
-            TempData["ThongBao"] = "Cập nhật khách hàng thành công.";
             return RedirectToAction("Index");
         }
 
-        // POST: KhachHang/Xoa/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        // GET: Admin/KhachHang/Xoa/5
         public ActionResult Xoa(int id)
         {
-            var khachhang = db.khachhangs.Find(id);
-            if (khachhang == null)
+            var xoa_kh = db.khachhangs.Find(id);
+            if (xoa_kh != null)
             {
-                return HttpNotFound();
-            }
-
-            // Quy tắc: không xóa khách đã có hóa đơn.
-            bool coHoaDon = db.hoadons.Any(hd => hd.makh == id);
-            if (coHoaDon)
-            {
-                TempData["Loi"] = "Không thể xóa khách hàng \"" + khachhang.hoten + "\" vì đã có hóa đơn trong hệ thống.";
-                return RedirectToAction("Index");
-            }
-
-            try
-            {
-                // Khách có tài khoản thì xóa tài khoản liên quan trước, sau đó mới xóa khách.
-                var taikhoansLienQuan = db.taikhoans.Where(tk => tk.makh == id).ToList();
-                foreach (var tk in taikhoansLienQuan)
+                // Không cho xóa nếu đã có hóa đơn
+                bool coHoaDon = db.hoadons.Any(hd => hd.makh == id);
+                if (coHoaDon)
                 {
-                    db.taikhoans.Remove(tk);
+                    TempData["ThongBao"] = "Không thể xóa khách hàng \"" + xoa_kh.hoten + "\" vì đã có hóa đơn!";
+                    return RedirectToAction("Index");
                 }
 
-                db.khachhangs.Remove(khachhang);
+                db.khachhangs.Remove(xoa_kh);
                 db.SaveChanges();
-
-                TempData["ThongBao"] = "Xóa khách hàng thành công.";
+                TempData["ThongBao"] = "Xóa khách hàng thành công!";
             }
-            catch (DbUpdateException)
-            {
-                TempData["Loi"] = "Không thể xóa khách hàng này vì dữ liệu đang được tham chiếu ở nơi khác.";
-            }
-
             return RedirectToAction("Index");
-        }
-
-        // Validate số điện thoại: nếu có nhập thì bắt buộc đúng 10-11 chữ số.
-        // hoten và diachi đã được validate tự động qua [Required] trên model khachhang.
-        private void ValidateSDT(khachhang model)
-        {
-            if (!string.IsNullOrWhiteSpace(model.SDT) && !Regex.IsMatch(model.SDT, @"^[0-9]{10,11}$"))
-            {
-                ModelState.AddModelError("SDT", "Số điện thoại phải gồm 10-11 chữ số.");
-            }
         }
 
         protected override void Dispose(bool disposing)

@@ -1,50 +1,44 @@
-﻿@model WebsiteThuongMaiDienTu.Models.khachhang
-
-@{
+﻿@{
     ViewBag.Title = "Thêm khách hàng";
 }
 
-<div class="kh-form-container">
-    <div class="kh-form-card">
-        <div class="kh-form-header">
-            <h2><i class="bi bi-person-plus-fill" style="color: var(--brand-yellow);"></i> Thêm khách hàng</h2>
+<div class="row justify-content-center pt-2">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-light shadow-sm">
+            <div class="card-header bg-white border-bottom py-3">
+                <h1 class="h5 m-0 fw-bold text-dark">Thêm khách hàng mới</h1>
+            </div>
+            <div class="card-body p-4">
+                @using (Html.BeginForm("TaoMoi", "KhachHang", new { area = "Admin" }, FormMethod.Post, new { id = "formThemKH", autocomplete = "off" }))
+                {
+                    <div class="mb-3">
+                        <label for="txt_makh" class="form-label text-muted fs-7 text-uppercase fw-bold">Mã khách hàng</label>
+                        <input type="number" id="txt_makh" name="txt_makh" class="form-control font-monospace"
+                               placeholder="Ví dụ: 1, 2, 3..." required aria-required="true" />
+                        <div class="form-text fs-8 text-muted">Mã định danh duy nhất (số nguyên).</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_hoten" class="form-label text-muted fs-7 text-uppercase fw-bold">Họ tên</label>
+                        <input type="text" id="txt_hoten" name="txt_hoten" class="form-control"
+                               placeholder="Nhập họ và tên khách hàng" required aria-required="true" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_diachi" class="form-label text-muted fs-7 text-uppercase fw-bold">Địa chỉ</label>
+                        <input type="text" id="txt_diachi" name="txt_diachi" class="form-control"
+                               placeholder="Nhập địa chỉ" required aria-required="true" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="txt_sdt" class="form-label text-muted fs-7 text-uppercase fw-bold">Số điện thoại</label>
+                        <input type="text" id="txt_sdt" name="txt_sdt" class="form-control"
+                               placeholder="Nhập 10-11 chữ số (không bắt buộc)" />
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end pt-2 border-top">
+                        @Html.ActionLink("Hủy bỏ", "Index", "KhachHang", new { area = "Admin" },
+                            new { @class = "btn btn-sm btn-light px-3 text-muted", role = "button" })
+                        <button type="submit" class="btn btn-sm btn-primary px-4 fw-bold shadow-sm">Xác nhận Lưu</button>
+                    </div>
+                }
+            </div>
         </div>
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger" style="padding:14px 18px;border-radius:8px;margin-bottom:18px;background:#ffebee;color:#c62828;border:1px solid #ef5350;">
-                <i class="bi bi-exclamation-triangle-fill"></i> Vui lòng kiểm tra lại thông tin bên dưới.
-            </div>
-        }
-
-        <form method="post" action="@Url.Action("TaoMoi")">
-            @Html.AntiForgeryToken()
-
-            <div class="form-group">
-                <label>Họ tên <span class="required">*</span></label>
-                <input type="text" name="hoten" class="form-control" maxlength="100"
-                       value="@(Model != null ? Model.hoten : "")" required />
-                @Html.ValidationMessage("hoten", new { @class = "field-error" })
-            </div>
-
-            <div class="form-group">
-                <label>Địa chỉ <span class="required">*</span></label>
-                <textarea name="diachi" class="form-control" rows="3" maxlength="200" required>@(Model != null ? Model.diachi : "")</textarea>
-                @Html.ValidationMessage("diachi", new { @class = "field-error" })
-            </div>
-
-            <div class="form-group">
-                <label>Số điện thoại</label>
-                <input type="tel" name="SDT" class="form-control" maxlength="15"
-                       placeholder="Nhập 10-11 chữ số (không bắt buộc)"
-                       value="@(Model != null ? Model.SDT : "")" />
-                @Html.ValidationMessage("SDT", new { @class = "field-error" })
-            </div>
-
-            <div class="d-flex align-items-center gap-2 mt-3">
-                <button type="submit" class="btn-luu"><i class="bi bi-check-circle"></i> Lưu</button>
-                <a href="@Url.Action("Index")" class="btn-huy">Hủy</a>
-            </div>
-        </form>
     </div>
 </div>

@@ -1,140 +1,58 @@
-﻿@model IEnumerable<WebsiteThuongMaiDienTu.Models.khachhang>
-
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<khachhang>
 @{
     ViewBag.Title = "Quản lý khách hàng";
-    var tongSoTrang = ViewBag.TongSoTrang ?? 1;
-    var trangHienTai = ViewBag.TrangHienTai ?? 1;
-    var tukhoa = ViewBag.TuKhoa as string;
 }
 
-<div class="kh-container">
-    <div class="kh-card">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2 text-dark font-medium m-0">Danh mục: Khách hàng</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        @Html.ActionLink("+ Thêm khách hàng mới", "TaoMoi", "KhachHang", new { area = "Admin" },
+            new { @class = "btn btn-sm btn-primary d-inline-flex align-items-center fw-bold shadow-sm px-3 py-2", role = "button" })
+    </div>
+</div>
 
-        <div class="kh-header">
-            <h2><i class="bi bi-people-fill" style="color: var(--brand-yellow);"></i> Quản lý khách hàng</h2>
-            <a href="@Url.Action("TaoMoi")" class="btn-them">
-                <i class="bi bi-plus-circle"></i> Thêm khách hàng
-            </a>
-        </div>
+@if (TempData["ThongBao"] != null)
+{
+    <div class="alert alert-info">@TempData["ThongBao"]</div>
+}
 
-        @if (TempData["ThongBao"] != null)
-        {
-            <div class="alert alert-success">
-                <i class="bi bi-check-circle-fill"></i> @TempData["ThongBao"]
-            </div>
-        }
-
-        @if (TempData["Loi"] != null)
-        {
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Loi"]
-            </div>
-        }
-
-        <form method="get" action="@Url.Action("Index")" class="search-box mb-3">
-            <div class="input-group">
-                <input type="text" name="tukhoa" class="form-control" placeholder="Tìm theo họ tên hoặc SĐT..." value="@tukhoa" />
-                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
-            </div>
-        </form>
-
-        @if (Model != null && Model.Any())
-        {
-            <div style="overflow-x:auto;">
-                <table class="kh-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Họ tên</th>
-                            <th>Địa chỉ</th>
-                            <th>Điện thoại</th>
-                            <th style="width:110px;">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var kh in Model)
-                        {
-                            <tr>
-                                <td>@kh.makh</td>
-                                <td>@kh.hoten</td>
-                                <td>@kh.diachi</td>
-                                <td>@(string.IsNullOrEmpty(kh.SDT) ? "—" : kh.SDT)</td>
-                                <td>
-                                    <a href="@Url.Action("Sua", new { id = kh.makh })" class="btn-icon btn-sua" title="Sửa">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    <form method="post" action="@Url.Action("Xoa", new { id = kh.makh })"
-                                          style="display:inline;"
-                                          onsubmit="return confirm('Xóa khách hàng \'@Html.Raw(kh.hoten)\'? Hành động này không thể hoàn tác.');">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn-icon btn-xoa" title="Xóa">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            if (tongSoTrang > 1)
-            {
-                <div class="pagination-container">
-                    <ul class="pagination">
-                        <li class="@(trangHienTai == 1 ? "disabled" : "")">
-                            @if (trangHienTai > 1)
-                            {
-                                <a href="@Url.Action("Index", new { tukhoa = tukhoa, page = trangHienTai - 1 })"><i class="bi bi-chevron-left"></i></a>
-                            }
-                            else
-                            {
-                                <span><i class="bi bi-chevron-left"></i></span>
-                            }
-                        </li>
-
-                        @for (int i = 1; i <= tongSoTrang; i++)
-                        {
-                            if (i == 1 || i == tongSoTrang || (i >= trangHienTai - 2 && i <= trangHienTai + 2))
-                            {
-                                <li class="@(i == trangHienTai ? "active" : "")">
-                                    @if (i == trangHienTai)
-                                    {
-                                        <span>@i</span>
-                                    }
-                                    else
-                                    {
-                                        <a href="@Url.Action("Index", new { tukhoa = tukhoa, page = i })">@i</a>
-                                    }
-                                </li>
-                            }
-                            else if (i == trangHienTai - 3 || i == trangHienTai + 3)
-                            {
-                                <li class="disabled"><span>...</span></li>
-                            }
-                        }
-
-                        <li class="@(trangHienTai == tongSoTrang ? "disabled" : "")">
-                            @if (trangHienTai < tongSoTrang)
-                            {
-                                <a href="@Url.Action("Index", new { tukhoa = tukhoa, page = trangHienTai + 1 })"><i class="bi bi-chevron-right"></i></a>
-                            }
-                            else
-                            {
-                                <span><i class="bi bi-chevron-right"></i></span>
-                            }
-                        </li>
-                    </ul>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="empty-state">
-                <i class="bi bi-people"></i>
-                <p>Chưa có khách hàng nào@(string.IsNullOrEmpty(tukhoa) ? "." : " khớp với từ khóa tìm kiếm.")</p>
-            </div>
-        }
-
+<div class="card border-light shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" aria-label="Danh sách khách hàng">
+            <thead class="table-light text-uppercase fs-7 text-muted border-bottom">
+                <tr>
+                    <th scope="col" class="ps-3" style="width: 120px;">Mã KH</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col" class="text-end pe-3" style="width: 180px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody class="border-top-0">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-3 font-monospace text-muted fw-bold">@item.makh</td>
+                        <td class="text-dark fw-semibold">@item.hoten</td>
+                        <td class="text-dark fw-semibold">@item.diachi</td>
+                        <td class="text-dark fw-semibold">@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</td>
+                        <td class="text-end pe-3">
+                            <div class="btn-group btn-group-sm" role="group">
+                                @Html.ActionLink("Sửa", "Sua", "KhachHang", new { area = "Admin", id = item.makh },
+                                    new { @class = "btn btn-outline-secondary px-2 fs-7", title = "Chỉnh sửa thông tin khách hàng" })
+                                @Html.ActionLink("Xóa", "Xoa", "KhachHang", new { area = "Admin", id = item.makh },
+                                    new
+                                         {
+                                             @class = "btn btn-outline-danger px-2 fs-7",
+                                             title = "Xóa khách hàng",
+                                        onclick = "return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');"
+                                         })
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
