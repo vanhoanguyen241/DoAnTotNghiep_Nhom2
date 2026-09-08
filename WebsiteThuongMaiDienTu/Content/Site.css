@@ -1236,3 +1236,105 @@ body {
 .btn-huy:hover {
     color: #333;
 }
+
+/* ===== Trang quản trị - Admin Layout ===== */
+
+.admin-wrapper {
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 250px;
+    background: var(--brand-dark);
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 1040;
+    transition: transform .3s ease;
+}
+
+.admin-brand {
+    padding: 20px 24px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: .5px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.admin-brand span {
+    color: var(--brand-yellow);
+}
+
+.admin-sidebar ul {
+    padding: 12px 0;
+    margin: 0;
+}
+
+.admin-sidebar li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: rgba(255,255,255,.75);
+    text-decoration: none;
+    font-size: .92rem;
+    transition: all .2s ease;
+}
+
+.admin-sidebar li a:hover,
+.admin-sidebar li a.active {
+    color: #fff;
+    background: rgba(255,255,255,.08);
+}
+
+.admin-sidebar li a i {
+    font-size: 1.15rem;
+    width: 22px;
+    text-align: center;
+    color: var(--brand-yellow);
+}
+
+/* Content area (bên phải sidebar) */
+.admin-content {
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #f5f6fa;
+}
+
+/* Topbar */
+.admin-topbar {
+    background: #fff;
+    padding: 14px 24px;
+    border-bottom: 1px solid #eee;
+    font-size: .95rem;
+    color: #555;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+
+.admin-topbar strong {
+    color: var(--brand-dark);
+}
+
+/* Body content */
+.admin-body {
+    padding: 24px;
+}
+
+/* Admin - Responsive */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .admin-content {
+        margin-left: 0;
+    }
+}
