@@ -17,6 +17,7 @@ namespace WebsiteThuongMaiDienTu.Models
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int mahoadon { get; set; }
 
         public int makh { get; set; }

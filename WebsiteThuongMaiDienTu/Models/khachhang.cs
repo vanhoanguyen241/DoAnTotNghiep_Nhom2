@@ -17,6 +17,7 @@ namespace WebsiteThuongMaiDienTu.Models
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int makh { get; set; }
 
         [Required]

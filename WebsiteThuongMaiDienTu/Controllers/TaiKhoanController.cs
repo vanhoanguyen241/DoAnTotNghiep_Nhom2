@@ -9,7 +9,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
 {
     public class TaiKhoanController : Controller
     {
-        private QLBanHang_Model db = new QLBanHang_Model();
+        QLBanHang_Model db = new QLBanHang_Model();
 
         // GET: TaiKhoan/DangNhap
         public ActionResult DangNhap()
@@ -19,39 +19,49 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
         // POST: TaiKhoan/DangNhap
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DangNhap(taikhoan model)
+        public ActionResult DangNhap(FormCollection collection)
         {
-            if (string.IsNullOrEmpty(model.tendangnhap) || string.IsNullOrEmpty(model.matkhau))
+            var Tendangnhap = collection["txt_tendangnhap"];
+            var Matkhau = collection["txt_matkhau"];
+
+            if (string.IsNullOrEmpty(Tendangnhap) || string.IsNullOrEmpty(Matkhau))
             {
-                ModelState.AddModelError("", "Vui lòng nhập tên đăng nhập và mật khẩu");
-                return View(model);
+                ViewBag.ThongBao = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!";
+                return View();
             }
 
-            var taikhoan = db.taikhoans
-                .FirstOrDefault(t => t.tendangnhap == model.tendangnhap
-                                  && t.matkhau == model.matkhau);
+            var tk_login = (from s in db.taikhoans
+                            where s.tendangnhap == Tendangnhap && s.matkhau == Matkhau
+                            select s).FirstOrDefault();
 
-            if (taikhoan == null)
+            if (tk_login != null)
             {
-                ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng");
-                return View(model);
+                Session["TenDangNhap"] = tk_login.tendangnhap;
+
+                if (tk_login.manv != null)
+                {
+                    Session["LoaiTaiKhoan"] = "NhanVien";
+                    Session["MaNV"] = tk_login.manv;
+
+                    // Lấy vai trò từ bảng nhanvien
+                    var nv = db.nhanviens.Find(tk_login.manv);
+                    if (nv != null)
+                    {
+                        Session["VaiTro"] = nv.vaitro; // Lưu 'Admin' hoặc 'NhanVien'
+                    }
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+            else if (tk_login.makh != null)
+                {
+                    Session["LoaiTaiKhoan"] = "KhachHang";
+                    Session["MaKH"] = tk_login.makh;
+                    return RedirectToAction("Index", "Home", new { area = "" });
+                }
             }
-
-            // Lưu thông tin đăng nhập vào Session
-            Session["TenDangNhap"] = taikhoan.tendangnhap;
-
-            if (taikhoan.manv != null)
+            else
             {
-                Session["LoaiTaiKhoan"] = "NhanVien";
-                Session["MaNV"] = taikhoan.manv;
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
-            }
-            else if (taikhoan.makh != null)
-            {
-                Session["LoaiTaiKhoan"] = "KhachHang";
-                Session["MaKH"] = taikhoan.makh;
-                return RedirectToAction("Index", "Home", new { area = "" });
+                ViewBag.ThongBao = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                return View();
             }
 
             return RedirectToAction("Index", "Home", new { area = "" });
@@ -65,87 +75,81 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
         // POST: TaiKhoan/DangKy
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DangKy(string tendangnhap, string matkhau, string xacnhanmatkhau,
-                                    string hoten, string diachi, string sodienthoai, string email)
+        public ActionResult DangKy(FormCollection collection)
         {
-            // Kiểm tra các trường bắt buộc
-            if (string.IsNullOrEmpty(tendangnhap) || string.IsNullOrEmpty(matkhau) ||
-                string.IsNullOrEmpty(hoten) || string.IsNullOrEmpty(diachi) || string.IsNullOrEmpty(sodienthoai))
+            var Tendangnhap = collection["txt_tendangnhap"];
+            var Matkhau = collection["txt_matkhau"];
+            var Xacnhanmk = collection["txt_xacnhanmk"];
+            var Hoten = collection["txt_hoten"];
+            var Diachi = collection["txt_diachi"];
+            var Sodienthoai = collection["txt_sdt"];
+
+            // Kiểm tra dữ liệu bắt buộc
+            if (string.IsNullOrEmpty(Tendangnhap) || string.IsNullOrEmpty(Matkhau) ||
+                string.IsNullOrEmpty(Xacnhanmk) || string.IsNullOrEmpty(Hoten) ||
+                string.IsNullOrEmpty(Diachi) || string.IsNullOrEmpty(Sodienthoai))
             {
-                ViewBag.Error = "Vui lòng điền đầy đủ thông tin bắt buộc";
+                ViewBag.ThongBao = "Vui lòng điền đầy đủ thông tin bắt buộc!";
                 return View();
             }
 
-            // Kiểm tra mật khẩu
-            if (matkhau.Length < 6)
+            if (Matkhau.Length < 6)
             {
-                ViewBag.Error = "Mật khẩu phải có ít nhất 6 ký tự";
+                ViewBag.ThongBao = "Mật khẩu phải có ít nhất 6 ký tự!";
                 return View();
             }
 
-            if (matkhau != xacnhanmatkhau)
+            if (Matkhau != Xacnhanmk)
             {
-                ViewBag.Error = "Mật khẩu xác nhận không khớp";
+                ViewBag.ThongBao = "Mật khẩu xác nhận không khớp!";
                 return View();
             }
 
-            // Kiểm tra tên đăng nhập đã tồn tại
-            var taikhoanTonTai = db.taikhoans.FirstOrDefault(t => t.tendangnhap == tendangnhap);
-            if (taikhoanTonTai != null)
+            // Kiểm tra tên đăng nhập đã tồn tại chưa
+            var tk_tontai = (from t in db.taikhoans
+                             where t.tendangnhap == Tendangnhap
+                             select t).FirstOrDefault();
+
+            if (tk_tontai != null)
             {
-                ViewBag.Error = "Tên đăng nhập đã tồn tại";
+                ViewBag.ThongBao = "Tên đăng nhập đã tồn tại!";
                 return View();
             }
 
-            try
-            {
-                // Tạo khách hàng mới
-                var khachhangMoi = new khachhang
-                {
-                    hoten = hoten,
-                    diachi = diachi,
-                    SDT = sodienthoai
-                };
+            // Lấy mã khách hàng lớn nhất hiện có trong bảng khachhang
+            var maKhLonNhat = (from kh in db.khachhangs
+                               select kh.makh).DefaultIfEmpty(0).Max();
 
-                db.khachhangs.Add(khachhangMoi);
-                db.SaveChanges();
+            int maKhMoi = maKhLonNhat + 1;
 
-                // Tạo tài khoản mới
-                var taikhoanMoi = new taikhoan
-                {
-                    tendangnhap = tendangnhap,
-                    matkhau = matkhau,
-                    makh = khachhangMoi.makh
-                };
+            // Tạo khách hàng mới
+            khachhang kh_moi = new khachhang();
+            kh_moi.makh = maKhMoi;
+            kh_moi.hoten = Hoten;
+            kh_moi.diachi = Diachi;
+            kh_moi.SDT = Sodienthoai;
 
-                db.taikhoans.Add(taikhoanMoi);
-                db.SaveChanges();
+            db.khachhangs.Add(kh_moi);
+            db.SaveChanges();
 
-                ViewBag.Success = "Đăng ký thành công! Vui lòng đăng nhập.";
-                return RedirectToAction("DangNhap", new { area = "" });
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Có lỗi xảy ra: " + ex.Message;
-                return View();
-            }
+            // Tạo tài khoản mới
+            taikhoan tk_moi = new taikhoan();
+            tk_moi.tendangnhap = Tendangnhap;
+            tk_moi.matkhau = Matkhau;
+            tk_moi.makh = maKhMoi;
+
+            db.taikhoans.Add(tk_moi);
+            db.SaveChanges();
+
+            ViewBag.ThongBaoThanhCong = "Đăng ký thành công! Vui lòng đăng nhập.";
+            return View();
         }
 
         // GET: TaiKhoan/DangXuat
         public ActionResult DangXuat()
         {
             Session.Clear();
-            return RedirectToAction("DangNhap", new { area = "" });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("DangNhap", "TaiKhoan", new { area = "" });
         }
     }
 }

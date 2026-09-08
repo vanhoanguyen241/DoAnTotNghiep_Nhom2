@@ -9,23 +9,22 @@
             <p>Tạo tài khoản mới để bắt đầu mua sắm</p>
         </div>
 
-        @if (ViewBag.Error != null)
+        @if (ViewBag.ThongBao != null)
         {
             <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.Error
+                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
             </div>
         }
 
-        @if (ViewBag.Success != null)
+        @if (ViewBag.ThongBaoThanhCong != null)
         {
             <div class="alert alert-success">
-                <i class="bi bi-check-circle-fill"></i> @ViewBag.Success
+                <i class="bi bi-check-circle-fill"></i> @ViewBag.ThongBaoThanhCong
             </div>
         }
 
-        <form method="post" action="@Url.Action("DangKy", "TaiKhoan")">
-            @Html.AntiForgeryToken()
-
+        @using (Html.BeginForm("DangKy", "TaiKhoan", FormMethod.Post))
+        {
             <!-- Thông tin tài khoản -->
             <div class="form-section">
                 <h3 class="form-section-title">
@@ -33,32 +32,27 @@
                 </h3>
 
                 <div class="form-group">
-                    <label for="tendangnhap">
-                        Tên đăng nhập <span class="required">*</span>
-                    </label>
+                    <label for="txt_tendangnhap">Tên đăng nhập <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-person"></i>
                         <input type="text"
                                class="form-control"
-                               id="tendangnhap"
-                               name="tendangnhap"
+                               id="txt_tendangnhap"
+                               name="txt_tendangnhap"
                                placeholder="Nhập tên đăng nhập"
                                required
                                maxlength="50" />
                     </div>
-                    <small class="form-text">Tên đăng nhập dùng để truy cập hệ thống</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="matkhau">
-                        Mật khẩu <span class="required">*</span>
-                    </label>
+                    <label for="txt_matkhau">Mật khẩu <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-lock"></i>
                         <input type="password"
                                class="form-control"
-                               id="matkhau"
-                               name="matkhau"
+                               id="txt_matkhau"
+                               name="txt_matkhau"
                                placeholder="Nhập mật khẩu"
                                required
                                minlength="6" />
@@ -67,15 +61,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="xacnhanmatkhau">
-                        Xác nhận mật khẩu <span class="required">*</span>
-                    </label>
+                    <label for="txt_xacnhanmk">Xác nhận mật khẩu <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-lock-fill"></i>
                         <input type="password"
                                class="form-control"
-                               id="xacnhanmatkhau"
-                               name="xacnhanmatkhau"
+                               id="txt_xacnhanmk"
+                               name="txt_xacnhanmk"
                                placeholder="Nhập lại mật khẩu"
                                required />
                     </div>
@@ -85,19 +77,17 @@
             <!-- Thông tin cá nhân -->
             <div class="form-section">
                 <h3 class="form-section-title">
-                    <i class="bi bi-person-vcard"></i> Thông tin cá nhân
+                    <i class="bi bi-person-vcard"></i> Thông tin khách hàng
                 </h3>
 
                 <div class="form-group">
-                    <label for="hoten">
-                        Họ và tên <span class="required">*</span>
-                    </label>
+                    <label for="txt_hoten">Họ và tên <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-person-badge"></i>
                         <input type="text"
                                class="form-control"
-                               id="hoten"
-                               name="hoten"
+                               id="txt_hoten"
+                               name="txt_hoten"
                                placeholder="Nhập họ và tên"
                                required
                                maxlength="100" />
@@ -105,46 +95,26 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="sodienthoai">
-                        Số điện thoại <span class="required">*</span>
-                    </label>
+                    <label for="txt_sdt">Số điện thoại <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-telephone"></i>
                         <input type="tel"
                                class="form-control"
-                               id="sodienthoai"
-                               name="sodienthoai"
+                               id="txt_sdt"
+                               name="txt_sdt"
                                placeholder="Nhập số điện thoại"
                                required
-                               pattern="[0-9]{10,11}"
                                maxlength="15" />
                     </div>
-                    <small class="form-text">Nhập 10-11 chữ số</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">
-                        Email
-                    </label>
-                    <div class="input-icon">
-                        <i class="bi bi-envelope"></i>
-                        <input type="email"
-                               class="form-control"
-                               id="email"
-                               name="email"
-                               placeholder="Nhập địa chỉ email" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="diachi">
-                        Địa chỉ <span class="required">*</span>
-                    </label>
+                    <label for="txt_diachi">Địa chỉ <span class="required">*</span></label>
                     <div class="input-icon">
                         <i class="bi bi-geo-alt"></i>
                         <textarea class="form-control"
-                                  id="diachi"
-                                  name="diachi"
+                                  id="txt_diachi"
+                                  name="txt_diachi"
                                   rows="3"
                                   placeholder="Nhập địa chỉ chi tiết"
                                   required
@@ -157,31 +127,10 @@
             <button type="submit" class="btn-register">
                 <i class="bi bi-check-circle"></i> Đăng ký tài khoản
             </button>
-        </form>
+        }
 
         <div class="login-link">
             Đã có tài khoản? <a href="@Url.Action("DangNhap", "TaiKhoan")">Đăng nhập ngay</a>
         </div>
     </div>
 </div>
-
-@section scripts {
-    <script>
-        // Validate password confirmation
-        document.getElementById('xacnhanmatkhau').addEventListener('input', function() {
-            var password = document.getElementById('matkhau').value;
-            var confirmPassword = this.value;
-
-            if (confirmPassword && password !== confirmPassword) {
-                this.setCustomValidity('Mật khẩu xác nhận không khớp');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // Validate phone number
-        document.getElementById('sodienthoai').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-    </script>
-}

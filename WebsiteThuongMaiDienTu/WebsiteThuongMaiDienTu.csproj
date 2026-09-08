@@ -130,6 +130,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
@@ -138,8 +139,6 @@
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\SanPhamCongKhaiController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
-    <Compile Include="Filters\KhachHangOnlyAttribute.cs" />
-    <Compile Include="Filters\NhanVienOnlyAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,6 +248,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Views\BaseAdmin\" />
     <Folder Include="Content\images\sanpham\" />
     <Folder Include="Views\Layout\" />
   </ItemGroup>

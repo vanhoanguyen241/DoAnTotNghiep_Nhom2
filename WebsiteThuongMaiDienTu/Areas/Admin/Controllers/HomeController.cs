@@ -3,8 +3,7 @@ using WebsiteThuongMaiDienTu.Filters;
 
 namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 {
-    [NhanVienOnly]
-    public class HomeController : Controller
+    public class HomeController : BaseAdminController
     {
         public ActionResult Index() => View();
     }

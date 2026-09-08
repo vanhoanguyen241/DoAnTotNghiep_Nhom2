@@ -3,14 +3,12 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using WebsiteThuongMaiDienTu.Filters;
 using WebsiteThuongMaiDienTu.Models;
 
 namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 {
     // Module 2 — Quản lý khách hàng. Chỉ Nhân viên mới được truy cập toàn bộ Controller này.
-    [NhanVienOnly]
-    public class KhachHangController : Controller
+    public class KhachHangController : BaseAdminController
     {
         private QLBanHang_Model db = new QLBanHang_Model();
 

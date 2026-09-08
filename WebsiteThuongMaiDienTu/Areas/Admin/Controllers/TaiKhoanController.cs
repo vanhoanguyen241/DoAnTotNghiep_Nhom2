@@ -7,23 +7,14 @@ using WebsiteThuongMaiDienTu.Models;
 
 namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 {
-    public class TaiKhoanController : Controller
+    public class TaiKhoanController : BaseAdminController
     {
         private QLBanHang_Model db = new QLBanHang_Model();
         // GET: TaiKhoan/DangXuat
         public ActionResult DangXuat()
         {
             Session.Clear();
-            return RedirectToAction("DangNhap", new { area = "" });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("DangNhap", "TaiKhoan", new { area = "" });
         }
     }
 }

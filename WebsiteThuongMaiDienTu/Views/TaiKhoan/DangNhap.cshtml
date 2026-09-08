@@ -1,6 +1,4 @@
-﻿@model WebsiteThuongMaiDienTu.Models.taikhoan
-
-@{
+﻿@{
     ViewBag.Title = "Đăng nhập";
 }
 
@@ -11,59 +9,40 @@
             <p>Đăng nhập để tiếp tục mua sắm</p>
         </div>
 
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        @if (ViewBag.ThongBao != null)
         {
             <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ErrorMessage
+                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
             </div>
         }
 
         @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
         {
-            @Html.AntiForgeryToken()
-
-            if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    @Html.ValidationSummary(true, "", new { @class = "" })
-                </div>
-            }
-
             <div class="form-group">
-                <label for="tendangnhap">
-                    Tên đăng nhập <span class="required">*</span>
-                </label>
+                <label for="txt_tendangnhap">Tên đăng nhập <span class="required">*</span></label>
                 <div class="input-icon">
                     <i class="bi bi-person"></i>
-                    @Html.TextBoxFor(m => m.tendangnhap, new
-                    {
-                        @class = "form-control",
-                        placeholder = "Nhập tên đăng nhập",
-                        id = "tendangnhap",
-                        required = "required"
-                    })
+                    <input type="text"
+                           class="form-control"
+                           id="txt_tendangnhap"
+                           name="txt_tendangnhap"
+                           placeholder="Nhập tên đăng nhập"
+                           required
+                           autofocus />
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="matkhau">
-                    Mật khẩu <span class="required">*</span>
-                </label>
+                <label for="txt_matkhau">Mật khẩu <span class="required">*</span></label>
                 <div class="input-icon">
                     <i class="bi bi-lock"></i>
-                    @Html.PasswordFor(m => m.matkhau, new
-                    {
-                        @class = "form-control",
-                        placeholder = "Nhập mật khẩu",
-                        id = "matkhau",
-                        required = "required"
-                    })
+                    <input type="password"
+                           class="form-control"
+                           id="txt_matkhau"
+                           name="txt_matkhau"
+                           placeholder="Nhập mật khẩu"
+                           required />
                 </div>
-            </div>
-
-            <div class="form-options">
-                <a href="@Url.Action("QuenMatKhau", "TaiKhoan")" class="forgot-password">Quên mật khẩu?</a>
             </div>
 
             <button type="submit" class="btn-login">
@@ -76,7 +55,3 @@
         </div>
     </div>
 </div>
-
-@section scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

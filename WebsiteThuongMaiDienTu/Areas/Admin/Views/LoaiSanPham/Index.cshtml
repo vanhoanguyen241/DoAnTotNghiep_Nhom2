@@ -1,90 +1,112 @@
-﻿@model List<WebsiteThuongMaiDienTu.Models.loaisanpham>
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<loaisanpham>
 
 @{
-    ViewBag.Title = "Quản lý loại sản phẩm";
+    ViewBag.Title = "Quản lý Loại sản phẩm";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="mb-0"><i class="bi bi-tags"></i> Quản lý loại sản phẩm</h3>
-    <a href="@Url.Action("TaoMoi")" class="btn" style="background: var(--brand-yellow); color: var(--brand-dark); font-weight:600;">
-        <i class="bi bi-plus-lg"></i> Thêm loại sản phẩm
-    </a>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2 text-dark font-medium m-0">
+        Danh mục: Loại sản phẩm
+    </h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+        @Html.ActionLink(
+            "+ Thêm loại mới",
+            "TaoMoi",
+            "LoaiSanPham",
+            new { area = "Admin" },
+            new
+            {
+                @class = "btn btn-sm btn-primary d-inline-flex align-items-center fw-bold shadow-sm px-3 py-2",
+                role = "button"
+            }
+        )
+    </div>
 </div>
 
-@if (TempData["ThongBaoThanhCong"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["ThongBaoThanhCong"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["ThongBaoLoi"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["ThongBaoLoi"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-
-<div class="card shadow-sm border-0">
+<div class="card border-light shadow-sm">
     <div class="table-responsive">
+
         <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+
+            <thead class="table-light text-uppercase fs-7 text-muted border-bottom">
                 <tr>
-                    <th>Mã loại</th>
-                    <th>Tên loại sản phẩm</th>
-                    <th style="width: 160px;" class="text-end">Thao tác</th>
+                    <th class="ps-3" style="width:150px;">
+                        Mã loại
+                    </th>
+
+                    <th>
+                        Tên loại sản phẩm
+                    </th>
+
+                    <th class="text-end pe-3" style="width:180px;">
+                        Hành động
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                @if (Model != null && Model.Count > 0)
-                {
-                    foreach (var loai in Model)
-                    {
-                        <tr>
-                            <td>@loai.maloaisanpham</td>
-                            <td>@loai.tenloaisanpham</td>
-                            <td class="text-end">
-                                <a href="@Url.Action("Sua", new { id = loai.maloaisanpham })" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-pencil"></i> Sửa
-                                </a>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                        data-bs-toggle="modal" data-bs-target="#modalXoa@(loai.maloaisanpham)">
-                                    <i class="bi bi-trash"></i> Xóa
-                                </button>
-                            </td>
-                        </tr>
 
-                        <div class="modal fade" id="modalXoa@(loai.maloaisanpham)" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Xác nhận xóa</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Bạn có chắc muốn xóa loại sản phẩm <strong>@loai.tenloaisanpham</strong>?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        @using (Html.BeginForm("Xoa", "LoaiSanPham", new { id = loai.maloaisanpham }, FormMethod.Post))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-danger">Xóa</button>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                else
+            <tbody class="border-top-0">
+
+                @foreach (var item in Model)
                 {
                     <tr>
-                        <td colspan="3" class="text-center text-muted py-4">Chưa có loại sản phẩm nào.</td>
+
+                        <td class="ps-3 font-monospace text-muted fw-bold">
+                            @item.maloaisanpham
+                        </td>
+
+                        <td class="text-dark fw-semibold">
+                            @item.tenloaisanpham
+                        </td>
+
+                        <td class="text-end pe-3">
+
+                            <div class="btn-group btn-group-sm">
+
+                                @Html.ActionLink(
+                                    "Sửa",
+                                    "Sua",
+                                    "LoaiSanPham",
+                                    new
+                                    {
+                                        area = "Admin",
+                                        id = item.maloaisanpham
+                                    },
+                                    new
+                                    {
+                                        @class = "btn btn-outline-secondary px-2",
+                                        title = "Chỉnh sửa loại sản phẩm"
+                                    }
+                                )
+
+                                @Html.ActionLink(
+                                    "Xóa",
+                                    "Xoa",
+                                    "LoaiSanPham",
+                                    new
+                                    {
+                                        area = "Admin",
+                                        id = item.maloaisanpham
+                                    },
+                                    new
+                                    {
+                                        @class = "btn btn-outline-danger px-2",
+                                        title = "Xóa loại sản phẩm",
+                                        onclick = "return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?');"
+                                    }
+                                )
+
+                            </div>
+
+                        </td>
+
                     </tr>
                 }
+
             </tbody>
+
         </table>
+
     </div>
 </div>
