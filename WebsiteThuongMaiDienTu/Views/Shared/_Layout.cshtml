@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
+
 <body>
     @{
         var tenDangNhap = Session["TenDangNhap"] as string;
@@ -51,6 +52,18 @@
                         </button>
                     </div>
                 </form>
+
+                <!-- Dropdown sản phẩm - chỉ hiện trên mobile -->
+                <div class="mobile-product-dropdown">
+                    <button type="button" class="mobile-product-toggle" id="mobileProductToggle">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="action-label">Sản phẩm</span>
+                        <i class="bi bi-chevron-down nav-caret"></i>
+                    </button>
+                    <div class="mobile-product-menu" id="mobileProductMenu">
+                        @Html.Action("DanhMucNav", "Layout")
+                    </div>
+                </div>
 
                 <ul class="header-actions list-unstyled mb-0">
                     <li>
@@ -144,8 +157,65 @@
         </footer>
     </div>
 
+    <!-- Bottom navigation - chỉ hiện trên mobile -->
+    <nav class="mobile-bottom-nav">
+        <a href="@Url.Action("Index", "Home", new { area = "" })" class="bottom-nav-item">
+            <i class="bi bi-house-door"></i>
+            <span>Trang chủ</span>
+        </a>
+        <a href="#" class="bottom-nav-item">
+            <i class="bi bi-info-circle"></i>
+            <span>Giới thiệu</span>
+        </a>
+        <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="bottom-nav-item">
+            <i class="bi bi-cart3"></i>
+            <span>Giỏ hàng</span>
+            @if (soLuongGioHang > 0)
+            {
+                <span class="bottom-nav-badge">@soLuongGioHang</span>
+            }
+        </a>
+        <a href="#" class="bottom-nav-item">
+            <i class="bi bi-envelope"></i>
+            <span>Liên hệ</span>
+        </a>
+        @if (string.IsNullOrEmpty(tenDangNhap))
+        {
+            <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })" class="bottom-nav-item">
+                <i class="bi bi-person"></i>
+                <span>Đăng nhập</span>
+            </a>
+        }
+        else
+        {
+            <a href="@Url.Action("DangXuat", "TaiKhoan", new { area = "" })" class="bottom-nav-item">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Đăng xuất</span>
+            </a>
+        }
+    </nav>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toggle = document.getElementById('mobileProductToggle');
+            var dropdown = toggle ? toggle.closest('.mobile-product-dropdown') : null;
+            if (toggle && dropdown) {
+                toggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('open');
+                });
+                document.addEventListener('click', function (e) {
+                    if (!dropdown.contains(e.target)) {
+                        dropdown.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
