@@ -29,8 +29,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult TaoMoi(FormCollection collection)
         {
+            // Lấy mã khách hàng lớn nhất hiện có trong bảng khachhang
+            var maKhLonNhat = (from khach in db.khachhangs
+                               select khach.makh).DefaultIfEmpty(0).Max();
+
+            int maKhMoi = maKhLonNhat + 1;
             khachhang kh = new khachhang();
-            kh.makh = int.Parse(collection["txt_makh"]);
+            kh.makh = maKhMoi;
             kh.hoten = collection["txt_hoten"];
             kh.diachi = collection["txt_diachi"];
             kh.SDT = collection["txt_sdt"];

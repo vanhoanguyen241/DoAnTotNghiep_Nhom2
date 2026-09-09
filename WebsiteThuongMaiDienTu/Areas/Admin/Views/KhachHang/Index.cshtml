@@ -4,55 +4,54 @@
     ViewBag.Title = "Quản lý khách hàng";
 }
 
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2 text-dark font-medium m-0">Danh mục: Khách hàng</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        @Html.ActionLink("+ Thêm khách hàng mới", "TaoMoi", "KhachHang", new { area = "Admin" },
-            new { @class = "btn btn-sm btn-primary d-inline-flex align-items-center fw-bold shadow-sm px-3 py-2", role = "button" })
-    </div>
-</div>
+<div class="kh-container">
+    <div class="kh-card">
+        <div class="kh-header">
+            <h2><i class="bi bi-people-fill" style="color: var(--brand-yellow);"></i> Quản lý Khách hàng</h2>
+            <a href="@Url.Action("TaoMoi", "KhachHang", new { area = "Admin" })" class="btn-them">
+                <i class="bi bi-plus-circle"></i> Thêm khách hàng
+            </a>
+        </div>
 
-@if (TempData["ThongBao"] != null)
-{
-    <div class="alert alert-info">@TempData["ThongBao"]</div>
-}
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @TempData["ThongBao"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-<div class="card border-light shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" aria-label="Danh sách khách hàng">
-            <thead class="table-light text-uppercase fs-7 text-muted border-bottom">
-                <tr>
-                    <th scope="col" class="ps-3" style="width: 120px;">Mã KH</th>
-                    <th scope="col">Họ tên</th>
-                    <th scope="col">Địa chỉ</th>
-                    <th scope="col">Số điện thoại</th>
-                    <th scope="col" class="text-end pe-3" style="width: 180px;">Hành động</th>
-                </tr>
-            </thead>
-            <tbody class="border-top-0">
-                @foreach (var item in Model)
-                {
+        <div class="table-responsive">
+            <table class="kh-table">
+                <thead>
                     <tr>
-                        <td class="ps-3 font-monospace text-muted fw-bold">@item.makh</td>
-                        <td class="text-dark fw-semibold">@item.hoten</td>
-                        <td class="text-dark fw-semibold">@item.diachi</td>
-                        <td class="text-dark fw-semibold">@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</td>
-                        <td class="text-end pe-3">
-                            <div class="btn-group btn-group-sm" role="group">
-                                @Html.ActionLink("Sửa", "Sua", "KhachHang", new { area = "Admin", id = item.makh },
-                                    new { @class = "btn btn-outline-secondary px-2 fs-7", title = "Chỉnh sửa thông tin khách hàng" })
-                                @Html.ActionLink("Xóa", "Xoa", "KhachHang", new { area = "Admin", id = item.makh },
-                                    new
-                                         {
-                                             @class = "btn btn-outline-danger px-2 fs-7",
-                                             title = "Xóa khách hàng",
-                                        onclick = "return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');"
-                                         })
-                            </div>
-                        </td>
+                        <th style="width: 80px;">Mã KH</th>
+                        <th>Họ tên</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th style="width: 120px;" class="text-center">Hành động</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong>@item.makh</strong></td>
+                            <td>@item.hoten</td>
+                            <td>@item.diachi</td>
+                            <td>@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Sua", "KhachHang", new { area = "Admin", id = item.makh })" class="btn-icon btn-sua" title="Sửa">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <a href="@Url.Action("Xoa", "KhachHang", new { area = "Admin", id = item.makh })" class="btn-icon btn-xoa" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
