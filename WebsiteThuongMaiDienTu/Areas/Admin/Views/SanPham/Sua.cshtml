@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label" for="txt_dongia">Đơn giá (VNĐ) <span class="text-danger">*</span></label>
-                    <input type="number" id="txt_dongia" name="txt_dongia" class="form-control" min="0" value="@Model.dongia" required />
+                    <input type="number" id="txt_dongia" name="txt_dongia" class="form-control" min="0" value="@string.Format("{0:0.##}", Model.dongia)" required />
                 </div>
                 <div class="col-md-4">
                     <label class="form-label" for="txt_soluong">Số lượng tồn kho</label>

@@ -54,11 +54,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View();
             }
 
-            decimal dongia;
-            int thoigianbaohanh, soluonghienco;
-            decimal.TryParse(collection["txt_dongia"], out dongia);
-            int.TryParse(collection["txt_tgbaohanh"], out thoigianbaohanh);
-            int.TryParse(collection["txt_soluong"], out soluonghienco);
+            decimal dongia = decimal.Parse(collection["txt_dongia"]);
+            int thoigianbaohanh = int.Parse(collection["txt_tgbaohanh"]);
+            int soluonghienco = int.Parse(collection["txt_soluong"]);
 
             if (dongia <= 0)
             {
@@ -126,11 +124,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View(sua_sp);
             }
 
-            decimal dongia;
-            int thoigianbaohanh, soluonghienco;
-            decimal.TryParse(collection["txt_dongia"], out dongia);
-            int.TryParse(collection["txt_tgbaohanh"], out thoigianbaohanh);
-            int.TryParse(collection["txt_soluong"], out soluonghienco);
+            decimal dongia = decimal.Parse(collection["txt_dongia"]);
+            int thoigianbaohanh = int.Parse(collection["txt_tgbaohanh"]);
+            int soluonghienco = int.Parse(collection["txt_soluong"]);
 
             if (dongia <= 0)
             {
