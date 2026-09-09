@@ -51,7 +51,10 @@
 <!-- Featured Products Section -->
 <section id="featured-products">
     <div class="section-header">
-        <h3><i class="bi bi-star-fill" style="color: var(--brand-yellow);"></i> Sản phẩm nổi bật</h3>
+        <h3>
+            <i class="bi bi-star-fill" style="color: var(--brand-yellow);"></i>
+            Sản phẩm nổi bật
+        </h3>
         <p>Những sản phẩm được khách hàng yêu thích nhất</p>
     </div>
 
@@ -60,30 +63,60 @@
         <div class="product-grid">
             @foreach (var sp in Model)
             {
-                <a href="@Url.Action("ChiTiet", "SanPham", new { id = sp.masanpham })" class="product-card">
-                    <div class="product-image">
-                        @if (!string.IsNullOrEmpty(sp.hinh))
-                        {
-                            <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham" onerror="this.parentElement.innerHTML='<div class=\'product-image-placeholder\'><i class=\'bi bi-image\'></i></div>';" />
-                        }
-                        else
-                        {
-                            <div class="product-image-placeholder">
-                                <i class="bi bi-image"></i>
-                            </div>
-                        }
-                    </div>
-
-                    <div class="product-body">
-                        <h4 class="product-name">@sp.tensanpham</h4>
-                        <p class="product-description">@sp.mota</p>
-
-                        <div class="product-footer">
-                            <span class="product-price">@string.Format("{0:N0}₫", sp.dongia)</span>
-                            <span class="product-badge">Nổi bật</span>
+                <div class="product-card">
+                    <a href="@Url.Action("ChiTiet", "SanPhamCongKhai", new { id = sp.masanpham, area = "" })">
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(sp.hinh))
+                            {
+                                <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham" />
+                            }
+                            else
+                            {
+                                <div class="product-image-placeholder">
+                                    <i class="bi bi-image"></i>
+                                </div>
+                            }
                         </div>
-                    </div>
-                </a>
+
+                        <div class="product-body">
+                            <h4 class="product-name">@sp.tensanpham</h4>
+                            <p class="product-description">@sp.mota</p>
+
+                            <div class="product-footer">
+                                <span class="product-price">
+                                    @string.Format("{0:N0}₫", sp.dongia)
+                                </span>
+
+                                @if (sp.soluonghienco > 0)
+                                {
+                                    <span class="product-stock in-stock">
+                                        <i class="bi bi-check-circle-fill"></i> Còn hàng
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="product-stock">
+                                        <i class="bi bi-x-circle"></i> Hết hàng
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </a>
+
+                    @if (sp.soluonghienco > 0)
+                    {
+                        <form method="post"
+                              action="@Url.Action("Them", "GioHang", new { area = "" })"
+                              class="mt-2 px-3 pb-3">
+                            <input type="hidden" name="id" value="@sp.masanpham" />
+                            <input type="hidden" name="sl" value="1" />
+
+                            <button type="submit" class="btn btn-sm btn-primary w-100">
+                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+                    }
+                </div>
             }
         </div>
     }
@@ -100,7 +133,7 @@
 @section scripts {
     <script>
         // Auto-start carousel
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var carousel = new bootstrap.Carousel(document.getElementById('heroBannerCarousel'), {
                 interval: 4000,
                 wrap: true,

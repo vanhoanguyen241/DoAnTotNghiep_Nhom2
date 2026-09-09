@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
@@ -13,7 +10,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
         public ActionResult Index()
         {
-            // Lấy danh sách sản phẩm nổi bật (quangcao = 1)
+            // Lấy sản phẩm nổi bật: có quảng cáo và còn hàng
             var sanPhamNoiBat = db.sanphams
                 .Where(sp => sp.quangcao == true && sp.soluonghienco > 0)
                 .OrderByDescending(sp => sp.masanpham)
@@ -21,15 +18,6 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 .ToList();
 
             return View(sanPhamNoiBat);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

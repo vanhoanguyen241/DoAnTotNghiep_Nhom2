@@ -134,6 +134,7 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhachHangController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="Models\chitiethoadon.cs" />
     <Compile Include="Models\chuyenhang.cs" />
     <Compile Include="Models\donvisanxuat.cs" />
-    <Compile Include="Models\GioHangItem.cs" />
     <Compile Include="Models\hoadon.cs" />
     <Compile Include="Models\khachhang.cs" />
     <Compile Include="Models\loaisanpham.cs" />
@@ -244,6 +244,8 @@
     <Content Include="Areas\Admin\Views\KhachHang\Index.cshtml" />
     <Content Include="Areas\Admin\Views\KhachHang\TaoMoi.cshtml" />
     <Content Include="Areas\Admin\Views\KhachHang\Sua.cshtml" />
+    <Content Include="Views\SanPhamCongKhai\ChiTiet.cshtml" />
+    <Content Include="Views\GioHang\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

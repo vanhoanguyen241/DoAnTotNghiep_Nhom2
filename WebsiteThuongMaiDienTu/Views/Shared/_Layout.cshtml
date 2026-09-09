@@ -1,35 +1,50 @@
-﻿@using WebsiteThuongMaiDienTu.Models
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - QLBanHang</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
-
     @{
-        var gioHang = Session["GioHang"] as List<WebsiteThuongMaiDienTu.Models.GioHangItem>;
-        int soLuongGioHang = gioHang != null ? gioHang.Sum(x => x.SoLuong) : 0;
+        var tenDangNhap = Session["TenDangNhap"] as string;
+
+        var gioHang = Session["GioHang"] as System.Collections.Generic.Dictionary<string, int>;
+        int soLuongGioHang = 0;
+
+        if (gioHang != null)
+        {
+            foreach (var soLuong in gioHang.Values)
+            {
+                soLuongGioHang += soLuong;
+            }
+        }
     }
 
     <header class="site-header">
-
         <!-- Hàng 1: Logo + Tìm kiếm + Tài khoản/Giỏ hàng -->
         <div class="header-top">
             <div class="site-container header-top-inner">
-
-                <a href="@Url.Action("Index", "Home")" class="logo">
-                    <span class="logo-icon"><img src="~/Content/images/logo.png" /></span>
+                <a href="@Url.Action("Index", "Home", new { area = "" })" class="logo">
+                    <span class="logo-icon">
+                        <img src="~/Content/images/logo.png" alt="QLBanHang" />
+                    </span>
                 </a>
 
-                <form class="search-form" role="search" action="@Url.Action("DanhSach", "SanPham")" method="get">
+                <form class="search-form"
+                      role="search"
+                      method="get"
+                      action="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })">
                     <div class="input-group">
-                        <input type="text" name="tukhoa" class="form-control search-input"
+                        <input type="text"
+                               name="tukhoa"
+                               class="form-control search-input"
                                placeholder="Bạn muốn mua gì hôm nay?" />
                         <button class="btn search-btn" type="submit">
                             <i class="bi bi-search"></i>
@@ -38,25 +53,25 @@
                 </form>
 
                 <ul class="header-actions list-unstyled mb-0">
-
                     <li>
-                        <a href="@Url.Action("Index", "GioHang")" class="action-item">
+                        <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="action-item">
                             <i class="bi bi-cart3"></i>
                             <span class="cart-badge">@soLuongGioHang</span>
                             <span class="action-label">Giỏ hàng</span>
                         </a>
                     </li>
 
-                    @if (Session["TenDangNhap"] != null)
+                    @if (!string.IsNullOrEmpty(tenDangNhap))
                     {
                         <li>
-                            <a href="@Url.Action("ThongTin", "TaiKhoan")" class="action-item">
+                            <span class="action-item">
                                 <i class="bi bi-person-circle"></i>
-                                <span class="action-label">@Session["TenDangNhap"]</span>
-                            </a>
+                                Xin chào, <strong>@tenDangNhap</strong>
+                            </span>
                         </li>
+
                         <li>
-                            <a href="@Url.Action("DangXuat", "TaiKhoan")" class="action-item">
+                            <a href="@Url.Action("DangXuat", "TaiKhoan", new { area = "" })" class="action-item">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span class="action-label">Đăng xuất</span>
                             </a>
@@ -65,15 +80,20 @@
                     else
                     {
                         <li>
-                            <a href="@Url.Action("DangNhap", "TaiKhoan")" class="action-item">
+                            <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })" class="action-item">
                                 <i class="bi bi-person"></i>
                                 <span class="action-label">Đăng nhập</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="@Url.Action("DangKy", "TaiKhoan", new { area = "" })" class="action-item">
+                                <i class="bi bi-person-plus"></i>
+                                <span class="action-label">Đăng ký</span>
+                            </a>
+                        </li>
                     }
-
                 </ul>
-
             </div>
         </div>
 
@@ -83,11 +103,11 @@
                 @Html.Action("DanhMucNav", "Layout", new { area = "" })
             </div>
         </nav>
-
     </header>
 
     <div class="site-container body-content">
         @RenderBody()
+
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - QLBanHang</p>

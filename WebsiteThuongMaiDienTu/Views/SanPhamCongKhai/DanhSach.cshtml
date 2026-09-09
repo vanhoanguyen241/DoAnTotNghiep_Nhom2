@@ -2,32 +2,37 @@
 
 @{
     ViewBag.Title = "Danh sách sản phẩm";
-    var tongSoSanPham = ViewBag.TongSoSanPham ?? 0;
-    var tongSoTrang = ViewBag.TongSoTrang ?? 1;
-    var trangHienTai = ViewBag.TrangHienTai ?? 1;
-    var maloai = ViewBag.MaLoai as string;
-    var tukhoa = ViewBag.TuKhoa as string;
-    var tenLoai = ViewBag.TenLoai as string;
+
+    int tongSoSanPham = (int)(ViewBag.TongSoSanPham ?? 0);
+    int tongSoTrang = (int)(ViewBag.TongSoTrang ?? 1);
+    int trangHienTai = (int)(ViewBag.TrangHienTai ?? 1);
+
+    string maloai = ViewBag.MaLoai as string;
+    string tukhoa = ViewBag.TuKhoa as string;
+    string tenLoai = ViewBag.TenLoai as string;
+
     var danhSachLoai = ViewBag.DanhSachLoai as List<WebsiteThuongMaiDienTu.Models.loaisanpham>;
 }
 
-<!-- Filter Section -->
+<!-- Bộ lọc sản phẩm -->
 <div class="filter-section">
     <div class="filter-header">
         <h3><i class="bi bi-funnel"></i> Bộ lọc sản phẩm</h3>
     </div>
 
-    <form method="get" action="@Url.Action("DanhSach", "SanPham")">
+    <form method="get" action="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })">
         <div class="filter-controls">
             <div class="filter-group">
                 <label>Loại sản phẩm</label>
                 <select name="maloai" class="form-control">
                     <option value="">-- Tất cả loại --</option>
+
                     @if (danhSachLoai != null)
                     {
                         foreach (var loai in danhSachLoai)
                         {
-                            <option value="@loai.maloaisanpham" @(maloai == loai.maloaisanpham ? "selected" : "")>
+                            <option value="@loai.maloaisanpham"
+                                    @(maloai == loai.maloaisanpham ? "selected" : "")>
                                 @loai.tenloaisanpham
                             </option>
                         }
@@ -37,53 +42,34 @@
 
             <div class="filter-group">
                 <label>Tìm kiếm</label>
-                <input type="text" name="tukhoa" class="form-control"
-                       placeholder="Nhập tên hoặc mô tả..." value="@tukhoa" />
+                <input type="text"
+                       name="tukhoa"
+                       class="form-control"
+                       placeholder="Nhập tên hoặc mô tả..."
+                       value="@tukhoa" />
             </div>
 
             <button type="submit" class="btn-filter">
                 <i class="bi bi-search"></i> Tìm kiếm
             </button>
 
-            <a href="@Url.Action("DanhSach", "SanPham")" class="btn-clear">
+            <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-clear">
                 <i class="bi bi-x-circle"></i> Xóa bộ lọc
             </a>
         </div>
-
-        @if (!string.IsNullOrEmpty(tukhoa) || !string.IsNullOrEmpty(maloai))
-        {
-            <div class="active-filters">
-                @if (!string.IsNullOrEmpty(tukhoa))
-                {
-                    <span class="filter-tag">
-                        Từ khóa: <strong>@tukhoa</strong>
-                        <a href="@Url.Action("DanhSach", "SanPham", new { maloai = maloai })">
-                            <i class="bi bi-x"></i>
-                        </a>
-                    </span>
-                }
-                @if (!string.IsNullOrEmpty(tenLoai))
-                {
-                    <span class="filter-tag">
-                        Loại: <strong>@tenLoai</strong>
-                        <a href="@Url.Action("DanhSach", "SanPham", new { tukhoa = tukhoa })">
-                            <i class="bi bi-x"></i>
-                        </a>
-                    </span>
-                }
-            </div>
-        }
     </form>
 </div>
 
-<!-- Results Header -->
+<!-- Kết quả -->
 <div class="results-header">
     <div class="results-info">
         Tìm thấy <strong>@tongSoSanPham</strong> sản phẩm
+
         @if (!string.IsNullOrEmpty(tenLoai))
         {
             <span> trong <strong>@tenLoai</strong></span>
         }
+
         @if (!string.IsNullOrEmpty(tukhoa))
         {
             <span> với từ khóa "<strong>@tukhoa</strong>"</span>
@@ -91,111 +77,107 @@
     </div>
 </div>
 
-<!-- Product Grid -->
+<!-- Danh sách sản phẩm -->
 @if (Model != null && Model.Any())
 {
     <div class="product-grid">
         @foreach (var sp in Model)
         {
-            <a href="@Url.Action("ChiTiet", "SanPham", new { id = sp.masanpham })" class="product-card">
-                <div class="product-image">
-                    @if (!string.IsNullOrEmpty(sp.hinh))
-                    {
-                        <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham"
-                             onerror="this.parentElement.innerHTML='<div class=\'product-image-placeholder\'><i class=\'bi bi-image\'></i></div>';" />
-                    }
-                    else
-                    {
-                        <div class="product-image-placeholder">
-                            <i class="bi bi-image"></i>
-                        </div>
-                    }
-
-                    @if (sp.quangcao == true)
-                    {
-                        <span class="product-badge">HOT</span>
-                    }
-                </div>
-
-                <div class="product-body">
-                    <h4 class="product-name">@sp.tensanpham</h4>
-                    <p class="product-description">@sp.mota</p>
-
-                    <div class="product-footer">
-                        <span class="product-price">@string.Format("{0:N0}₫", sp.dongia)</span>
-                        @if (sp.soluonghienco > 0)
+            <div class="product-card">
+                <a href="@Url.Action("ChiTiet", "SanPhamCongKhai", new { id = sp.masanpham, area = "" })">
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(sp.hinh))
                         {
-                            <span class="product-stock in-stock">
-                                <i class="bi bi-check-circle-fill"></i> Còn hàng
-                            </span>
+                            <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham" />
                         }
                         else
                         {
-                            <span class="product-stock">
-                                <i class="bi bi-x-circle"></i> Hết hàng
-                            </span>
+                            <div class="product-image-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
                         }
                     </div>
-                </div>
-            </a>
+
+                    <div class="product-body">
+                        <h4 class="product-name">@sp.tensanpham</h4>
+                        <p class="product-description">@sp.mota</p>
+
+                        <div class="product-footer">
+                            <span class="product-price">
+                                @string.Format("{0:N0}₫", sp.dongia)
+                            </span>
+
+                            @if (sp.soluonghienco > 0)
+                            {
+                                <span class="product-stock in-stock">
+                                    <i class="bi bi-check-circle-fill"></i> Còn hàng
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="product-stock">
+                                    <i class="bi bi-x-circle"></i> Hết hàng
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </a>
+
+                @if (sp.soluonghienco > 0)
+                {
+                    <form method="post"
+                          action="@Url.Action("Them", "GioHang", new { area = "" })"
+                          class="mt-2 px-3 pb-3">
+                        <input type="hidden" name="id" value="@sp.masanpham" />
+                        <input type="hidden" name="sl" value="1" />
+
+                        <button type="submit" class="btn btn-sm btn-primary w-100">
+                            <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                        </button>
+                    </form>
+                }
+            </div>
         }
     </div>
 
-    <!-- Pagination -->
+    <!-- Phân trang đơn giản -->
     if (tongSoTrang > 1)
     {
         <div class="pagination-container">
             <ul class="pagination">
-                <!-- Previous Button -->
-                <li class="@(trangHienTai == 1 ? "disabled" : "")">
-                    @if (trangHienTai > 1)
-                    {
-                        <a href="@Url.Action("DanhSach", "SanPham", new { maloai = maloai, tukhoa = tukhoa, page = trangHienTai - 1 })">
+                @if (trangHienTai > 1)
+                {
+                    <li>
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { maloai = maloai, tukhoa = tukhoa, page = trangHienTai - 1, area = "" })">
                             <i class="bi bi-chevron-left"></i>
                         </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= tongSoTrang; i++)
+                {
+                    if (i == trangHienTai)
+                    {
+                        <li class="active"><span>@i</span></li>
                     }
                     else
                     {
-                        <span><i class="bi bi-chevron-left"></i></span>
-                    }
-                </li>
-
-                <!-- Page Numbers -->
-                @for (int i = 1; i <= tongSoTrang; i++)
-                {
-                    // Hiển thị: trang đầu, trang cuối, và 2 trang gần trang hiện tại
-                    if (i == 1 || i == tongSoTrang || (i >= trangHienTai - 2 && i <= trangHienTai + 2))
-                    {
-                        <li class="@(i == trangHienTai ? "active" : "")">
-                            @if (i == trangHienTai)
-                            {
-                                <span>@i</span>
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("DanhSach", "SanPham", new { maloai = maloai, tukhoa = tukhoa, page = i })">@i</a>
-                            }
+                        <li>
+                            <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { maloai = maloai, tukhoa = tukhoa, page = i, area = "" })">
+                                @i
+                            </a>
                         </li>
-                    }
-                    else if (i == trangHienTai - 3 || i == trangHienTai + 3)
-                    {
-                        <li class="disabled"><span>...</span></li>
                     }
                 }
 
-                <!-- Next Button -->
-                <li class="@(trangHienTai == tongSoTrang ? "disabled" : "")">
-                    @if (trangHienTai < tongSoTrang)
-                    {
-                        <a href="@Url.Action("DanhSach", "SanPham", new { maloai = maloai, tukhoa = tukhoa, page = trangHienTai + 1 })">
+                @if (trangHienTai < tongSoTrang)
+                {
+                    <li>
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { maloai = maloai, tukhoa = tukhoa, page = trangHienTai + 1, area = "" })">
                             <i class="bi bi-chevron-right"></i>
                         </a>
-                    }
-                    else
-                    {
-                        <span><i class="bi bi-chevron-right"></i></span>
-                    }
-                </li>
+                    </li>
+                }
             </ul>
         </div>
     }
@@ -206,7 +188,8 @@ else
         <i class="bi bi-search"></i>
         <h3>Không tìm thấy sản phẩm</h3>
         <p>Không có sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn</p>
-        <a href="@Url.Action("DanhSach", "SanPham")" class="btn-back-home">
+
+        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-back-home">
             <i class="bi bi-arrow-left"></i> Xem tất cả sản phẩm
         </a>
     </div>

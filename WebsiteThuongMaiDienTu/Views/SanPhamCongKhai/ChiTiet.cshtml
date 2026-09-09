@@ -1,0 +1,119 @@
+﻿@model WebsiteThuongMaiDienTu.Models.sanpham
+
+@{
+    ViewBag.Title = Model.tensanpham;
+
+    string tenLoai = ViewBag.TenLoai as string;
+    string tenNSX = ViewBag.TenNSX as string;
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h2 class="h4 mb-0">@Model.tensanpham</h2>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (!string.IsNullOrEmpty(Model.hinh))
+                    {
+                        <img src="@Url.Content(Model.hinh)"
+                             alt="@Model.tensanpham"
+                             class="img-fluid border rounded" />
+                    }
+                    else
+                    {
+                        <div class="border rounded p-5 text-center">
+                            <i class="bi bi-image" style="font-size: 3rem;"></i>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 200px;">Mã sản phẩm</th>
+                            <td>@Model.masanpham</td>
+                        </tr>
+                        <tr>
+                            <th>Loại sản phẩm</th>
+                            <td>@tenLoai</td>
+                        </tr>
+                        <tr>
+                            <th>Nhà sản xuất</th>
+                            <td>@tenNSX</td>
+                        </tr>
+                        <tr>
+                            <th>Thời gian bảo hành</th>
+                            <td>@Model.thoigianbaohanh tháng</td>
+                        </tr>
+                        <tr>
+                            <th>Đơn giá</th>
+                            <td>
+                                <strong>@string.Format("{0:N0}₫", Model.dongia)</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Số lượng hiện có</th>
+                            <td>
+                                @if (Model.soluonghienco > 0)
+                                {
+                                    <span class="text-success">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        Còn @Model.soluonghienco sản phẩm
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                        Hết hàng
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="mb-3">
+                        <h5>Mô tả sản phẩm</h5>
+                        <p>@Model.mota</p>
+                    </div>
+
+                    @if (Model.soluonghienco > 0)
+                    {
+                        <form method="post"
+                              action="@Url.Action("Them", "GioHang", new { area = "" })"
+                              class="d-flex align-items-center gap-2 mt-3">
+                            <input type="hidden" name="id" value="@Model.masanpham" />
+
+                            <label class="mb-0">Số lượng:</label>
+                            <input type="number"
+                                   name="sl"
+                                   value="1"
+                                   min="1"
+                                   max="@Model.soluonghienco"
+                                   class="form-control"
+                                   style="width: 100px;" />
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mt-3">
+                            <i class="bi bi-exclamation-triangle-fill"></i> Sản phẩm tạm thời hết hàng.
+                        </div>
+                    }
+
+                    <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })"
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
