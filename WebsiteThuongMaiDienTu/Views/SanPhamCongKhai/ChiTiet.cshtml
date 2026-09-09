@@ -1,117 +1,123 @@
 ﻿@model WebsiteThuongMaiDienTu.Models.sanpham
-
 @{
     ViewBag.Title = Model.tensanpham;
-
     string tenLoai = ViewBag.TenLoai as string;
     string tenNSX = ViewBag.TenNSX as string;
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
-            <h2 class="h4 mb-0">@Model.tensanpham</h2>
+<div class="product-detail-container">
+    <div class="product-detail-card">
+        <div class="product-detail-header">
+            <h2>@Model.tensanpham</h2>
         </div>
-
-        <div class="card-body p-4">
+        <div class="product-detail-body">
             <div class="row">
-                <div class="col-md-4">
-                    @if (!string.IsNullOrEmpty(Model.hinh))
-                    {
-                        <img src="@Url.Content(Model.hinh)"
-                             alt="@Model.tensanpham"
-                             class="img-fluid border rounded" />
-                    }
-                    else
-                    {
-                        <div class="border rounded p-5 text-center">
-                            <i class="bi bi-image" style="font-size: 3rem;"></i>
-                        </div>
-                    }
+                <!-- Cột ảnh -->
+                <div class="col-md-5">
+                    <div class="product-detail-gallery">
+                        @if (!string.IsNullOrEmpty(Model.hinh))
+                        {
+                            <img src="@Url.Content(Model.hinh)" alt="@Model.tensanpham" class="product-detail-main-img" />
+                        }
+                        else
+                        {
+                            <div class="product-detail-img-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
+                    </div>
                 </div>
 
-                <div class="col-md-8">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="width: 200px;">Mã sản phẩm</th>
-                            <td>@Model.masanpham</td>
-                        </tr>
-                        <tr>
-                            <th>Loại sản phẩm</th>
-                            <td>@tenLoai</td>
-                        </tr>
-                        <tr>
-                            <th>Nhà sản xuất</th>
-                            <td>@tenNSX</td>
-                        </tr>
-                        <tr>
-                            <th>Thời gian bảo hành</th>
-                            <td>@Model.thoigianbaohanh tháng</td>
-                        </tr>
-                        <tr>
-                            <th>Đơn giá</th>
-                            <td>
-                                <strong>@string.Format("{0:N0}₫", Model.dongia)</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Số lượng hiện có</th>
-                            <td>
-                                @if (Model.soluonghienco > 0)
-                                {
-                                    <span class="text-success">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                        Còn @Model.soluonghienco sản phẩm
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-danger">
-                                        <i class="bi bi-x-circle-fill"></i>
-                                        Hết hàng
-                                    </span>
-                                }
-                            </td>
-                        </tr>
-                    </table>
+                <!-- Cột thông tin -->
+                <div class="col-md-7">
+                    <div class="product-detail-info">
+                        <h1 class="product-detail-name">@Model.tensanpham</h1>
 
-                    <div class="mb-3">
-                        <h5>Mô tả sản phẩm</h5>
-                        <p>@Model.mota</p>
-                    </div>
-
-                    @if (Model.soluonghienco > 0)
-                    {
-                        <form method="post"
-                              action="@Url.Action("Them", "GioHang", new { area = "" })"
-                              class="d-flex align-items-center gap-2 mt-3">
-                            <input type="hidden" name="id" value="@Model.masanpham" />
-
-                            <label class="mb-0">Số lượng:</label>
-                            <input type="number"
-                                   name="sl"
-                                   value="1"
-                                   min="1"
-                                   max="@Model.soluonghienco"
-                                   class="form-control"
-                                   style="width: 100px;" />
-
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <div class="alert alert-warning mt-3">
-                            <i class="bi bi-exclamation-triangle-fill"></i> Sản phẩm tạm thời hết hàng.
+                        <!-- Hộp giá -->
+                        <div class="product-detail-price-box">
+                            <span class="product-detail-price-label">Giá bán</span>
+                            <span class="product-detail-price">@string.Format("{0:N0}₫", Model.dongia)</span>
                         </div>
-                    }
 
-                    <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })"
-                       class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Quay lại danh sách
-                    </a>
+                        <!-- Thông số -->
+                        <div class="product-detail-meta">
+                            <div class="product-detail-meta-item">
+                                <span class="product-detail-meta-label">Mã sản phẩm</span>
+                                <span class="product-detail-meta-value" style="font-family: monospace;">@Model.masanpham</span>
+                            </div>
+                            <div class="product-detail-meta-item">
+                                <span class="product-detail-meta-label">Loại sản phẩm</span>
+                                <span class="product-detail-meta-value">@tenLoai</span>
+                            </div>
+                            <div class="product-detail-meta-item">
+                                <span class="product-detail-meta-label">Nhà sản xuất</span>
+                                <span class="product-detail-meta-value">@tenNSX</span>
+                            </div>
+                            <div class="product-detail-meta-item">
+                                <span class="product-detail-meta-label">Bảo hành</span>
+                                <span class="product-detail-meta-value">@Model.thoigianbaohanh tháng</span>
+                            </div>
+                            <div class="product-detail-meta-item">
+                                <span class="product-detail-meta-label">Tình trạng</span>
+                                <span class="product-detail-meta-value">
+                                    @if (Model.soluonghienco > 0)
+                                    {
+                                        <span class="stock-badge in-stock">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Còn hàng (@Model.soluonghienco)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="stock-badge out-of-stock">
+                                            <i class="bi bi-x-circle-fill"></i>
+                                            Hết hàng
+                                        </span>
+                                    }
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Mô tả -->
+                        <div class="product-detail-description">
+                            <h5><i class="bi bi-file-text"></i> Mô tả sản phẩm</h5>
+                            <p>@Model.mota</p>
+                        </div>
+
+                        <!-- Form thêm vào giỏ -->
+                        @if (Model.soluonghienco > 0)
+                        {
+                            <form method="post"
+                                  action="@Url.Action("Them", "GioHang", new { area = "" })"
+                                  class="add-to-cart-form">
+                                <div class="qty-selector">
+                                    <label for="sl">Số lượng:</label>
+                                    <input type="number"
+                                           id="sl"
+                                           name="sl"
+                                           value="1"
+                                           min="1"
+                                           max="@Model.soluonghienco"
+                                           class="qty-input" />
+                                </div>
+                                <input type="hidden" name="id" value="@Model.masanpham" />
+                                <button type="submit" class="btn-add-to-cart">
+                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="out-of-stock-alert">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <span>Sản phẩm tạm thời hết hàng. Vui lòng quay lại sau.</span>
+                            </div>
+                        }
+
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-back-list">
+                            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

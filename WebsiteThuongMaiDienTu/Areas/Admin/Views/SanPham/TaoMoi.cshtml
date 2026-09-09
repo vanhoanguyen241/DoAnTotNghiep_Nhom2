@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Thêm sản phẩm";
+}
+<div class="kh-form-container kh-form-container-wide">
+    <div class="kh-form-card">
+        <div class="kh-form-header">
+            <h2><i class="bi bi-box-seam" style="color: var(--brand-yellow);"></i> Thêm sản phẩm mới</h2>
+        </div>
+
+        @if (ViewBag.ThongBao != null)
+        {
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
+            </div>
+        }
+
+        @using (Html.BeginForm("TaoMoi", "SanPham", new { area = "Admin" }, FormMethod.Post, new { enctype = "multipart/form-data", id = "formThemSP", autocomplete = "off" }))
+        {
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" for="txt_masp">Mã sản phẩm <span class="text-danger">*</span></label>
+                    <input type="text" id="txt_masp" name="txt_masp" class="form-control" required />
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label" for="txt_tensp">Tên sản phẩm <span class="text-danger">*</span></label>
+                    <input type="text" id="txt_tensp" name="txt_tensp" class="form-control" required />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="txt_lsp">Loại sản phẩm <span class="text-danger">*</span></label>
+                    @Html.DropDownList("txt_lsp", (SelectList)ViewBag.maloaisanpham, "-- Chọn loại sản phẩm --", new { @class = "form-select", required = "required" })
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="txt_dvsx">Nhà sản xuất <span class="text-danger">*</span></label>
+                    @Html.DropDownList("txt_dvsx", (SelectList)ViewBag.donvisanxuat, "-- Chọn nhà sản xuất --", new { @class = "form-select", required = "required" })
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label" for="txt_mota">Mô tả</label>
+                    <textarea id="txt_mota" name="txt_mota" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label" for="txt_tgbaohanh">Bảo hành (tháng)</label>
+                    <input type="number" id="txt_tgbaohanh" name="txt_tgbaohanh" class="form-control" min="0" value="0" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="txt_dongia">Đơn giá (VNĐ) <span class="text-danger">*</span></label>
+                    <input type="number" id="txt_dongia" name="txt_dongia" class="form-control" min="0" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="txt_soluong">Số lượng tồn kho</label>
+                    <input type="number" id="txt_soluong" name="txt_soluong" class="form-control" min="0" value="0" />
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label" for="file_hinh">Hình ảnh</label>
+                    <input type="file" id="file_hinh" name="file_hinh" class="form-control" accept=".jpg,.jpeg,.png" />
+                    <small class="form-text">Bỏ trống sẽ dùng ảnh mặc định.</small>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check sp-check">
+                        <input type="checkbox" class="form-check-input" name="chk_quangcao" id="chk_quangcao" />
+                        <label class="form-check-label" for="chk_quangcao">Hiện ở trang chủ (quảng cáo)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn-luu"><i class="bi bi-check-circle"></i> Thêm sản phẩm</button>
+                <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })" class="btn-huy">Hủy bỏ</a>
+            </div>
+        }
+    </div>
+</div>

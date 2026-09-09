@@ -1,175 +1,143 @@
 ﻿@model List<WebsiteThuongMaiDienTu.Models.sanpham>
-
 @{
     ViewBag.Title = "Giỏ hàng";
-
     var gioHang = ViewBag.GioHang as System.Collections.Generic.Dictionary<string, int>;
-
     if (gioHang == null)
     {
         gioHang = new System.Collections.Generic.Dictionary<string, int>();
     }
-
     decimal tongTien = 0;
-
     if (ViewBag.TongTien != null)
     {
         tongTien = (decimal)ViewBag.TongTien;
     }
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
-            <h2 class="h4 mb-0">
-                <i class="bi bi-cart3"></i> Giỏ hàng
-            </h2>
+<div class="cart-container">
+    <div class="cart-card">
+        <div class="cart-header">
+            <h2><i class="bi bi-cart3"></i> Giỏ hàng của bạn</h2>
         </div>
 
-        <div class="card-body p-4">
-            @if (TempData["ThongBaoGioHang"] != null)
-            {
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle-fill"></i> @TempData["ThongBaoGioHang"]
-                </div>
-            }
+        @if (TempData["ThongBaoGioHang"] != null)
+        {
+            <div class="cart-alert cart-alert-success">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>@TempData["ThongBaoGioHang"]</span>
+            </div>
+        }
 
-            @if (TempData["LoiGioHang"] != null)
-            {
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-triangle-fill"></i> @TempData["LoiGioHang"]
-                </div>
-            }
+        @if (TempData["LoiGioHang"] != null)
+        {
+            <div class="cart-alert cart-alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>@TempData["LoiGioHang"]</span>
+            </div>
+        }
 
-            @if (Model != null && Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle">
-                        <thead class="table-light">
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Sản phẩm</th>
+                            <th style="width: 15%;">Đơn giá</th>
+                            <th style="width: 18%;">Số lượng</th>
+                            <th style="width: 12%;">Thành tiền</th>
+                            <th style="width: 5%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sp in Model)
+                        {
+                            int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
+                            decimal thanhTien = sp.dongia * soLuong;
                             <tr>
-                                <th style="width: 80px;">Hình</th>
-                                <th>Sản phẩm</th>
-                                <th style="width: 120px;">Đơn giá</th>
-                                <th style="width: 180px;">Số lượng</th>
-                                <th style="width: 140px;">Thành tiền</th>
-                                <th style="width: 80px;">Xóa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var sp in Model)
-                            {
-                                int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
-                                decimal thanhTien = sp.dongia * soLuong;
-
-                                <tr>
-                                    <td>
+                                <td data-label="Sản phẩm">
+                                    <div class="cart-product-cell">
                                         @if (!string.IsNullOrEmpty(sp.hinh))
                                         {
-                                            <img src="@Url.Content(sp.hinh)"
-                                                 alt="@sp.tensanpham"
-                                                 style="width: 60px; height: 60px; object-fit: cover;" />
+                                            <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham" class="cart-product-img" />
                                         }
                                         else
                                         {
-                                            <div class="text-center text-muted">
+                                            <div class="cart-product-img-placeholder">
                                                 <i class="bi bi-image"></i>
                                             </div>
                                         }
-                                    </td>
-
-                                    <td>
-                                        <strong>@sp.tensanpham</strong>
-                                        <div class="text-muted small">@sp.masanpham</div>
-                                    </td>
-
-                                    <td>
-                                        @string.Format("{0:N0}₫", sp.dongia)
-                                    </td>
-
-                                    <td>
-                                        <form method="post"
-                                              action="@Url.Action("CapNhat", "GioHang", new { area = "" })">
+                                        <div class="cart-product-info">
+                                            <strong>@sp.tensanpham</strong>
+                                            <span class="text-muted">@sp.masanpham</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Đơn giá">
+                                    <span class="cart-price">@string.Format("{0:N0}₫", sp.dongia)</span>
+                                </td>
+                                <td data-label="Số lượng">
+                                    <div class="qty-control">
+                                        <form method="post" action="@Url.Action("CapNhat", "GioHang", new { area = "" })" style="display: contents;">
                                             <input type="hidden" name="id" value="@sp.masanpham" />
-
-                                            <div class="d-flex align-items-center gap-2">
-                                                <button type="submit"
-                                                        name="hanhdong"
-                                                        value="bot"
-                                                        class="btn btn-sm btn-outline-secondary">
-                                                    -
-                                                </button>
-
-                                                <span>@soLuong</span>
-
-                                                <button type="submit"
-                                                        name="hanhdong"
-                                                        value="them"
-                                                        class="btn btn-sm btn-outline-secondary">
-                                                    +
-                                                </button>
-                                            </div>
+                                            <button type="submit" name="hanhdong" value="bot" class="qty-btn" title="Giảm số lượng">−</button>
                                         </form>
-                                    </td>
-
-                                    <td>
-                                        @string.Format("{0:N0}₫", thanhTien)
-                                    </td>
-
-                                    <td class="text-center">
-                                        <form method="post"
-                                              action="@Url.Action("CapNhat", "GioHang", new { area = "" })"
-                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?');">
+                                        <span class="qty-value">@soLuong</span>
+                                        <form method="post" action="@Url.Action("CapNhat", "GioHang", new { area = "" })" style="display: contents;">
                                             <input type="hidden" name="id" value="@sp.masanpham" />
-                                            <input type="hidden" name="hanhdong" value="xoa" />
-
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            <button type="submit" name="hanhdong" value="them" class="qty-btn" title="Tăng số lượng">+</button>
                                         </form>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                    </div>
+                                </td>
+                                <td data-label="Thành tiền">
+                                    <span class="cart-total-price">@string.Format("{0:N0}₫", thanhTien)</span>
+                                </td>
+                                <td data-label="">
+                                    <form method="post"
+                                          action="@Url.Action("CapNhat", "GioHang", new { area = "" })"
+                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?');"
+                                          style="display: inline;">
+                                        <input type="hidden" name="id" value="@sp.masanpham" />
+                                        <input type="hidden" name="hanhdong" value="xoa" />
+                                        <button type="submit" class="btn-delete-cart" title="Xóa khỏi giỏ">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })"
-                       class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
-                    </a>
-
-                    <div class="text-end">
-                        <h5 class="mb-1">Tổng tiền:</h5>
-                        <h4 class="mb-0 text-danger">
-                            @string.Format("{0:N0}₫", tongTien)
-                        </h4>
-                    </div>
+            <div class="cart-footer">
+                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-continue-shopping">
+                    <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
+                </a>
+                <div class="cart-summary">
+                    <div class="cart-summary-label">Tổng tiền thanh toán</div>
+                    <div class="cart-summary-total">@string.Format("{0:N0}₫", tongTien)</div>
                 </div>
+            </div>
 
-                <div class="mt-3 text-end">
-                    <a href="@Url.Action("Index", "Home", new { area = "" })"
-                       class="btn btn-primary disabled">
-                        <i class="bi bi-bag-check"></i> Đặt hàng
-                    </a>
-                    <div class="text-muted small mt-1">
-                        Chức năng đặt hàng sẽ được nối với module hóa đơn ở bước sau.
-                    </div>
+            <div class="text-end mt-3">
+                <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn-checkout disabled">
+                    <i class="bi bi-bag-check"></i> Đặt hàng
+                </a>
+                <div class="text-muted small mt-1">
+                    Chức năng đặt hàng sẽ được nối với module hóa đơn ở bước sau.
                 </div>
-            }
-            else
-            {
-                <div class="text-center py-5">
-                    <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
-                    <h4 class="mt-3">Giỏ hàng trống</h4>
-                    <p class="text-muted">Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
-
-                    <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })"
-                       class="btn btn-primary">
-                        <i class="bi bi-arrow-left-circle"></i> Xem sản phẩm
-                    </a>
-                </div>
-            }
-        </div>
+            </div>
+        }
+        else
+        {
+            <div class="cart-empty">
+                <i class="bi bi-cart-x d-block"></i>
+                <h4>Giỏ hàng trống</h4>
+                <p>Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-checkout">
+                    <i class="bi bi-arrow-left-circle"></i> Xem sản phẩm
+                </a>
+            </div>
+        }
     </div>
 </div>

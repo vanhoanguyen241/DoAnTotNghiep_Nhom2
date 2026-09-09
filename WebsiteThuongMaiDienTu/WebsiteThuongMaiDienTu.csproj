@@ -131,8 +131,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DonViSanXuatController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -214,6 +216,12 @@
     <Content Include="Areas\Admin\Views\LoaiSanPham\Index.cshtml" />
     <Content Include="Areas\Admin\Views\LoaiSanPham\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\LoaiSanPham\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\DonViSanXuat\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\DonViSanXuat\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\DonViSanXuat\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

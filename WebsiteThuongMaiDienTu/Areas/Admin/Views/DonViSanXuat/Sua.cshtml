@@ -1,0 +1,28 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model donvisanxuat
+@{
+    ViewBag.Title = "Chỉnh sửa đơn vị sản xuất";
+}
+<div class="kh-form-container">
+    <div class="kh-form-card">
+        <div class="kh-form-header">
+            <h2><i class="bi bi-pencil-square" style="color: var(--brand-yellow);"></i> Cập nhật đơn vị sản xuất</h2>
+        </div>
+
+        @using (Html.BeginForm("Sua", "DonViSanXuat", new { area = "Admin" }, FormMethod.Post, new { id = "formSuaDonVi" }))
+        {
+            <div class="mb-3">
+                <label class="form-label" for="txt_ma">Mã đơn vị</label>
+                <input type="text" id="txt_ma" name="txt_ma" class="form-control" readonly value="@Model.madonvisanxuat" style="background: #f8f9fa;" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label" for="txt_ten">Tên đơn vị sản xuất <span class="text-danger">*</span></label>
+                <input type="text" id="txt_ten" name="txt_ten" class="form-control" value="@Model.tendonvisanxuat" required />
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn-luu"><i class="bi bi-check-circle"></i> Lưu thay đổi</button>
+                <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })" class="btn-huy">Hủy bỏ</a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,80 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<sanpham>
+@{
+    ViewBag.Title = "Quản lý Sản phẩm";
+}
+<div class="kh-container kh-container-wide">
+    <div class="kh-card">
+        <div class="kh-header">
+            <h2><i class="bi bi-box-seam" style="color: var(--brand-yellow);"></i> Quản lý Sản phẩm</h2>
+            <a href="@Url.Action("TaoMoi", "SanPham", new { area = "Admin" })" class="btn-them">
+                <i class="bi bi-plus-circle"></i> Thêm sản phẩm mới
+            </a>
+        </div>
+
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @TempData["ThongBao"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="table-responsive">
+            <table class="kh-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">Ảnh</th>
+                        <th style="width: 120px;">Mã SP</th>
+                        <th>Tên sản phẩm</th>
+                        <th style="width: 130px;">Đơn giá</th>
+                        <th style="width: 100px;" class="text-center">Tồn kho</th>
+                        <th style="width: 100px;" class="text-center">Quảng cáo</th>
+                        <th style="width: 120px;" class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Content(item.hinh)" alt="@item.tensanpham" class="sp-thumb" />
+                            </td>
+                            <td><strong>@item.masanpham</strong></td>
+                            <td>@item.tensanpham</td>
+                            <td>@string.Format("{0:N0}₫", item.dongia)</td>
+                            <td class="text-center">
+                                @if (item.soluonghienco > 0)
+                                {
+                                    <span class="sp-badge sp-badge-success">@item.soluonghienco</span>
+                                }
+                                else
+                                {
+                                    <span class="sp-badge sp-badge-danger">Hết hàng</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (item.quangcao == true)
+                                {
+                                    <span class="sp-badge sp-badge-warning">Có</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Không</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("Sua", "SanPham", new { area = "Admin", id = item.masanpham })" class="btn-icon btn-sua" title="Sửa">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <a href="@Url.Action("Xoa", "SanPham", new { area = "Admin", id = item.masanpham })" class="btn-icon btn-xoa" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
