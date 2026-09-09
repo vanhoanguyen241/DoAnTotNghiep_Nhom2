@@ -24,7 +24,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (vaiTro != "Admin")
             {
                 // Danh sách các Controller chỉ Admin mới được vào
-                List<string> adminOnlyControllers = new List<string> { "LoaiSanPham", "DonViSanXuat" };
+                List<string> adminOnlyControllers = new List<string>
+                {
+                    "LoaiSanPham",
+                    "DonViSanXuat",
+                    "HoaDon",
+                    "ChiTietHoaDon"
+                };
                 if (adminOnlyControllers.Contains(controllerName))
                 {
                     // Chuyển về trang chủ Admin

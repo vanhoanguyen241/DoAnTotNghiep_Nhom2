@@ -98,9 +98,39 @@
         </div>
 
         <!-- Hàng 2: Danh mục sản phẩm -->
-        <nav class="category-nav">
-            <div class="site-container">
-                @Html.Action("DanhMucNav", "Layout", new { area = "" })
+        <!-- ===== Thanh nav chính ===== -->
+        <nav class="main-nav">
+            <div class="site-container main-nav-inner">
+                <ul class="main-nav-list">
+                    <li>
+                        <a href="@Url.Action("Index", "Home", new { area = "" })">
+                            <i class="bi bi-house-door"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-info-circle"></i> Giới thiệu
+                        </a>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })">
+                            <i class="bi bi-box-seam"></i> Sản phẩm <i class="bi bi-chevron-down nav-caret"></i>
+                        </a>
+                        <div class="nav-dropdown">
+                            @Html.Action("DanhMucNav", "Layout")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-briefcase"></i> Tuyển dụng
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-envelope"></i> Liên hệ
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </header>

@@ -1,0 +1,136 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<hoadon>
+@{
+    ViewBag.Title = "Quản lý Hóa đơn";
+}
+
+<div class="kh-container kh-container-wide">
+    <div class="kh-card">
+        <div class="kh-header">
+            <h2>
+                <i class="bi bi-receipt" style="color: var(--brand-yellow);"></i>
+                Quản lý Hóa đơn
+            </h2>
+
+            <a href="@Url.Action("TaoMoi", "HoaDon", new { area = "Admin" })" class="btn-them">
+                <i class="bi bi-plus-circle"></i> Thêm hóa đơn
+            </a>
+        </div>
+
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @TempData["ThongBao"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="kh-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Mã HĐ</th>
+                            <th>Khách hàng</th>
+                            <th style="width: 110px;">Ngày đặt</th>
+                            <th style="width: 110px;">Ngày giao</th>
+                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
+                            <th style="width: 110px;" class="text-center">Trạng thái</th>
+                            <th style="width: 120px;" class="text-center">Thanh toán</th>
+                            <th style="width: 100px;" class="text-center">Giao tận nơi</th>
+                            <th style="width: 150px;" class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><strong>@item.mahoadon</strong></td>
+
+                                <td>
+                                    @(item.khachhang != null ? item.khachhang.hoten : "—")
+                                </td>
+
+                                <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
+                                <td>@item.ngaygiaohang.ToString("dd/MM/yyyy")</td>
+
+                                <td class="text-end">
+                                    @string.Format("{0:N0}₫", item.tongtien)
+                                </td>
+
+                                <td class="text-center">
+                                    @if (item.trangthaidon == 0)
+                                    {
+                                        <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
+                                    }
+                                    else if (item.trangthaidon == 1)
+                                    {
+                                        <span class="sp-badge sp-badge-success">Đã duyệt</span>
+                                    }
+                                    else if (item.trangthaidon == 2)
+                                    {
+                                        <span class="sp-badge sp-badge-danger">Từ chối</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.trangthaidon</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    @if (item.dathanhtoan)
+                                    {
+                                        <span class="sp-badge sp-badge-success">Đã thanh toán</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="sp-badge sp-badge-danger">Chưa</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    @if (item.giaotannoi)
+                                    {
+                                        <span class="sp-badge sp-badge-warning">Có</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Không</span>
+                                    }
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="@Url.Action("Index", "ChiTietHoaDon", new { area = "Admin", id = item.mahoadon })"
+                                       class="btn-icon btn-sua"
+                                       title="Xem chi tiết">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+
+                                    <a href="@Url.Action("Sua", "HoaDon", new { area = "Admin", id = item.mahoadon })"
+                                       class="btn-icon btn-sua"
+                                       title="Sửa">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+
+                                    <a href="@Url.Action("Xoa", "HoaDon", new { area = "Admin", id = item.mahoadon })"
+                                       class="btn-icon btn-xoa"
+                                       title="Xóa"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa hóa đơn này?');">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Chưa có hóa đơn nào. Nhấn nút <strong>Thêm hóa đơn</strong> để tạo mới.
+            </div>
+        }
+    </div>
+</div>

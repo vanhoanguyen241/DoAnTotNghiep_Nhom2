@@ -131,7 +131,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChiTietHoaDonController.cs" />
     <Compile Include="Areas\Admin\Controllers\DonViSanXuatController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HoaDonController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
@@ -222,6 +224,12 @@
     <Content Include="Areas\Admin\Views\SanPham\TaoMoi.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\HoaDon\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\HoaDon\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\HoaDon\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\ChiTietHoaDon\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ChiTietHoaDon\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\ChiTietHoaDon\Sua.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

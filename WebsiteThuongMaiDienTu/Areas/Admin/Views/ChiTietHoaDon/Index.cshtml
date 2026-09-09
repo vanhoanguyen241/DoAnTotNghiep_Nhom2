@@ -1,0 +1,163 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<chitiethoadon>
+@{
+    ViewBag.Title = "Chi tiết hóa đơn";
+    var hoaDon = ViewBag.HoaDon as hoadon;
+}
+
+@if (hoaDon == null)
+{
+    <div class="kh-container">
+        <div class="kh-card">
+            <div class="alert alert-danger">
+                Không tìm thấy hóa đơn.
+            </div>
+
+            <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })" class="btn-huy">
+                <i class="bi bi-arrow-left"></i> Quay lại danh sách hóa đơn
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="kh-container kh-container-wide">
+        <div class="kh-card">
+            <div class="kh-header">
+                <h2>
+                    <i class="bi bi-receipt-cutoff" style="color: var(--brand-yellow);"></i>
+                    Chi tiết hóa đơn #@hoaDon.mahoadon
+                </h2>
+
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("TaoMoi", "ChiTietHoaDon", new { area = "Admin", id = hoaDon.mahoadon })"
+                       class="btn-them">
+                        <i class="bi bi-plus-circle"></i> Thêm chi tiết
+                    </a>
+
+                    <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
+                       class="btn-huy">
+                        <i class="bi bi-arrow-left"></i> Danh sách hóa đơn
+                    </a>
+                </div>
+            </div>
+
+            @if (TempData["ThongBao"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    @TempData["ThongBao"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="alert alert-info mb-4">
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <strong>Khách hàng:</strong><br />
+                        @(hoaDon.khachhang != null ? hoaDon.khachhang.hoten : "—")
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Ngày đặt:</strong><br />
+                        @hoaDon.ngaydathang.ToString("dd/MM/yyyy")
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Trạng thái:</strong><br />
+
+                        @if (hoaDon.trangthaidon == 0)
+                        {
+                            <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
+                        }
+                        else if (hoaDon.trangthaidon == 1)
+                        {
+                            <span class="sp-badge sp-badge-success">Đã duyệt</span>
+                        }
+                        else if (hoaDon.trangthaidon == 2)
+                        {
+                            <span class="sp-badge sp-badge-danger">Từ chối</span>
+                        }
+                        else
+                        {
+                            <span>@hoaDon.trangthaidon</span>
+                        }
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Tổng tiền:</strong><br />
+                        @string.Format("{0:N0}₫", hoaDon.tongtien)
+                    </div>
+                </div>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="kh-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 120px;">Mã SP</th>
+                                <th>Tên sản phẩm</th>
+                                <th style="width: 100px;" class="text-center">Số lượng</th>
+                                <th style="width: 130px;" class="text-end">Đơn giá</th>
+                                <th style="width: 140px;" class="text-end">Thành tiền</th>
+                                <th style="width: 120px;" class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><strong>@item.masanpham</strong></td>
+
+                                    <td>
+                                        @(item.sanpham != null ? item.sanpham.tensanpham : "—")
+                                    </td>
+
+                                    <td class="text-center">@item.soluong</td>
+
+                                    <td class="text-end">
+                                        @string.Format("{0:N0}₫", item.dongia)
+                                    </td>
+
+                                    <td class="text-end">
+                                        @string.Format("{0:N0}₫", item.thanhtien)
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Sua", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
+                                           class="btn-icon btn-sua"
+                                           title="Sửa">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Xoa", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
+                                           class="btn-icon btn-xoa"
+                                           title="Xóa"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa chi tiết hóa đơn này?');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-end mt-3">
+                    <h4>
+                        Tổng tiền:
+                        @string.Format("{0:N0}₫", hoaDon.tongtien)
+                    </h4>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    Hóa đơn này chưa có chi tiết sản phẩm. Nhấn nút <strong>Thêm chi tiết</strong> để thêm sản phẩm vào hóa đơn.
+                </div>
+            }
+        </div>
+    </div>
+}
