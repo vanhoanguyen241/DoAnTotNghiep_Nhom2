@@ -138,6 +138,7 @@
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\DatHangController.cs" />
     <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhachHangController.cs" />
@@ -262,6 +263,8 @@
     <Content Include="Areas\Admin\Views\KhachHang\Sua.cshtml" />
     <Content Include="Views\SanPhamCongKhai\ChiTiet.cshtml" />
     <Content Include="Views\GioHang\Index.cshtml" />
+    <Content Include="Views\DatHang\Index.cshtml" />
+    <Content Include="Views\DatHang\ThanhCong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

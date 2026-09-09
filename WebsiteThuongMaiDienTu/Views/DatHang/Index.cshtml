@@ -1,0 +1,240 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model List<sanpham>
+@{
+    ViewBag.Title = "Xác nhận đặt hàng";
+
+    var gioHang = ViewBag.GioHang as Dictionary<string, int>;
+
+    if (gioHang == null)
+    {
+        gioHang = new Dictionary<string, int>();
+    }
+
+    decimal tongTien = ViewBag.TongTien != null ? (decimal)ViewBag.TongTien : 0;
+    var khachHang = ViewBag.KhachHang as khachhang;
+    var homNay = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<div class="cart-container">
+    <div class="cart-card">
+        <div class="cart-header">
+            <h2><i class="bi bi-receipt"></i> Xác nhận đặt hàng</h2>
+        </div>
+
+        @if (ViewBag.ThongBao != null)
+        {
+            <div class="cart-alert cart-alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>@ViewBag.ThongBao</span>
+            </div>
+        }
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Sản phẩm</th>
+                            <th style="width: 15%;">Đơn giá</th>
+                            <th style="width: 15%;">Số lượng</th>
+                            <th style="width: 20%;">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sp in Model)
+                        {
+                            int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
+                            decimal thanhTien = sp.dongia * soLuong;
+
+                            <tr>
+                                <td data-label="Sản phẩm">
+                                    <div class="cart-product-cell">
+                                        @if (!string.IsNullOrEmpty(sp.hinh))
+                                        {
+                                            <img src="@Url.Content(sp.hinh)" alt="@sp.tensanpham" class="cart-product-img" />
+                                        }
+                                        else
+                                        {
+                                            <div class="cart-product-img-placeholder">
+                                                <i class="bi bi-image"></i>
+                                            </div>
+                                        }
+
+                                        <div class="cart-product-info">
+                                            <strong>@sp.tensanpham</strong>
+                                            <span class="text-muted">@sp.masanpham</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Đơn giá">
+                                    <span class="cart-price">@string.Format("{0:N0}₫", sp.dongia)</span>
+                                </td>
+                                <td data-label="Số lượng">
+                                    <strong>@soLuong</strong>
+                                </td>
+                                <td data-label="Thành tiền">
+                                    <span class="cart-total-price">@string.Format("{0:N0}₫", thanhTien)</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-footer">
+                <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="btn-continue-shopping">
+                    <i class="bi bi-pencil"></i> Sửa giỏ hàng
+                </a>
+
+                <div class="cart-summary">
+                    <div class="cart-summary-label">Tổng tiền thanh toán</div>
+                    <div class="cart-summary-total">@string.Format("{0:N0}₫", tongTien)</div>
+                </div>
+            </div>
+
+            using (Html.BeginForm("XacNhanDatHang", "DatHang", new { area = "" }, FormMethod.Post, new { id = "formDatHang", autocomplete = "off" }))
+            {
+                <div class="form-section mt-4">
+                    <h3 class="form-section-title">
+                        <i class="bi bi-person-vcard"></i> Thông tin khách hàng
+                    </h3>
+
+                    @if (khachHang != null)
+                    {
+                    <div class="cart-alert cart-alert-success">
+                        <i class="bi bi-person-check-fill"></i>
+                        <span>
+                            Bạn đang đặt hàng với tài khoản <strong>@khachHang.hoten</strong>.
+                            Hệ thống sẽ sử dụng thông tin khách hàng đã có sẵn.
+                        </span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" value="@khachHang.hoten" readonly />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" value="@khachHang.SDT" readonly />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" value="@khachHang.diachi" readonly />
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                Họ và tên <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   name="txt_hoten"
+                                   class="form-control"
+                                   placeholder="Nhập họ và tên"
+                                   maxlength="100"
+                                   required />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                Số điện thoại <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   name="txt_sdt"
+                                   class="form-control"
+                                   placeholder="Nhập 10 - 11 chữ số"
+                                   maxlength="11"
+                                   required />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">
+                                Địa chỉ <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   name="txt_diachi"
+                                   class="form-control"
+                                   placeholder="Nhập địa chỉ"
+                                   maxlength="200"
+                                   required />
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <div class="form-section mt-4">
+                    <h3 class="form-section-title">
+                        <i class="bi bi-truck"></i> Hình thức nhận hàng
+                    </h3>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày giao mong muốn</label>
+                            <input type="date"
+                                   name="txt_ngaygiaohang"
+                                   class="form-control"
+                                   value="@homNay"
+                                   min="@homNay" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Địa chỉ giao tận nơi</label>
+                            <input type="text"
+                                   name="txt_diachigiao"
+                                   class="form-control"
+                                   placeholder="Để trống nếu nhận tại cửa hàng hoặc dùng địa chỉ đã đăng ký"
+                                   maxlength="200" />
+                        </div>
+                    </div>
+
+                    <div class="form-check sp-check mt-3">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="chk_giaotannoi"
+                               id="chk_giaotannoi" />
+                        <label class="form-check-label" for="chk_giaotannoi">
+                            Giao hàng tận nơi
+                        </label>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea name="txt_ghichu"
+                                  class="form-control"
+                                  rows="3"
+                                  maxlength="1000"
+                                  placeholder="Nhập ghi chú cho đơn hàng nếu cần"></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn-luu">
+                        <i class="bi bi-check-circle"></i> Xác nhận đặt hàng
+                    </button>
+
+                    <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="btn-huy">
+                        Quay lại giỏ hàng
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="cart-empty">
+                <i class="bi bi-cart-x d-block"></i>
+                <h4>Giỏ hàng trống</h4>
+                <p>Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-checkout">
+                    <i class="bi bi-arrow-left-circle"></i> Xem sản phẩm
+                </a>
+            </div>
+        }
+    </div>
+</div>

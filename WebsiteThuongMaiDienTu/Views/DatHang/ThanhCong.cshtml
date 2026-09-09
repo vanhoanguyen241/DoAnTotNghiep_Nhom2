@@ -1,0 +1,81 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model hoadon
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+}
+
+<div class="kh-form-container">
+    <div class="kh-form-card">
+        <div class="kh-form-header text-center">
+            <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: #2e7d32;"></i>
+            <h2>Đặt hàng thành công</h2>
+        </div>
+
+        <div class="cart-alert cart-alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>
+                Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là <strong>@Model.mahoadon</strong>.
+            </span>
+        </div>
+
+        <div class="product-detail-meta">
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Mã hóa đơn</span>
+                <span class="product-detail-meta-value">@Model.mahoadon</span>
+            </div>
+
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Ngày đặt hàng</span>
+                <span class="product-detail-meta-value">@Model.ngaydathang.ToString("dd/MM/yyyy")</span>
+            </div>
+
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Ngày giao mong muốn</span>
+                <span class="product-detail-meta-value">@Model.ngaygiaohang.ToString("dd/MM/yyyy")</span>
+            </div>
+
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Tổng tiền</span>
+                <span class="product-detail-meta-value" style="color: var(--brand-red); font-weight: 700;">
+                    @string.Format("{0:N0}₫", Model.tongtien)
+                </span>
+            </div>
+
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Trạng thái</span>
+                <span class="product-detail-meta-value">
+                    <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
+                </span>
+            </div>
+
+            <div class="product-detail-meta-item">
+                <span class="product-detail-meta-label">Hình thức nhận hàng</span>
+                <span class="product-detail-meta-value">
+                    @(Model.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                </span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ghichu))
+            {
+                <div class="product-detail-meta-item">
+                    <span class="product-detail-meta-label">Ghi chú</span>
+                    <span class="product-detail-meta-value">@Model.ghichu</span>
+                </div>
+            }
+        </div>
+
+        <p class="text-muted mt-3">
+            Vui lòng lưu lại mã đơn hàng để tra cứu khi cần.
+        </p>
+
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-luu">
+                <i class="bi bi-bag"></i> Tiếp tục mua sắm
+            </a>
+
+            <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn-huy">
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+</div>
