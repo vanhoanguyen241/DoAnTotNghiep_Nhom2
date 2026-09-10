@@ -49,6 +49,11 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 }
             }
 
+            if (Request.QueryString["focus"] == "1")
+            {
+                ViewBag.FocusForm = true;
+            }
+
             ChuanBiViewDatHang(gioHang, sanPhams);
             return View(sanPhams);
         }

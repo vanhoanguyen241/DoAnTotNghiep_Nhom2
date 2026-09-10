@@ -95,77 +95,78 @@
 
             using (Html.BeginForm("XacNhanDatHang", "DatHang", new { area = "" }, FormMethod.Post, new { id = "formDatHang", autocomplete = "off" }))
             {
-                <div class="form-section mt-4">
+                <div class="form-section mt-4" id="sectionKhachHang">
                     <h3 class="form-section-title">
                         <i class="bi bi-person-vcard"></i> Thông tin khách hàng
                     </h3>
 
                     @if (khachHang != null)
                     {
-                    <div class="cart-alert cart-alert-success">
-                        <i class="bi bi-person-check-fill"></i>
-                        <span>
-                            Bạn đang đặt hàng với tài khoản <strong>@khachHang.hoten</strong>.
-                            Hệ thống sẽ sử dụng thông tin khách hàng đã có sẵn.
-                        </span>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" value="@khachHang.hoten" readonly />
+                        <div class="cart-alert cart-alert-success">
+                            <i class="bi bi-person-check-fill"></i>
+                            <span>
+                                Bạn đang đặt hàng với tài khoản <strong>@khachHang.hoten</strong>.
+                                Hệ thống sẽ sử dụng thông tin khách hàng đã có sẵn.
+                            </span>
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" value="@khachHang.SDT" readonly />
-                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" value="@khachHang.hoten" readonly />
+                            </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">Địa chỉ</label>
-                            <input type="text" class="form-control" value="@khachHang.diachi" readonly />
+                            <div class="col-md-4">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" value="@khachHang.SDT" readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control" value="@khachHang.diachi" readonly />
+                            </div>
                         </div>
-                    </div>
                     }
                     else
                     {
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">
-                                Họ và tên <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   name="txt_hoten"
-                                   class="form-control"
-                                   placeholder="Nhập họ và tên"
-                                   maxlength="100"
-                                   required />
-                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Họ và tên <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       name="txt_hoten"
+                                       id="txt_hoten"
+                                       class="form-control"
+                                       placeholder="Nhập họ và tên"
+                                       maxlength="100"
+                                       required />
+                            </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">
-                                Số điện thoại <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   name="txt_sdt"
-                                   class="form-control"
-                                   placeholder="Nhập 10 - 11 chữ số"
-                                   maxlength="11"
-                                   required />
-                        </div>
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Số điện thoại <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       name="txt_sdt"
+                                       class="form-control"
+                                       placeholder="Nhập 10 - 11 chữ số"
+                                       maxlength="11"
+                                       required />
+                            </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label">
-                                Địa chỉ <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   name="txt_diachi"
-                                   class="form-control"
-                                   placeholder="Nhập địa chỉ"
-                                   maxlength="200"
-                                   required />
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    Địa chỉ <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       name="txt_diachi"
+                                       class="form-control"
+                                       placeholder="Nhập địa chỉ"
+                                       maxlength="200"
+                                       required />
+                            </div>
                         </div>
-                    </div>
                     }
                 </div>
 
@@ -238,3 +239,20 @@
         }
     </div>
 </div>
+@if (ViewBag.FocusForm == true)
+{
+    <script>
+    window.addEventListener('DOMContentLoaded', function () {
+        var section = document.getElementById('sectionKhachHang');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        setTimeout(function () {
+            var input = document.getElementById('txt_hoten');
+            if (input) {
+                input.focus();
+            }
+        }, 500);
+    });
+    </script>
+}
