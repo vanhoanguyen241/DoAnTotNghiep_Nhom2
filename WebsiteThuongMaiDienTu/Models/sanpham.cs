@@ -12,6 +12,7 @@ namespace WebsiteThuongMaiDienTu.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public sanpham()
         {
+            chitietdathangs = new HashSet<chitietdathang>();
             chitiethoadons = new HashSet<chitiethoadon>();
         }
 
@@ -46,6 +47,9 @@ namespace WebsiteThuongMaiDienTu.Models
         public int soluonghienco { get; set; }
 
         public bool? quangcao { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<chitietdathang> chitietdathangs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chitiethoadon> chitiethoadons { get; set; }

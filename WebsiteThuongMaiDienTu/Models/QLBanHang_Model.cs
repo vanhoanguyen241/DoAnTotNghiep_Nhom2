@@ -12,8 +12,10 @@ namespace WebsiteThuongMaiDienTu.Models
         {
         }
 
+        public virtual DbSet<chitietdathang> chitietdathangs { get; set; }
         public virtual DbSet<chitiethoadon> chitiethoadons { get; set; }
         public virtual DbSet<chuyenhang> chuyenhangs { get; set; }
+        public virtual DbSet<dathang> dathangs { get; set; }
         public virtual DbSet<donvisanxuat> donvisanxuats { get; set; }
         public virtual DbSet<hoadon> hoadons { get; set; }
         public virtual DbSet<khachhang> khachhangs { get; set; }
@@ -24,6 +26,10 @@ namespace WebsiteThuongMaiDienTu.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<chitietdathang>()
+                .Property(e => e.masanpham)
+                .IsUnicode(false);
+
             modelBuilder.Entity<chitiethoadon>()
                 .Property(e => e.masanpham)
                 .IsUnicode(false);
@@ -45,6 +51,11 @@ namespace WebsiteThuongMaiDienTu.Models
             modelBuilder.Entity<khachhang>()
                 .Property(e => e.SDT)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<khachhang>()
+                .HasMany(e => e.dathangs)
+                .WithRequired(e => e.khachhang)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<khachhang>()
                 .HasMany(e => e.hoadons)
@@ -80,6 +91,11 @@ namespace WebsiteThuongMaiDienTu.Models
             modelBuilder.Entity<sanpham>()
                 .Property(e => e.madonvisanxuat)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<sanpham>()
+                .HasMany(e => e.chitietdathangs)
+                .WithRequired(e => e.sanpham)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<sanpham>()
                 .HasMany(e => e.chitiethoadons)

@@ -1,5 +1,5 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
-@model List<hoadon>
+@model List<dathang>
 @{
     ViewBag.Title = "Duyệt đơn hàng";
 }
@@ -9,7 +9,7 @@
         <div class="kh-header">
             <h2>
                 <i class="bi bi-clipboard-check" style="color: var(--brand-yellow);"></i>
-                Đơn hàng chờ duyệt
+                Phiếu đặt hàng chờ duyệt
             </h2>
             <div class="d-flex gap-2">
                 <a href="@Url.Action("DanhSachTuChoi", "DuyetDon", new { area = "Admin" })" class="btn-them"
@@ -37,30 +37,26 @@
                 <table class="kh-table">
                     <thead>
                         <tr>
-                            <th style="width: 80px;">Mã HĐ</th>
+                            <th style="width: 80px;">Mã đơn</th>
                             <th>Khách hàng</th>
                             <th style="width: 120px;">SĐT</th>
                             <th style="width: 110px;">Ngày đặt</th>
                             <th style="width: 110px;">Ngày giao</th>
-                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
                             <th style="width: 100px;" class="text-center">Số SP</th>
                             <th style="width: 110px;" class="text-center">Giao tận nơi</th>
-                            <th style="width: 140px;" class="text-center">Hành động</th>
+                            <th style="width: 110px;" class="text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            int soSP = item.chitiethoadons?.Count ?? 0;
+                            int soSP = item.chitietdathangs != null ? item.chitietdathangs.Count : 0;
                             <tr>
-                                <td><strong>@item.mahoadon</strong></td>
+                                <td><strong>@item.madathang</strong></td>
                                 <td>@(item.khachhang != null ? item.khachhang.hoten : "—")</td>
                                 <td>@(item.khachhang != null && !string.IsNullOrEmpty(item.khachhang.SDT) ? item.khachhang.SDT : "—")</td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>@item.ngaygiaohang.ToString("dd/MM/yyyy")</td>
-                                <td class="text-end">
-                                    <strong>@string.Format("{0:N0}₫", item.tongtien)</strong>
-                                </td>
                                 <td class="text-center">
                                     <span class="sp-badge sp-badge-warning">@soSP</span>
                                 </td>
@@ -75,14 +71,9 @@
                                     }
                                 </td>
                                 <td class="text-center">
-                                    <a href="@Url.Action("ChiTiet", "DuyetDon", new { area = "Admin", id = item.mahoadon })"
+                                    <a href="@Url.Action("ChiTiet", "DuyetDon", new { area = "Admin", id = item.madathang })"
                                        class="btn-icon btn-sua" title="Duyệt đơn">
                                         <i class="bi bi-check2-square"></i>
-                                    </a>
-                                    <a href="@Url.Action("Index", "ChiTietHoaDon", new { area = "Admin", id = item.mahoadon })"
-                                       class="btn-icon" title="Xem chi tiết"
-                                       style="background:#E8F5E9;color:#2E7D32;">
-                                        <i class="bi bi-eye-fill"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -94,7 +85,7 @@
         else
         {
             <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Hiện không có đơn hàng nào cần duyệt.
+                <i class="bi bi-info-circle"></i> Hiện không có phiếu đặt hàng nào cần duyệt.
             </div>
         }
     </div>

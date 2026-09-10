@@ -1,5 +1,5 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
-@model List<hoadon>
+@model List<dathang>
 @{
     ViewBag.Title = "Đơn hàng đã từ chối";
 }
@@ -9,7 +9,7 @@
         <div class="kh-header">
             <h2>
                 <i class="bi bi-x-octagon" style="color:#C62828;"></i>
-                Đơn hàng đã từ chối
+                Phiếu đặt hàng đã từ chối
             </h2>
             <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn-huy"
                style="padding:10px 16px;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:8px;">
@@ -31,10 +31,9 @@
                 <table class="kh-table">
                     <thead>
                         <tr>
-                            <th style="width: 80px;">Mã HĐ</th>
+                            <th style="width: 80px;">Mã đơn</th>
                             <th>Khách hàng</th>
                             <th style="width: 110px;">Ngày đặt</th>
-                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
                             <th>Lý do / Ghi chú</th>
                             <th style="width: 100px;" class="text-center">Hành động</th>
                         </tr>
@@ -43,20 +42,19 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td><strong>#@item.mahoadon</strong></td>
+                                <td><strong>#@item.madathang</strong></td>
                                 <td>@(item.khachhang != null ? item.khachhang.hoten : "—")</td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
-                                <td class="text-end">@string.Format("{0:N0}₫", item.tongtien)</td>
                                 <td>
                                     <small class="text-muted">
                                         @(string.IsNullOrEmpty(item.ghichu) ? "—" : item.ghichu)
                                     </small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.mahoadon })"
+                                    <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.madathang })"
                                        class="btn-icon btn-xoa"
                                        title="Xóa đơn"
-                                       onclick="return confirm('XÓA VĨNH VIỄN đơn #@item.mahoadon?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
+                                       onclick="return confirm('XÓA VĨNH VIỄN đơn #@item.madathang?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
                                         <i class="bi bi-trash-fill"></i>
                                     </a>
                                 </td>

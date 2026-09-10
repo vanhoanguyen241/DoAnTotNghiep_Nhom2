@@ -12,6 +12,7 @@ namespace WebsiteThuongMaiDienTu.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public khachhang()
         {
+            dathangs = new HashSet<dathang>();
             hoadons = new HashSet<hoadon>();
             taikhoans = new HashSet<taikhoan>();
         }
@@ -30,6 +31,9 @@ namespace WebsiteThuongMaiDienTu.Models
 
         [StringLength(15)]
         public string SDT { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<dathang> dathangs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hoadon> hoadons { get; set; }

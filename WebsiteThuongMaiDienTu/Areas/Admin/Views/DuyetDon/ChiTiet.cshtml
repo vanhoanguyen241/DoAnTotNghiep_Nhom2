@@ -1,18 +1,18 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
-@model List<chitiethoadon>
+@model List<chitietdathang>
 @{
     ViewBag.Title = "Duyệt đơn hàng";
-    var hoaDon = ViewBag.HoaDon as hoadon;
+    var datHang = ViewBag.DatHang as dathang;
     var khachHang = ViewBag.KhachHang as khachhang;
     var tonKho = ViewBag.TonKho as Dictionary<string, int>;
     if (tonKho == null) { tonKho = new Dictionary<string, int>(); }
 }
 
-@if (hoaDon == null)
+@if (datHang == null)
 {
     <div class="kh-container">
         <div class="kh-card">
-            <div class="alert alert-danger">Không tìm thấy hóa đơn.</div>
+            <div class="alert alert-danger">Không tìm thấy phiếu đặt hàng.</div>
             <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn-huy">
                 <i class="bi bi-arrow-left"></i> Quay lại
             </a>
@@ -26,7 +26,7 @@ else
             <div class="kh-header">
                 <h2>
                     <i class="bi bi-clipboard2-check" style="color: var(--brand-yellow);"></i>
-                    Duyệt đơn #@hoaDon.mahoadon
+                    Duyệt phiếu đặt hàng #@datHang.madathang
                 </h2>
                 <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn-huy"
                    style="padding:10px 16px;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:8px;">
@@ -55,16 +55,16 @@ else
                     </div>
                     <div class="col-md-3">
                         <strong>Ngày đặt / Ngày giao:</strong><br />
-                        @hoaDon.ngaydathang.ToString("dd/MM/yyyy") → @hoaDon.ngaygiaohang.ToString("dd/MM/yyyy")
+                        @datHang.ngaydathang.ToString("dd/MM/yyyy") → @datHang.ngaygiaohang.ToString("dd/MM/yyyy")
                     </div>
                     <div class="col-md-3">
                         <strong>Hình thức:</strong><br />
-                        @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                        @(datHang.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
                     </div>
-                    @if (!string.IsNullOrEmpty(hoaDon.ghichu))
+                    @if (!string.IsNullOrEmpty(datHang.ghichu))
                     {
                         <div class="col-12">
-                            <strong>Ghi chú:</strong> @hoaDon.ghichu
+                            <strong>Ghi chú:</strong> @datHang.ghichu
                         </div>
                     }
                 </div>
@@ -74,7 +74,7 @@ else
             {
                 using (Html.BeginForm("XuLyDuyet", "DuyetDon", new { area = "Admin" }, FormMethod.Post, new { id = "formDuyetDon" }))
                 {
-                    <input type="hidden" name="mahoadon" value="@hoaDon.mahoadon" />
+                    <input type="hidden" name="madathang" value="@datHang.madathang" />
 
                     <div class="table-responsive">
                         <table class="kh-table">
@@ -95,13 +95,13 @@ else
                                 @foreach (var ct in Model)
                                 {
                                     int ton = tonKho.ContainsKey(ct.masanpham) ? tonKho[ct.masanpham] : 0;
-                                    int macDinh = Math.Min(ct.soluong, ton);
+                                    int macDinh = Math.Min(ct.soluongdat, ton);
                                     <tr>
                                         <td><strong>@ct.masanpham</strong></td>
                                         <td>@(ct.sanpham != null ? ct.sanpham.tensanpham : "—")</td>
                                         <td class="text-end">@string.Format("{0:N0}₫", ct.dongia)</td>
                                         <td class="text-center">
-                                            <span class="sp-badge sp-badge-warning">@ct.soluong</span>
+                                            <span class="sp-badge sp-badge-warning">@ct.soluongdat</span>
                                         </td>
                                         <td class="text-center">
                                             @if (ton > 0)
@@ -120,7 +120,7 @@ else
                                                    min="0"
                                                    max="@ton"
                                                    value="@macDinh"
-                                                   data-goc="@ct.soluong"
+                                                   data-goc="@ct.soluongdat"
                                                    data-ton="@ton"
                                                    style="text-align:center;font-weight:700;"
                                                    required />
@@ -142,7 +142,7 @@ else
                             <strong>Tổng tiền sau duyệt:</strong>
                             <span id="tongTienMoi"
                                   style="font-size:1.4rem;color:var(--brand-red);font-weight:800;margin-left:8px;">
-                                @string.Format("{0:N0}₫", hoaDon.tongtien)
+                                @string.Format("{0:N0}₫", datHang.chitietdathangs.Sum(ct => ct.thanhtien))
                             </span>
                         </div>
                         <div class="d-flex gap-2">
@@ -162,7 +162,7 @@ else
             else
             {
                 <div class="alert alert-warning">
-                    Đơn hàng này chưa có sản phẩm nào.
+                    Phiếu đặt hàng này chưa có sản phẩm nào.
                 </div>
             }
         </div>
@@ -173,10 +173,10 @@ else
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="post" action="@Url.Action("TuChoi", "DuyetDon", new { area = "Admin" })">
-                    <input type="hidden" name="id" value="@hoaDon.mahoadon" />
+                    <input type="hidden" name="id" value="@datHang.madathang" />
                     <div class="modal-header" style="background:#FFEBEE;">
                         <h5 class="modal-title" style="color:#C62828;">
-                            <i class="bi bi-x-octagon-fill"></i> Từ chối đơn #@hoaDon.mahoadon
+                            <i class="bi bi-x-octagon-fill"></i> Từ chối đơn #@datHang.madathang
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -188,7 +188,7 @@ else
                                   placeholder="Ví dụ: Hết hàng, khách không liên hệ được..."
                                   required maxlength="500"></textarea>
                         <small class="text-muted">
-                            Lý do sẽ được nối vào phần ghi chú của hóa đơn.
+                            Lý do sẽ được nối vào phần ghi chú của phiếu đặt hàng.
                         </small>
                     </div>
                     <div class="modal-footer">
@@ -210,6 +210,7 @@ else
             function formatVND(n) {
                 return new Intl.NumberFormat('vi-VN').format(n) + '₫';
             }
+
             function recalc() {
                 var tong = 0;
                 document.querySelectorAll('.sl-duyet').forEach(function (input) {
@@ -228,11 +229,13 @@ else
                 var el = document.getElementById('tongTienMoi');
                 if (el) el.textContent = formatVND(tong);
             }
+
             document.addEventListener('input', function (e) {
                 if (e.target && e.target.classList && e.target.classList.contains('sl-duyet')) {
                     recalc();
                 }
             });
+
             document.addEventListener('DOMContentLoaded', recalc);
         })();
     </script>

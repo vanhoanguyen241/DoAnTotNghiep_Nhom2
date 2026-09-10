@@ -13,9 +13,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // GET: Admin/DuyetDon
         public ActionResult Index()
         {
-            var dsChoDuyet = db.hoadons
-                .Where(h => h.trangthaidon == 0)
-                .OrderByDescending(h => h.ngaydathang)
+            var dsChoDuyet = db.dathangs
+                .Where(d => d.trangthai == 0)
+                .OrderByDescending(d => d.ngaydathang)
                 .ToList();
             return View(dsChoDuyet);
         }
@@ -23,23 +23,23 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // GET: Admin/DuyetDon/ChiTiet/5
         public ActionResult ChiTiet(int id)
         {
-            var hd = db.hoadons.Find(id);
-            if (hd == null)
+            var dh = db.dathangs.Find(id);
+            if (dh == null)
             {
-                TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
+                TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
                 return RedirectToAction("Index");
             }
-            if (hd.trangthaidon != 0)
+            if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
                 return RedirectToAction("Index");
             }
 
-            ViewBag.HoaDon = hd;
-            ViewBag.KhachHang = hd.khachhang;
+            ViewBag.DatHang = dh;
+            ViewBag.KhachHang = dh.khachhang;
 
-            var dsChiTiet = db.chitiethoadons
-                .Where(ct => ct.mahoadon == id)
+            var dsChiTiet = db.chitietdathangs
+                .Where(ct => ct.madathang == id)
                 .ToList();
 
             // Nạp tồn kho hiện tại cho từng sản phẩm (để view hiển thị)
@@ -50,7 +50,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 tonKho[ct.masanpham] = sp != null ? sp.soluonghienco : 0;
             }
             ViewBag.TonKho = tonKho;
-
             return View(dsChiTiet);
         }
 
@@ -59,31 +58,25 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         public ActionResult XuLyDuyet(FormCollection collection)
         {
             int id;
-            if (!int.TryParse(collection["mahoadon"], out id))
+            if (!int.TryParse(collection["madathang"], out id))
                 return RedirectToAction("Index");
 
-            var hd = db.hoadons.Find(id);
-            if (hd == null)
+            var dh = db.dathangs.Find(id);
+            if (dh == null)
             {
-                TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
+                TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
                 return RedirectToAction("Index");
             }
-            if (hd.trangthaidon != 0)
+            if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
                 return RedirectToAction("Index");
             }
 
-            var dsChiTiet = db.chitiethoadons
-                .Where(ct => ct.mahoadon == id)
+            var dsChiTiet = db.chitietdathangs
+                .Where(ct => ct.madathang == id)
                 .ToList();
 
-            // Lưu số lượng gốc (trước khi duyệt) để so sánh
-            var soLuongGoc = new Dictionary<string, int>();
-            foreach (var ct in dsChiTiet)
-                soLuongGoc[ct.masanpham] = ct.soluong;
-
-            // Đọc số lượng duyệt từ form
             var soLuongDuyet = new Dictionary<string, int>();
             bool allZero = true;
             bool coThayDoi = false;
@@ -108,6 +101,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     TempData["ThongBao"] = "Sản phẩm \"" + ct.masanpham + "\" không tồn tại!";
                     return RedirectToAction("ChiTiet", new { id = id });
                 }
+
                 if (slDuyet > sp.soluonghienco)
                 {
                     TempData["ThongBao"] = "Sản phẩm \"" + sp.tensanpham
@@ -118,53 +112,71 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 soLuongDuyet[ct.masanpham] = slDuyet;
                 if (slDuyet > 0) allZero = false;
 
-                if (slDuyet != soLuongGoc[ct.masanpham])
+                if (slDuyet != ct.soluongdat)
                 {
                     coThayDoi = true;
                     if (slDuyet == 0)
                         ghiChuThayDoi.Add("SP \"" + sp.tensanpham + "\" bị loại");
                     else
                         ghiChuThayDoi.Add("SP \"" + sp.tensanpham + "\": "
-                            + soLuongGoc[ct.masanpham] + " → " + slDuyet);
+                            + ct.soluongdat + " → " + slDuyet);
                 }
             }
 
             // Nếu TẤT CẢ dòng = 0 → tự động từ chối
             if (allZero)
             {
-                hd.trangthaidon = 2;
-                hd.nguoilap = Session["MaNV"] as int?;
+                dh.trangthai = 2;
                 string lyDo = " | Tự động từ chối: Không có sản phẩm nào được duyệt.";
-                hd.ghichu = (hd.ghichu ?? "") + lyDo;
-                if (hd.ghichu.Length > 1000) hd.ghichu = hd.ghichu.Substring(0, 1000);
+                dh.ghichu = (dh.ghichu ?? "") + lyDo;
+                if (dh.ghichu.Length > 1000) dh.ghichu = dh.ghichu.Substring(0, 1000);
                 db.SaveChanges();
+
                 TempData["ThongBao"] = "Đơn hàng đã được tự động từ chối (không có sản phẩm nào được duyệt)!";
                 return RedirectToAction("Index");
             }
 
-            // Xử lý từng dòng: xóa dòng = 0, cập nhật dòng > 0, trừ tồn kho
+            // Tạo hóa đơn mới từ các dòng được duyệt
+            // TĂNG THỦ CÔNG mahoadon
+            int maHoaDonMoi;
+            if (db.hoadons.Any())
+                maHoaDonMoi = db.hoadons.Max(h => h.mahoadon) + 1;
+            else
+                maHoaDonMoi = 1;
+
+            hoadon hd = new hoadon();
+            hd.mahoadon = maHoaDonMoi;
+            hd.makh = dh.makh;
+            hd.nguoilap = Session["MaNV"] as int?;
+            hd.ngaydathang = dh.ngaydathang;
+            hd.ngaygiaohang = dh.ngaygiaohang;
+            hd.dathanhtoan = false;
+            hd.giaotannoi = dh.giaotannoi;
+            hd.ghichu = dh.ghichu;
+
             decimal tongTienMoi = 0;
+
             foreach (var ct in dsChiTiet)
             {
                 int slDuyet = soLuongDuyet[ct.masanpham];
-                if (slDuyet == 0)
+                ct.soluongduyet = slDuyet;
+
+                if (slDuyet > 0)
                 {
-                    db.chitiethoadons.Remove(ct);
-                }
-                else
-                {
-                    ct.soluong = slDuyet;                 // ghi đè trực tiếp
-                    ct.thanhtien = ct.dongia * slDuyet;
-                    tongTienMoi += ct.thanhtien;
+                    chitiethoadon cthd = new chitiethoadon();
+                    cthd.mahoadon = maHoaDonMoi;
+                    cthd.masanpham = ct.masanpham;
+                    cthd.soluong = slDuyet;
+                    cthd.dongia = ct.dongia;
+                    cthd.thanhtien = ct.dongia * slDuyet;
+                    hd.chitiethoadons.Add(cthd);
+                    tongTienMoi += cthd.thanhtien;
 
                     var sp = db.sanphams.Find(ct.masanpham);
-                    sp.soluonghienco -= slDuyet;         // Trừ tồn kho khi duyệt
+                    sp.soluonghienco -= slDuyet;   // Trừ tồn kho khi duyệt
                 }
             }
 
-            // Cập nhật hóa đơn
-            hd.trangthaidon = 1;
-            hd.nguoilap = Session["MaNV"] as int?;
             hd.tongtien = tongTienMoi;
 
             if (coThayDoi)
@@ -174,8 +186,15 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 if (hd.ghichu.Length > 1000) hd.ghichu = hd.ghichu.Substring(0, 1000);
             }
 
+            db.hoadons.Add(hd);
             db.SaveChanges();
-            TempData["ThongBao"] = "Duyệt đơn hàng thành công!";
+
+            // Liên kết phiếu đặt hàng với hóa đơn vừa tạo
+            dh.trangthai = 1;
+            dh.mahoadon = hd.mahoadon;
+            db.SaveChanges();
+
+            TempData["ThongBao"] = "Duyệt đơn hàng thành công! Đã tạo hóa đơn #" + hd.mahoadon;
             return RedirectToAction("Index");
         }
 
@@ -183,26 +202,25 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult TuChoi(int id, string lydo)
         {
-            var hd = db.hoadons.Find(id);
-            if (hd == null)
+            var dh = db.dathangs.Find(id);
+            if (dh == null)
             {
-                TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
+                TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
                 return RedirectToAction("Index");
             }
-            if (hd.trangthaidon != 0)
+            if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
                 return RedirectToAction("Index");
             }
 
-            hd.trangthaidon = 2;
-            hd.nguoilap = Session["MaNV"] as int?;
+            dh.trangthai = 2;
             string lyDoFmt = " | Từ chối: "
                 + (string.IsNullOrWhiteSpace(lydo) ? "Không nêu lý do" : lydo.Trim());
-            hd.ghichu = (hd.ghichu ?? "") + lyDoFmt;
-            if (hd.ghichu.Length > 1000) hd.ghichu = hd.ghichu.Substring(0, 1000);
-
+            dh.ghichu = (dh.ghichu ?? "") + lyDoFmt;
+            if (dh.ghichu.Length > 1000) dh.ghichu = dh.ghichu.Substring(0, 1000);
             db.SaveChanges();
+
             TempData["ThongBao"] = "Đã từ chối đơn hàng!";
             return RedirectToAction("Index");
         }
@@ -210,9 +228,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // GET: Admin/DuyetDon/DanhSachTuChoi
         public ActionResult DanhSachTuChoi()
         {
-            var dsTuChoi = db.hoadons
-                .Where(h => h.trangthaidon == 2)
-                .OrderByDescending(h => h.ngaydathang)
+            var dsTuChoi = db.dathangs
+                .Where(d => d.trangthai == 2)
+                .OrderByDescending(d => d.ngaydathang)
                 .ToList();
             return View(dsTuChoi);
         }
@@ -220,26 +238,22 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // GET: Admin/DuyetDon/XoaDonTuChoi/5
         public ActionResult XoaDonTuChoi(int id)
         {
-            var hd = db.hoadons.Find(id);
-            if (hd == null)
+            var dh = db.dathangs.Find(id);
+            if (dh == null)
             {
-                TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
+                TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
                 return RedirectToAction("DanhSachTuChoi");
             }
-            if (hd.trangthaidon != 2)
+            if (dh.trangthai != 2)
             {
                 TempData["ThongBao"] = "Chỉ xóa được đơn đã bị từ chối!";
                 return RedirectToAction("DanhSachTuChoi");
             }
-            if (db.chuyenhangs.Any(ch => ch.mahoadon == id))
-            {
-                TempData["ThongBao"] = "Không thể xóa đơn đã có phiếu chuyển hàng!";
-                return RedirectToAction("DanhSachTuChoi");
-            }
 
-            var chiTiet = db.chitiethoadons.Where(ct => ct.mahoadon == id).ToList();
-            if (chiTiet.Any()) db.chitiethoadons.RemoveRange(chiTiet);
-            db.hoadons.Remove(hd);
+            // Vì đơn từ chối chưa bao giờ tạo hóa đơn nên không cần check chuyenhang
+            var chiTiet = db.chitietdathangs.Where(ct => ct.madathang == id).ToList();
+            if (chiTiet.Any()) db.chitietdathangs.RemoveRange(chiTiet);
+            db.dathangs.Remove(dh);
             db.SaveChanges();
 
             TempData["ThongBao"] = "Đã xóa đơn hàng bị từ chối!";

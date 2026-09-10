@@ -6,24 +6,20 @@ namespace WebsiteThuongMaiDienTu.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("hoadon")]
-    public partial class hoadon
+    [Table("dathang")]
+    public partial class dathang
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public hoadon()
+        public dathang()
         {
-            chitiethoadons = new HashSet<chitiethoadon>();
-            chuyenhangs = new HashSet<chuyenhang>();
-            dathangs = new HashSet<dathang>();
+            chitietdathangs = new HashSet<chitietdathang>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int mahoadon { get; set; }
+        public int madathang { get; set; }
 
         public int makh { get; set; }
-
-        public int? nguoilap { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime ngaydathang { get; set; }
@@ -31,26 +27,20 @@ namespace WebsiteThuongMaiDienTu.Models
         [Column(TypeName = "date")]
         public DateTime ngaygiaohang { get; set; }
 
-        public decimal tongtien { get; set; }
-
-        public bool dathanhtoan { get; set; }
-
         public bool giaotannoi { get; set; }
+
+        public byte trangthai { get; set; }
 
         [StringLength(1000)]
         public string ghichu { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<chitiethoadon> chitiethoadons { get; set; }
+        public int? mahoadon { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<chuyenhang> chuyenhangs { get; set; }
+        public virtual ICollection<chitietdathang> chitietdathangs { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<dathang> dathangs { get; set; }
+        public virtual hoadon hoadon { get; set; }
 
         public virtual khachhang khachhang { get; set; }
-
-        public virtual nhanvien nhanvien { get; set; }
     }
 }

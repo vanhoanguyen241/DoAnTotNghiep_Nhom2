@@ -132,6 +132,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ChiTietHoaDonController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChuyenHangController.cs" />
     <Compile Include="Areas\Admin\Controllers\DonViSanXuatController.cs" />
     <Compile Include="Areas\Admin\Controllers\DuyetDonController.cs" />
     <Compile Include="Areas\Admin\Controllers\HoaDonController.cs" />
@@ -235,6 +236,9 @@
     <Content Include="Areas\Admin\Views\DuyetDon\Index.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\ChiTiet.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\DanhSachTuChoi.cshtml" />
+    <Content Include="Areas\Admin\Views\ChuyenHang\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ChuyenHang\ChoLapPhieu.cshtml" />
+    <Content Include="Areas\Admin\Views\ChuyenHang\GanNhanVien.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
