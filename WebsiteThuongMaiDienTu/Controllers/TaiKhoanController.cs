@@ -43,18 +43,19 @@ namespace WebsiteThuongMaiDienTu.Controllers
                     Session["LoaiTaiKhoan"] = "NhanVien";
                     Session["MaNV"] = tk_login.manv;
 
-                    // Lấy vai trò từ bảng nhanvien
                     var nv = db.nhanviens.Find(tk_login.manv);
                     if (nv != null)
                     {
-                        Session["VaiTro"] = nv.vaitro; // Lưu 'Admin' hoặc 'NhanVien'
+                        Session["VaiTro"] = nv.vaitro;
                     }
+
                     return RedirectToAction("Index", "Home", new { area = "Admin" });
                 }
-            else if (tk_login.makh != null)
+                else if (tk_login.makh != null)
                 {
                     Session["LoaiTaiKhoan"] = "KhachHang";
                     Session["MaKH"] = tk_login.makh;
+
                     return RedirectToAction("Index", "Home", new { area = "" });
                 }
             }
@@ -77,17 +78,20 @@ namespace WebsiteThuongMaiDienTu.Controllers
         [HttpPost]
         public ActionResult DangKy(FormCollection collection)
         {
-            var Tendangnhap = collection["txt_tendangnhap"];
-            var Matkhau = collection["txt_matkhau"];
-            var Xacnhanmk = collection["txt_xacnhanmk"];
-            var Hoten = collection["txt_hoten"];
-            var Diachi = collection["txt_diachi"];
-            var Sodienthoai = collection["txt_sdt"];
+            var Tendangnhap = (collection["txt_tendangnhap"] ?? "").Trim();
+            var Matkhau = (collection["txt_matkhau"] ?? "").Trim();
+            var Xacnhanmk = (collection["txt_xacnhanmk"] ?? "").Trim();
+            var Hoten = (collection["txt_hoten"] ?? "").Trim();
+            var Diachi = (collection["txt_diachi"] ?? "").Trim();
+            var Sodienthoai = (collection["txt_sdt"] ?? "").Trim();
 
             // Kiểm tra dữ liệu bắt buộc
-            if (string.IsNullOrEmpty(Tendangnhap) || string.IsNullOrEmpty(Matkhau) ||
-                string.IsNullOrEmpty(Xacnhanmk) || string.IsNullOrEmpty(Hoten) ||
-                string.IsNullOrEmpty(Diachi) || string.IsNullOrEmpty(Sodienthoai))
+            if (string.IsNullOrEmpty(Tendangnhap)
+                || string.IsNullOrEmpty(Matkhau)
+                || string.IsNullOrEmpty(Xacnhanmk)
+                || string.IsNullOrEmpty(Hoten)
+                || string.IsNullOrEmpty(Diachi)
+                || string.IsNullOrEmpty(Sodienthoai))
             {
                 ViewBag.ThongBao = "Vui lòng điền đầy đủ thông tin bắt buộc!";
                 return View();
@@ -116,26 +120,43 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return View();
             }
 
-            // Lấy mã khách hàng lớn nhất hiện có trong bảng khachhang
-            var maKhLonNhat = (from kh in db.khachhangs
-                               select kh.makh).DefaultIfEmpty(0).Max();
+            // ======================================================
+            // ADR-009: Kiểm tra SDT đã tồn tại trong khachhang chưa
+            // ======================================================
+            int maKhMoi;
 
-            int maKhMoi = maKhLonNhat + 1;
+            var khachCu = (from kh in db.khachhangs
+                           where kh.SDT == Sodienthoai
+                           select kh).FirstOrDefault();
 
-            // Tạo khách hàng mới
-            khachhang kh_moi = new khachhang();
-            kh_moi.makh = maKhMoi;
-            kh_moi.hoten = Hoten;
-            kh_moi.diachi = Diachi;
-            kh_moi.SDT = Sodienthoai;
+            if (khachCu != null)
+            {
+                // SDT đã tồn tại -> dùng lại khách hàng cũ
+                maKhMoi = khachCu.makh;
+            }
+            else
+            {
+                // SDT chưa tồn tại -> tạo khách hàng mới
+                if (db.khachhangs.Any())
+                    maKhMoi = db.khachhangs.Max(k => k.makh) + 1;
+                else
+                    maKhMoi = 1;
 
-            db.khachhangs.Add(kh_moi);
-            db.SaveChanges();
+                khachhang kh_moi = new khachhang();
+                kh_moi.makh = maKhMoi;
+                kh_moi.hoten = Hoten;
+                kh_moi.diachi = Diachi;
+                kh_moi.SDT = Sodienthoai;
 
-            // Tạo tài khoản mới
+                db.khachhangs.Add(kh_moi);
+                db.SaveChanges();
+            }
+
+            // Tạo tài khoản khách hàng
             taikhoan tk_moi = new taikhoan();
             tk_moi.tendangnhap = Tendangnhap;
             tk_moi.matkhau = Matkhau;
+            tk_moi.manv = null;
             tk_moi.makh = maKhMoi;
 
             db.taikhoans.Add(tk_moi);

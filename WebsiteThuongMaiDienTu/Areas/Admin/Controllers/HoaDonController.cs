@@ -60,14 +60,15 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View();
             }
 
-            // Lấy mã hóa đơn lớn nhất hiện có
-            int maHDLonNhat = db.hoadons
-                .Select(h => h.mahoadon)
-                .DefaultIfEmpty(0)
-                .Max();
+            // Tăng mã thủ công: kiểm tra DB trước
+            int maHoaDonMoi;
+            if (db.hoadons.Any())
+                maHoaDonMoi = db.hoadons.Max(h => h.mahoadon) + 1;
+            else
+                maHoaDonMoi = 1;
 
             hoadon hd = new hoadon();
-            hd.mahoadon = maHDLonNhat + 1;
+            hd.mahoadon = maHoaDonMoi;
             hd.makh = makh;
             hd.nguoilap = Session["MaNV"] as int?;
             hd.ngaydathang = ngaydathang;
@@ -75,11 +76,8 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             hd.tongtien = 0;
             hd.dathanhtoan = collection["chk_dathanhtoan"] != null;
             hd.giaotannoi = collection["chk_giaotannoi"] != null;
-
-            // Admin tạo hóa đơn trực tiếp thì có thể xem như đã duyệt
-            hd.trangthaidon = 1;
-
             hd.ghichu = collection["txt_ghichu"];
+            // ĐÃ BỎ dòng: hd.trangthaidon = 1;
 
             db.hoadons.Add(hd);
             db.SaveChanges();

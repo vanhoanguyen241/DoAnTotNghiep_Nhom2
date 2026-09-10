@@ -63,23 +63,14 @@ else
                     </div>
 
                     <div class="col-md-3">
-                        <strong>Trạng thái:</strong><br />
-
-                        @if (hoaDon.trangthaidon == 0)
+                        <strong>Thanh toán:</strong><br />
+                        @if (hoaDon.dathanhtoan)
                         {
-                            <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
-                        }
-                        else if (hoaDon.trangthaidon == 1)
-                        {
-                            <span class="sp-badge sp-badge-success">Đã duyệt</span>
-                        }
-                        else if (hoaDon.trangthaidon == 2)
-                        {
-                            <span class="sp-badge sp-badge-danger">Từ chối</span>
+                            <span class="sp-badge sp-badge-success">Đã thanh toán</span>
                         }
                         else
                         {
-                            <span>@hoaDon.trangthaidon</span>
+                            <span class="sp-badge sp-badge-danger">Chưa thanh toán</span>
                         }
                     </div>
 

@@ -150,8 +150,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\chitietdathang.cs" />
     <Compile Include="Models\chitiethoadon.cs" />
     <Compile Include="Models\chuyenhang.cs" />
+    <Compile Include="Models\dathang.cs" />
     <Compile Include="Models\donvisanxuat.cs" />
     <Compile Include="Models\hoadon.cs" />
     <Compile Include="Models\khachhang.cs" />

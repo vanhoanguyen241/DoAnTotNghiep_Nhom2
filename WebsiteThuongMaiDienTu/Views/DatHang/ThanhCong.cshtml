@@ -1,7 +1,30 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
-@model hoadon
+@model dathang
 @{
     ViewBag.Title = "Đặt hàng thành công";
+
+    decimal tongTien = 0;
+    if (Model.chitietdathangs != null)
+    {
+        foreach (var ct in Model.chitietdathangs)
+        {
+            tongTien += ct.thanhtien;
+        }
+    }
+
+    string trangThaiText = "Chờ duyệt";
+    string trangThaiClass = "sp-badge-warning";
+
+    if (Model.trangthai == 1)
+    {
+        trangThaiText = "Đã duyệt";
+        trangThaiClass = "sp-badge-success";
+    }
+    else if (Model.trangthai == 2)
+    {
+        trangThaiText = "Từ chối";
+        trangThaiClass = "sp-badge-danger";
+    }
 }
 
 <div class="kh-form-container">
@@ -14,14 +37,14 @@
         <div class="cart-alert cart-alert-success">
             <i class="bi bi-check-circle-fill"></i>
             <span>
-                Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là <strong>@Model.mahoadon</strong>.
+                Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là <strong>#@Model.madathang</strong>.
             </span>
         </div>
 
         <div class="product-detail-meta">
             <div class="product-detail-meta-item">
-                <span class="product-detail-meta-label">Mã hóa đơn</span>
-                <span class="product-detail-meta-value">@Model.mahoadon</span>
+                <span class="product-detail-meta-label">Mã đơn hàng</span>
+                <span class="product-detail-meta-value">@Model.madathang</span>
             </div>
 
             <div class="product-detail-meta-item">
@@ -37,14 +60,14 @@
             <div class="product-detail-meta-item">
                 <span class="product-detail-meta-label">Tổng tiền</span>
                 <span class="product-detail-meta-value" style="color: var(--brand-red); font-weight: 700;">
-                    @string.Format("{0:N0}₫", Model.tongtien)
+                    @string.Format("{0:N0}₫", tongTien)
                 </span>
             </div>
 
             <div class="product-detail-meta-item">
                 <span class="product-detail-meta-label">Trạng thái</span>
                 <span class="product-detail-meta-value">
-                    <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
+                    <span class="sp-badge @trangThaiClass">@trangThaiText</span>
                 </span>
             </div>
 
@@ -72,7 +95,6 @@
             <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-luu">
                 <i class="bi bi-bag"></i> Tiếp tục mua sắm
             </a>
-
             <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn-huy">
                 Về trang chủ
             </a>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
@@ -30,7 +31,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return RedirectToAction("Index", "GioHang");
             }
 
-            // Kiểm tra nhanh tồn kho trước khi vào trang đặt hàng
+            // Kiểm tra tồn kho trước khi vào trang đặt hàng
             foreach (var sp in sanPhams)
             {
                 int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
@@ -49,7 +50,6 @@ namespace WebsiteThuongMaiDienTu.Controllers
             }
 
             ChuanBiViewDatHang(gioHang, sanPhams);
-
             return View(sanPhams);
         }
 
@@ -74,7 +74,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return RedirectToAction("Index", "GioHang");
             }
 
-            // Kiểm tra tồn kho lần cuối trước khi tạo đơn
+            // Kiểm tra tồn kho lần cuối trước khi tạo phiếu đặt hàng
             foreach (var sp in sanPhams)
             {
                 int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
@@ -94,10 +94,11 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
             ChuanBiViewDatHang(gioHang, sanPhams);
 
-            // Xác định khách hàng
+            // ======================================================
+            // 1. Xác định khách hàng
+            // ======================================================
             int makh;
             khachhang khachHienTai = null;
-
             int? maKHTuSession = Session["MaKH"] as int?;
 
             if (Session["LoaiTaiKhoan"] != null
@@ -145,13 +146,15 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 }
                 else
                 {
-                    int maKhLonNhat = db.khachhangs
-                        .Select(k => k.makh)
-                        .DefaultIfEmpty(0)
-                        .Max();
+                    int maKhachHangMoi;
+
+                    if (db.khachhangs.Any())
+                        maKhachHangMoi = db.khachhangs.Max(k => k.makh) + 1;
+                    else
+                        maKhachHangMoi = 1;
 
                     khachhang kh_moi = new khachhang();
-                    kh_moi.makh = maKhLonNhat + 1;
+                    kh_moi.makh = maKhachHangMoi;
                     kh_moi.hoten = hoten;
                     kh_moi.diachi = diachi;
                     kh_moi.SDT = sdt;
@@ -170,7 +173,9 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return View("Index", sanPhams);
             }
 
-            // Ngày giao mong muốn
+            // ======================================================
+            // 2. Xử lý ngày giao mong muốn
+            // ======================================================
             DateTime ngayDatHang = DateTime.Today;
             DateTime ngayGiaoHang = ngayDatHang;
             DateTime tempNgayGiao;
@@ -186,10 +191,12 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return View("Index", sanPhams);
             }
 
+            // ======================================================
+            // 3. Ghi chú + giao tận nơi
+            // ======================================================
             bool giaotannoi = collection["chk_giaotannoi"] != null;
             string ghiChu = (collection["txt_ghichu"] ?? "").Trim();
 
-            // Nếu giao tận nơi thì nối địa chỉ giao vào ghi chú
             if (giaotannoi)
             {
                 string diaChiGiao = (collection["txt_diachigiao"] ?? "").Trim();
@@ -217,77 +224,67 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 ghiChu = ghiChu.Substring(0, 1000);
             }
 
-            // Tính tổng tiền
-            decimal tongTien = 0;
+            // ======================================================
+            // 4. Tạo phiếu đặt hàng + chi tiết phiếu đặt hàng
+            // ======================================================
+            int maDatHangMoi;
 
-            foreach (var sp in sanPhams)
-            {
-                if (gioHang.ContainsKey(sp.masanpham))
-                {
-                    tongTien += sp.dongia * gioHang[sp.masanpham];
-                }
-            }
+            if (db.dathangs.Any())
+                maDatHangMoi = db.dathangs.Max(d => d.madathang) + 1;
+            else
+                maDatHangMoi = 1;
 
-            // Tạo hóa đơn
-            int maHoaDonLonNhat = db.hoadons
-                .Select(h => h.mahoadon)
-                .DefaultIfEmpty(0)
-                .Max();
+            dathang datHang = new dathang();
+            datHang.madathang = maDatHangMoi;
+            datHang.makh = makh;
+            datHang.ngaydathang = ngayDatHang;
+            datHang.ngaygiaohang = ngayGiaoHang;
+            datHang.giaotannoi = giaotannoi;
+            datHang.trangthai = 0; // 0 = Chờ duyệt
+            datHang.ghichu = ghiChu;
+            datHang.mahoadon = null; // Chưa có hóa đơn
 
-            hoadon hd = new hoadon();
-            hd.mahoadon = maHoaDonLonNhat + 1;
-            hd.makh = makh;
-            hd.nguoilap = null;
-            hd.ngaydathang = ngayDatHang;
-            hd.ngaygiaohang = ngayGiaoHang;
-            hd.tongtien = tongTien;
-            hd.dathanhtoan = false;
-            hd.giaotannoi = giaotannoi;
-            hd.trangthaidon = 0;
-            hd.ghichu = ghiChu;
-
-            db.hoadons.Add(hd);
-
-            // Tạo chi tiết hóa đơn
             foreach (var sp in sanPhams)
             {
                 int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
 
-                chitiethoadon ct = new chitiethoadon();
-                ct.mahoadon = hd.mahoadon;
-                ct.masanpham = sp.masanpham;
-                ct.soluong = soLuong;
-                ct.dongia = sp.dongia;
-                ct.thanhtien = sp.dongia * soLuong;
-
-                db.chitiethoadons.Add(ct);
+                datHang.chitietdathangs.Add(new chitietdathang
+                {
+                    madathang = maDatHangMoi,
+                    masanpham = sp.masanpham,
+                    soluongdat = soLuong,
+                    soluongduyet = null,
+                    dongia = sp.dongia,
+                    thanhtien = sp.dongia * soLuong
+                });
             }
 
+            db.dathangs.Add(datHang);
             db.SaveChanges();
 
             // Xóa giỏ hàng sau khi đặt thành công
             Session.Remove("GioHang");
 
             TempData["ThongBao"] = "Đặt hàng thành công!";
-
-            return RedirectToAction("ThanhCong", new { id = hd.mahoadon });
+            return RedirectToAction("ThanhCong", new { id = datHang.madathang });
         }
 
         // GET: /DatHang/ThanhCong/123
         public ActionResult ThanhCong(int id)
         {
-            var hoaDon = db.hoadons.Find(id);
+            var datHang = db.dathangs
+                .Include(d => d.chitietdathangs)
+                .FirstOrDefault(d => d.madathang == id);
 
-            if (hoaDon == null)
+            if (datHang == null)
             {
                 return HttpNotFound();
             }
 
-            return View(hoaDon);
+            return View(datHang);
         }
 
         // ---------- Hàm dùng chung ----------
-
         private List<sanpham> LaySanPhamTrongGio(Dictionary<string, int> gioHang)
         {
             var maSanPhamTrongGio = gioHang.Keys.ToList();

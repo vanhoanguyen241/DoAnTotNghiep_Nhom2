@@ -23,11 +23,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // Danh sách đơn đã thanh toán + giao tận nơi + chưa có phiếu giao
         public ActionResult ChoLapPhieu()
         {
+            // DB mới: hoadon không còn trangthaidon.
+            // Hóa đơn chỉ tồn tại sau khi đã duyệt (DuyetDon tạo) hoặc Admin tạo trực tiếp,
+            // nên chỉ cần lọc: đã thanh toán + giao tận nơi + chưa có phiếu giao.
             var dsCanLapPhieu = db.hoadons
-                .Where(h => h.trangthaidon == 1
-                         && h.dathanhtoan == true
-                         && h.giaotannoi == true
-                         && !h.chuyenhangs.Any())
+                .Where(h => h.dathanhtoan == true
+                    && h.giaotannoi == true
+                    && !h.chuyenhangs.Any())
                 .OrderByDescending(h => h.ngaydathang)
                 .ToList();
             return View(dsCanLapPhieu);
@@ -41,13 +43,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (hd == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
-                return RedirectToAction("ChoLapPhieu");
-            }
-
-            // Kiểm tra điều kiện nghiệp vụ trước khi tạo phiếu
-            if (hd.trangthaidon != 1)
-            {
-                TempData["ThongBao"] = "Chỉ lập phiếu giao cho đơn hàng đã duyệt!";
                 return RedirectToAction("ChoLapPhieu");
             }
             if (!hd.dathanhtoan)

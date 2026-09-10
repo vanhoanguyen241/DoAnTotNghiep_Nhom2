@@ -32,11 +32,11 @@
                     <thead>
                         <tr>
                             <th style="width: 80px;">Mã HĐ</th>
+                            <th style="width: 100px;" class="text-center">Mã đơn đặt</th>
                             <th>Khách hàng</th>
                             <th style="width: 110px;">Ngày đặt</th>
                             <th style="width: 110px;">Ngày giao</th>
                             <th style="width: 130px;" class="text-end">Tổng tiền</th>
-                            <th style="width: 110px;" class="text-center">Trạng thái</th>
                             <th style="width: 120px;" class="text-center">Thanh toán</th>
                             <th style="width: 100px;" class="text-center">Giao tận nơi</th>
                             <th style="width: 150px;" class="text-center">Hành động</th>
@@ -47,7 +47,19 @@
                         {
                             <tr>
                                 <td><strong>@item.mahoadon</strong></td>
-
+                                <td class="text-center">
+                                    @{
+                                        var donDat = item.dathangs != null && item.dathangs.Any() ? item.dathangs.FirstOrDefault() : null;
+                                    }
+                                    @if (donDat != null)
+                                    {
+                                        <span class="sp-badge sp-badge-warning">#@donDat.madathang</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
                                 <td>
                                     @(item.khachhang != null ? item.khachhang.hoten : "—")
                                 </td>
@@ -57,25 +69,6 @@
 
                                 <td class="text-end">
                                     @string.Format("{0:N0}₫", item.tongtien)
-                                </td>
-
-                                <td class="text-center">
-                                    @if (item.trangthaidon == 0)
-                                    {
-                                        <span class="sp-badge sp-badge-warning">Chờ duyệt</span>
-                                    }
-                                    else if (item.trangthaidon == 1)
-                                    {
-                                        <span class="sp-badge sp-badge-success">Đã duyệt</span>
-                                    }
-                                    else if (item.trangthaidon == 2)
-                                    {
-                                        <span class="sp-badge sp-badge-danger">Từ chối</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@item.trangthaidon</span>
-                                    }
                                 </td>
 
                                 <td class="text-center">
