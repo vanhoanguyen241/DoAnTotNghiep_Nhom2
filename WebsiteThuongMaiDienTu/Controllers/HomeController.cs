@@ -19,5 +19,20 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
             return View(sanPhamNoiBat);
         }
+
+        public ActionResult GioiThieu()
+        {
+            return View();
+        }
+
+        public ActionResult TuyenDung()
+        {
+            return View();
+        }
+
+        public ActionResult LienHe()
+        {
+            return View();
+        }
     }
 }

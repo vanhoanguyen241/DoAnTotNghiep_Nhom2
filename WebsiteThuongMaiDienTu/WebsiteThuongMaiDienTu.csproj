@@ -140,6 +140,7 @@
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ThanhToanController.cs" />
     <Compile Include="Controllers\DatHangController.cs" />
     <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -242,6 +243,9 @@
     <Content Include="Areas\Admin\Views\ChuyenHang\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\ChoLapPhieu.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\GanNhanVien.cshtml" />
+    <Content Include="Areas\Admin\Views\ChuyenHang\CuaToi.cshtml" />
+    <Content Include="Areas\Admin\Views\ThanhToan\DaThanhToan.cshtml" />
+    <Content Include="Areas\Admin\Views\ThanhToan\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -278,6 +282,12 @@
     <Content Include="Views\DatHang\ThanhCong.cshtml" />
     <Content Include="Views\TraCuuDonHang\Index.cshtml" />
     <Content Include="Views\TraCuuDonHang\KetQua.cshtml" />
+    <Content Include="Views\Home\GioiThieu.cshtml" />
+    <Content Include="Views\Home\TuyenDung.cshtml" />
+    <Content Include="Views\Home\LienHe.cshtml" />
+    <Content Include="Views\TaiKhoan\DoiMatKhau.cshtml" />
+    <Content Include="Views\TaiKhoan\LichSuDonHang.cshtml" />
+    <Content Include="Views\TaiKhoan\ThongTin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

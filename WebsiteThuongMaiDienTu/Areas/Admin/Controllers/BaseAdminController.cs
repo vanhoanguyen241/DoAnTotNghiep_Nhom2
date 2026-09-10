@@ -17,7 +17,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return;
             }
 
-            // 2. Check quyền sâu (Chặn NhanVien vào các Controller chỉ dành cho Admin)
+            // 2. Check quyền sâu
             string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             string vaiTro = Session["VaiTro"]?.ToString();
 
@@ -29,8 +29,10 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     "LoaiSanPham",
                     "DonViSanXuat",
                     "HoaDon",
-                    "ChiTietHoaDon"
+                    "ChiTietHoaDon",
+                    "ThanhToan"
                 };
+
                 if (adminOnlyControllers.Contains(controllerName))
                 {
                     // Chuyển về trang chủ Admin

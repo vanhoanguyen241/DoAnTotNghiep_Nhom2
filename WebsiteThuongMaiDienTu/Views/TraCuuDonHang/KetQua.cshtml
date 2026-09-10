@@ -5,8 +5,20 @@
 
     string trangThaiText = "Chờ duyệt";
     string trangThaiClass = "sp-badge-warning";
-    if (Model.trangthai == 1) { trangThaiText = "Đã duyệt"; trangThaiClass = "sp-badge-success"; }
-    else if (Model.trangthai == 2) { trangThaiText = "Từ chối"; trangThaiClass = "sp-badge-danger"; }
+
+    if (Model.trangthai == 1)
+    {
+        trangThaiText = "Đã duyệt";
+        trangThaiClass = "sp-badge-success";
+    }
+    else if (Model.trangthai == 2)
+    {
+        trangThaiText = "Từ chối";
+        trangThaiClass = "sp-badge-danger";
+    }
+
+    var hoaDon = Model.hoadon;
+    bool daThanhToan = hoaDon != null && hoaDon.dathanhtoan;
 }
 
 <div class="kh-container kh-container-wide">
@@ -16,6 +28,7 @@
                 <i class="bi bi-receipt-cutoff" style="color: var(--brand-yellow);"></i>
                 Chi tiết đơn hàng #@Model.madathang
             </h2>
+
             <a href="@Url.Action("Index", "TraCuuDonHang")" class="btn-huy">
                 <i class="bi bi-arrow-left"></i> Tra cứu đơn khác
             </a>
@@ -28,26 +41,51 @@
                     <strong>Khách hàng:</strong><br />
                     @(Model.khachhang != null ? Model.khachhang.hoten : "—")
                 </div>
+
                 <div class="col-md-4">
                     <strong>Số điện thoại:</strong><br />
                     @(Model.khachhang != null && !string.IsNullOrEmpty(Model.khachhang.SDT) ? Model.khachhang.SDT : "—")
                 </div>
+
                 <div class="col-md-4">
                     <strong>Trạng thái:</strong><br />
                     <span class="sp-badge @trangThaiClass">@trangThaiText</span>
                 </div>
+
                 <div class="col-md-4">
                     <strong>Ngày đặt:</strong><br />
                     @Model.ngaydathang.ToString("dd/MM/yyyy")
                 </div>
+
                 <div class="col-md-4">
                     <strong>Ngày giao mong muốn:</strong><br />
                     @Model.ngaygiaohang.ToString("dd/MM/yyyy")
                 </div>
+
                 <div class="col-md-4">
                     <strong>Hình thức nhận:</strong><br />
                     @(Model.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
                 </div>
+
+                <div class="col-md-4">
+                    <strong>Thanh toán:</strong><br />
+                    @if (hoaDon != null)
+                    {
+                        if (daThanhToan)
+                        {
+                            <span class="sp-badge sp-badge-success">Đã thanh toán thành công</span>
+                        }
+                        else
+                        {
+                            <span class="sp-badge sp-badge-danger">Chưa thanh toán</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">—</span>
+                    }
+                </div>
+
                 @if (!string.IsNullOrEmpty(Model.ghichu))
                 {
                     <div class="col-12">
@@ -82,7 +120,9 @@
                                     <div class="cart-product-cell">
                                         @if (ct.sanpham != null && !string.IsNullOrEmpty(ct.sanpham.hinh))
                                         {
-                                            <img src="@Url.Content(ct.sanpham.hinh)" alt="@ct.sanpham.tensanpham" class="cart-product-img" />
+                                            <img src="@Url.Content(ct.sanpham.hinh)"
+                                                 alt="@ct.sanpham.tensanpham"
+                                                 class="cart-product-img" />
                                         }
                                         else
                                         {
@@ -90,15 +130,18 @@
                                                 <i class="bi bi-image"></i>
                                             </div>
                                         }
+
                                         <div class="cart-product-info">
                                             <strong>@(ct.sanpham != null ? ct.sanpham.tensanpham : "—")</strong>
                                             <span class="text-muted">@(ct.sanpham != null ? ct.sanpham.masanpham : "")</span>
                                         </div>
                                     </div>
                                 </td>
+
                                 <td data-label="SL Đặt" class="text-center">
                                     <span class="sp-badge sp-badge-warning">@ct.soluongdat</span>
                                 </td>
+
                                 <td data-label="SL Duyệt" class="text-center">
                                     @if (ct.soluongduyet.HasValue)
                                     {
@@ -109,6 +152,7 @@
                                         <span class="text-muted">—</span>
                                     }
                                 </td>
+
                                 <td data-label="Đơn giá" class="text-end">
                                     <span class="cart-price">@string.Format("{0:N0}₫", ct.dongia)</span>
                                 </td>
@@ -137,15 +181,41 @@
         }
         else if (Model.trangthai == 1)
         {
-            <div class="alert alert-success mt-4">
-                <i class="bi bi-check-circle-fill"></i>
-                <strong>Đơn hàng đã được duyệt.</strong>
-                @if (Model.mahoadon.HasValue)
-                {
-                    <span> Mã hóa đơn chính thức của bạn là <strong>#@Model.mahoadon</strong>.</span>
-                }
-                <br /> Vui lòng chờ nhân viên liên hệ để tiến hành thanh toán và giao hàng.
-            </div>
+            if (daThanhToan)
+            {
+                <div class="alert alert-success mt-4">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <strong>Đã thanh toán thành công.</strong>
+
+                    @if (Model.mahoadon.HasValue)
+                    {
+                        <span> Mã hóa đơn của bạn là <strong>#@Model.mahoadon</strong>.</span>
+                    }
+
+                    @if (Model.giaotannoi)
+                    {
+                        <span> Đơn hàng sẽ được giao tới địa chỉ của bạn.</span>
+                    }
+                    else
+                    {
+                        <span> Vui lòng nhận hàng tại cửa hàng.</span>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning mt-4">
+                    <i class="bi bi-cash-coin"></i>
+                    <strong>Đơn hàng đã được duyệt nhưng chưa thanh toán.</strong>
+
+                    @if (Model.mahoadon.HasValue)
+                    {
+                        <span> Mã hóa đơn của bạn là <strong>#@Model.mahoadon</strong>.</span>
+                    }
+
+                    <span> Vui lòng hoàn tất thanh toán để đơn hàng được xử lý.</span>
+                </div>
+            }
         }
         else
         {
@@ -160,6 +230,7 @@
             <a href="@Url.Action("DanhSach", "SanPhamCongKhai")" class="btn-luu">
                 <i class="bi bi-bag"></i> Tiếp tục mua sắm
             </a>
+
             <a href="@Url.Action("Index", "Home")" class="btn-huy">
                 Về trang chủ
             </a>

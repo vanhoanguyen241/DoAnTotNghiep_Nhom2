@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
@@ -171,6 +173,131 @@ namespace WebsiteThuongMaiDienTu.Controllers
         {
             Session.Clear();
             return RedirectToAction("DangNhap", "TaiKhoan", new { area = "" });
+        }
+
+        // GET: TaiKhoan/DoiMatKhau
+        public ActionResult DoiMatKhau()
+        {
+            // Chưa đăng nhập thì không cho vào
+            if (Session["TenDangNhap"] == null)
+            {
+                return RedirectToAction("DangNhap");
+            }
+
+            // Hiển thị thông báo thành công (truyền từ POST qua redirect)
+            if (TempData["ThongBaoThanhCong"] != null)
+            {
+                ViewBag.ThongBaoThanhCong = TempData["ThongBaoThanhCong"];
+            }
+            return View();
+        }
+
+        // POST: TaiKhoan/DoiMatKhau
+        [HttpPost]
+        public ActionResult DoiMatKhau(FormCollection collection)
+        {
+            if (Session["TenDangNhap"] == null)
+            {
+                return RedirectToAction("DangNhap");
+            }
+
+            var matKhauCu = (collection["txt_matkhaucu"] ?? "").Trim();
+            var matKhauMoi = (collection["txt_matkhaumoi"] ?? "").Trim();
+            var xacNhanMk = (collection["txt_xacnhanmk"] ?? "").Trim();
+
+            // 1. Kiểm tra điền đầy đủ
+            if (string.IsNullOrEmpty(matKhauCu)
+                || string.IsNullOrEmpty(matKhauMoi)
+                || string.IsNullOrEmpty(xacNhanMk))
+            {
+                ViewBag.ThongBao = "Vui lòng điền đầy đủ các ô mật khẩu!";
+                return View();
+            }
+
+            // 2. Lấy tài khoản đang đăng nhập
+            var tendangnhap = Session["TenDangNhap"].ToString();
+            var tk = (from t in db.taikhoans
+                      where t.tendangnhap == tendangnhap
+                      select t).FirstOrDefault();
+
+            if (tk == null)
+            {
+                Session.Clear();
+                return RedirectToAction("DangNhap");
+            }
+
+            // 3. Kiểm tra mật khẩu cũ
+            if (tk.matkhau != matKhauCu)
+            {
+                ViewBag.ThongBao = "Mật khẩu cũ không đúng!";
+                return View();
+            }
+
+            // 4. Kiểm tra độ dài mật khẩu mới
+            if (matKhauMoi.Length < 6)
+            {
+                ViewBag.ThongBao = "Mật khẩu mới phải có ít nhất 6 ký tự!";
+                return View();
+            }
+
+            // 5. Mật khẩu mới phải khác mật khẩu cũ
+            if (matKhauMoi == matKhauCu)
+            {
+                ViewBag.ThongBao = "Mật khẩu mới phải khác mật khẩu cũ!";
+                return View();
+            }
+
+            // 6. Kiểm tra xác nhận mật khẩu
+            if (matKhauMoi != xacNhanMk)
+            {
+                ViewBag.ThongBao = "Mật khẩu xác nhận không khớp!";
+                return View();
+            }
+
+            // 7. Cập nhật mật khẩu mới vào database
+            tk.matkhau = matKhauMoi;
+            db.SaveChanges();
+
+            TempData["ThongBaoThanhCong"] = "Đổi mật khẩu thành công! Vui lòng đăng nhập lại bằng mật khẩu mới.";
+            return RedirectToAction("DangXuat", "TaiKhoan", new { area = "" });
+        }
+        public ActionResult ThongTin()
+        {
+            if (Session["MaKH"] == null) return RedirectToAction("DangNhap");
+            int makh = (int)Session["MaKH"];
+            var kh = db.khachhangs.Find(makh);
+            if (kh == null) return HttpNotFound();
+
+            if (TempData["ThongBao"] != null) ViewBag.ThongBao = TempData["ThongBao"];
+            return View(kh);
+        }
+
+        [HttpPost]
+        public ActionResult ThongTin(FormCollection collection)
+        {
+            if (Session["MaKH"] == null) return RedirectToAction("DangNhap");
+            int makh = (int)Session["MaKH"];
+            var kh = db.khachhangs.Find(makh);
+            if (kh != null)
+            {
+                kh.hoten = collection["txt_hoten"];
+                kh.diachi = collection["txt_diachi"];
+                kh.SDT = collection["txt_sdt"];
+                db.SaveChanges();
+                TempData["ThongBao"] = "Cập nhật thông tin thành công!";
+            }
+            return RedirectToAction("ThongTin");
+        }
+
+        public ActionResult LichSuDonHang()
+        {
+            if (Session["MaKH"] == null) return RedirectToAction("DangNhap");
+            int makh = (int)Session["MaKH"];
+            var dsDonHang = db.dathangs
+                .Where(d => d.makh == makh)
+                .OrderByDescending(d => d.ngaydathang)
+                .ToList();
+            return View(dsDonHang);
         }
     }
 }

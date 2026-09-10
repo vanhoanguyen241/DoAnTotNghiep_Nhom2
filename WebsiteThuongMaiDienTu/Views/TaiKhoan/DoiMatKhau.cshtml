@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Đổi mật khẩu";
+}
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2><i class="bi bi-key-fill" style="color: var(--brand-yellow);"></i> Đổi mật khẩu</h2>
+            <p>
+                Cập nhật mật khẩu cho tài khoản <strong>@Session["TenDangNhap"]</strong>
+            </p>
+        </div>
+
+        @if (ViewBag.ThongBao != null)
+        {
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
+            </div>
+        }
+
+        @if (ViewBag.ThongBaoThanhCong != null)
+        {
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle-fill"></i> @ViewBag.ThongBaoThanhCong
+            </div>
+        }
+
+        @using (Html.BeginForm("DoiMatKhau", "TaiKhoan", FormMethod.Post, new { id = "formDoiMatKhau", autocomplete = "off" }))
+        {
+            <div class="form-group">
+                <label for="txt_matkhaucu">Mật khẩu hiện tại <span class="required">*</span></label>
+                <div class="input-icon">
+                    <i class="bi bi-lock"></i>
+                    <input type="password"
+                           class="form-control"
+                           id="txt_matkhaucu"
+                           name="txt_matkhaucu"
+                           placeholder="Nhập mật khẩu hiện tại"
+                           required
+                           autofocus />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="txt_matkhaumoi">Mật khẩu mới <span class="required">*</span></label>
+                <div class="input-icon">
+                    <i class="bi bi-key"></i>
+                    <input type="password"
+                           class="form-control"
+                           id="txt_matkhaumoi"
+                           name="txt_matkhaumoi"
+                           placeholder="Nhập mật khẩu mới"
+                           required
+                           minlength="6" />
+                </div>
+                <small class="form-text">Mật khẩu phải có ít nhất 6 ký tự</small>
+            </div>
+
+            <div class="form-group">
+                <label for="txt_xacnhanmk">Xác nhận mật khẩu mới <span class="required">*</span></label>
+                <div class="input-icon">
+                    <i class="bi bi-key-fill"></i>
+                    <input type="password"
+                           class="form-control"
+                           id="txt_xacnhanmk"
+                           name="txt_xacnhanmk"
+                           placeholder="Nhập lại mật khẩu mới"
+                           required
+                           minlength="6" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="bi bi-check-circle"></i> Xác nhận đổi mật khẩu
+            </button>
+        }
+
+        <div class="register-link">
+            <a href="@Url.Action("Index", "Home", new { area = "" })">Về trang chủ</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Kiểm tra khớp mật khẩu ngay phía client trước khi gửi lên server
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('formDoiMatKhau');
+            if (!form) return;
+            form.addEventListener('submit', function (e) {
+                var mkMoi = document.getElementById('txt_matkhaumoi').value;
+                var xacNhan = document.getElementById('txt_xacnhanmk').value;
+                if (mkMoi !== xacNhan) {
+                    e.preventDefault();
+                    alert('Mật khẩu xác nhận không khớp với mật khẩu mới!');
+                }
+            });
+        });
+    </script>
+}

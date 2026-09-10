@@ -1,0 +1,85 @@
+﻿@model List<WebsiteThuongMaiDienTu.Models.dathang>
+@{
+    ViewBag.Title = "Lịch sử mua hàng";
+}
+
+<div class="kh-container kh-container-wide">
+    <div class="kh-card">
+        <div class="kh-header">
+            <h2><i class="bi bi-clock-history" style="color: var(--brand-yellow);"></i> Lịch sử mua hàng</h2>
+            <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn-huy">
+                <i class="bi bi-arrow-left"></i> Về trang chủ
+            </a>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="kh-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Mã đơn</th>
+                            <th style="width: 120px;">Ngày đặt</th>
+                            <th style="width: 120px;">Ngày giao</th>
+                            <th style="width: 120px;" class="text-center">Trạng thái</th>
+                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
+                            <th style="width: 100px;" class="text-center">Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dh in Model)
+                        {
+                            string trangThai = "Chờ duyệt";
+                            string colorClass = "sp-badge-warning";
+
+                            if (dh.trangthai == 1)
+                            {
+                                trangThai = "Đã duyệt";
+                                colorClass = "sp-badge-success";
+                            }
+                            else if (dh.trangthai == 2)
+                            {
+                                trangThai = "Từ chối";
+                                colorClass = "sp-badge-danger";
+                            }
+
+                            decimal tongTien = dh.chitietdathangs != null
+                                ? dh.chitietdathangs.Sum(ct => ct.thanhtien)
+                                : 0;
+
+                            <tr>
+                                <td><strong>#@dh.madathang</strong></td>
+                                <td>@dh.ngaydathang.ToString("dd/MM/yyyy")</td>
+                                <td>@dh.ngaygiaohang.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">
+                                    <span class="sp-badge @colorClass">@trangThai</span>
+                                </td>
+                                <td class="text-end" style="color: var(--brand-red); font-weight: 700;">
+                                    @string.Format("{0:N0}₫", tongTien)
+                                </td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("KetQua", "TraCuuDonHang", new { id = dh.madathang, area = "" })"
+                                       class="btn-icon btn-sua"
+                                       title="Xem chi tiết">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h4>Bạn chưa có đơn hàng nào</h4>
+                <p>Hãy khám phá các sản phẩm của chúng tôi và đặt hàng ngay!</p>
+                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-luu" style="margin-top: 16px;">
+                    <i class="bi bi-bag"></i> Mua sắm ngay
+                </a>
+            </div>
+        }
+    </div>
+</div>

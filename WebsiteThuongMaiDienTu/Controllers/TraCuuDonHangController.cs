@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.Entity; // Cần thiết để dùng .Include()
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
@@ -21,6 +21,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
         public ActionResult TimKiem(FormCollection collection)
         {
             int madathang;
+
             if (int.TryParse(collection["txt_madathang"], out madathang))
             {
                 return RedirectToAction("KetQua", new { id = madathang });
@@ -33,9 +34,11 @@ namespace WebsiteThuongMaiDienTu.Controllers
         // GET: /TraCuuDonHang/KetQua/123
         public ActionResult KetQua(int id)
         {
-            // Lấy đầy đủ thông tin: Đơn hàng -> Khách hàng -> Chi tiết đơn -> Sản phẩm
+            // Lấy đầy đủ thông tin:
+            // Đơn hàng -> Khách hàng -> Hóa đơn -> Chi tiết đơn -> Sản phẩm
             var donHang = db.dathangs
                 .Include(d => d.khachhang)
+                .Include(d => d.hoadon)
                 .Include(d => d.chitietdathangs.Select(ct => ct.sanpham))
                 .FirstOrDefault(d => d.madathang == id);
 

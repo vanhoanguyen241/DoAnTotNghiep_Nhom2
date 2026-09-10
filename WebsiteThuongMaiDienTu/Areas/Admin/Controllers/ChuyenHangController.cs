@@ -179,5 +179,59 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 .ToList();
             ViewBag.manv = new SelectList(dsnv, "manv", "hoten", maNvDaChon);
         }
+
+        // GET: Admin/ChuyenHang/CuaToi
+        // Trang dành riêng cho nhân viên xem các đơn mình được giao
+        public ActionResult CuaToi()
+        {
+            int? maNV = Session["MaNV"] as int?;
+            if (!maNV.HasValue)
+            {
+                TempData["ThongBao"] = "Vui lòng đăng nhập với tư cách nhân viên!";
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            }
+
+            // Lấy danh sách đơn chưa giao (daxuli == false) và được gán cho nhân viên hiện tại
+            var dsDonCuaToi = db.chuyenhangs
+                .Where(ch => ch.manv == maNV.Value && ch.daxuli == false)
+                .OrderByDescending(ch => ch.machuyenhang)
+                .ToList();
+
+            return View(dsDonCuaToi);
+        }
+
+        // POST: Admin/ChuyenHang/XacNhanGiaoHang
+        [HttpPost]
+        public ActionResult XacNhanGiaoHang(int id)
+        {
+            int? maNV = Session["MaNV"] as int?;
+            if (!maNV.HasValue)
+            {
+                return RedirectToAction("DangNhap", "TaiKhoan", new { area = "" });
+            }
+
+            // Tìm phiếu giao hàng: phải đúng mã phiếu VÀ đúng nhân viên đang đăng nhập
+            var ch = db.chuyenhangs.FirstOrDefault(x => x.machuyenhang == id && x.manv == maNV.Value);
+
+            if (ch == null)
+            {
+                TempData["ThongBao"] = "Không tìm thấy đơn hàng hoặc bạn không có quyền giao đơn này!";
+                return RedirectToAction("CuaToi");
+            }
+
+            if (ch.daxuli)
+            {
+                TempData["ThongBao"] = "Đơn hàng này đã được xác nhận giao trước đó!";
+                return RedirectToAction("CuaToi");
+            }
+
+            // Cập nhật trạng thái
+            ch.daxuli = true;
+            ch.ngaygiao = DateTime.Today;
+            db.SaveChanges();
+
+            TempData["ThongBao"] = "Xác nhận giao hàng thành công!";
+            return RedirectToAction("CuaToi");
+        }
     }
 }
