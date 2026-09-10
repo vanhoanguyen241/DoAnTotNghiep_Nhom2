@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
-using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
@@ -29,8 +27,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
         // POST: Admin/SanPham/TaoMoi
         [HttpPost]
-        public ActionResult TaoMoi(FormCollection collection, HttpPostedFileBase file_hinh)
+        public ActionResult TaoMoi(FormCollection collection)
         {
+            // Lấy dữ liệu từ View đúng theo tên name trong form của bạn
             string masanpham = collection["txt_masp"];
             string tensanpham = collection["txt_tensp"];
             string maloaisanpham = collection["txt_lsp"];
@@ -72,6 +71,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View();
             }
 
+            // Gán vào model đúng tên trường trong sanpham.cs
             sanpham sp = new sanpham();
             sp.masanpham = masanpham;
             sp.tensanpham = tensanpham;
@@ -81,8 +81,18 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             sp.thoigianbaohanh = thoigianbaohanh;
             sp.dongia = dongia;
             sp.soluonghienco = soluonghienco;
-            sp.quangcao = collection["chk_quangcao"] != null; // có tick checkbox hay không
-            sp.hinh = LuuAnh(file_hinh, masanpham, "~/Content/images/sanpham/default.png");
+            sp.quangcao = collection["chk_quangcao"] != null;
+
+            // Xử lý nhập tên file ảnh (thay cho upload file)
+            string tenFileHinh = collection["txt_hinh"]?.Trim();
+            if (string.IsNullOrWhiteSpace(tenFileHinh))
+            {
+                sp.hinh = "~/Content/images/sanpham/default.png";
+            }
+            else
+            {
+                sp.hinh = "~/Content/images/sanpham/" + tenFileHinh;
+            }
 
             db.sanphams.Add(sp);
             db.SaveChanges();
@@ -106,11 +116,10 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
         // POST: Admin/SanPham/Sua
         [HttpPost]
-        public ActionResult Sua(FormCollection collection, HttpPostedFileBase file_hinh)
+        public ActionResult Sua(FormCollection collection)
         {
             string masanpham = collection["txt_masp"];
             var sua_sp = db.sanphams.Find(masanpham);
-
             if (sua_sp == null)
             {
                 return HttpNotFound();
@@ -135,6 +144,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View(sua_sp);
             }
 
+            // Cập nhật đúng tên trường
             sua_sp.tensanpham = tensanpham;
             sua_sp.maloaisanpham = collection["txt_lsp"];
             sua_sp.madonvisanxuat = collection["txt_dvsx"];
@@ -144,13 +154,15 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             sua_sp.soluonghienco = soluonghienco;
             sua_sp.quangcao = collection["chk_quangcao"] != null;
 
-            // Chỉ thay ảnh nếu người dùng có chọn ảnh mới
-            if (file_hinh != null && file_hinh.ContentLength > 0)
+            // Cập nhật ảnh nếu người dùng có nhập tên file mới
+            string tenFileHinhMoi = collection["txt_hinh"]?.Trim();
+            if (!string.IsNullOrWhiteSpace(tenFileHinhMoi))
             {
-                sua_sp.hinh = LuuAnh(file_hinh, masanpham, sua_sp.hinh);
+                sua_sp.hinh = "~/Content/images/sanpham/" + tenFileHinhMoi;
             }
 
             db.SaveChanges();
+
             TempData["ThongBao"] = "Cập nhật sản phẩm \"" + sua_sp.tensanpham + "\" thành công!";
             return RedirectToAction("Index");
         }
@@ -177,8 +189,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         }
 
         // ---------- Hàm dùng chung ----------
-
-        // Nạp dropdown Loại sản phẩm + Nhà sản xuất
+        // Nạp dropdown Loại sản phẩm + Nhà sản xuất (Đúng chuẩn View của bạn)
         private void NapDanhSachChonLua(string maloaiDaChon = null, string maDvsxDaChon = null)
         {
             var loai_sp = db.loaisanphams.ToList();
@@ -186,27 +197,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
             var donvi_sx = db.donvisanxuats.ToList();
             ViewBag.donvisanxuat = new SelectList(donvi_sx, "madonvisanxuat", "tendonvisanxuat", maDvsxDaChon);
-        }
-
-        // Lưu file ảnh vào ~/Content/images/sanpham/, trả về đường dẫn để lưu vào CSDL
-        private string LuuAnh(HttpPostedFileBase file, string masanpham, string duongDanCu)
-        {
-            if (file == null || file.ContentLength == 0)
-            {
-                return duongDanCu;
-            }
-
-            string extension = Path.GetExtension(file.FileName).ToLower();
-            if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
-            {
-                return duongDanCu; // định dạng không hợp lệ, giữ ảnh cũ
-            }
-
-            string tenFile = masanpham + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + extension;
-            string duongDanVatLy = Server.MapPath("~/Content/images/sanpham/") + tenFile;
-            file.SaveAs(duongDanVatLy);
-
-            return "~/Content/images/sanpham/" + tenFile;
         }
     }
 }

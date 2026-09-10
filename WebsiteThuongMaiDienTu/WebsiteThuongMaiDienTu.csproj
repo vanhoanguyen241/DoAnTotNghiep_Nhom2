@@ -147,6 +147,7 @@
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\SanPhamCongKhaiController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\TraCuuDonHangController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -275,6 +276,8 @@
     <Content Include="Views\GioHang\Index.cshtml" />
     <Content Include="Views\DatHang\Index.cshtml" />
     <Content Include="Views\DatHang\ThanhCong.cshtml" />
+    <Content Include="Views\TraCuuDonHang\Index.cshtml" />
+    <Content Include="Views\TraCuuDonHang\KetQua.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

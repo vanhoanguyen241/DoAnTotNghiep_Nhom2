@@ -134,6 +134,11 @@
                         </div>
                     </li>
                     <li>
+                        <a href="@Url.Action("Index", "TraCuuDonHang", new { area = "" })">
+                            <i class="bi bi-search"></i> Tra cứu đơn hàng
+                        </a>
+                    </li>
+                    <li>
                         <a href="#">
                             <i class="bi bi-briefcase"></i> Tuyển dụng
                         </a>
@@ -162,6 +167,10 @@
         <a href="@Url.Action("Index", "Home", new { area = "" })" class="bottom-nav-item">
             <i class="bi bi-house-door"></i>
             <span>Trang chủ</span>
+        </a>
+        <a href="@Url.Action("Index", "TraCuuDonHang", new { area = "" })" class="bottom-nav-item">
+            <i class="bi bi-search"></i>
+            <span>Tra cứu</span>
         </a>
         <a href="#" class="bottom-nav-item">
             <i class="bi bi-info-circle"></i>

@@ -16,7 +16,7 @@
             </div>
         }
 
-        @using (Html.BeginForm("Sua", "SanPham", new { area = "Admin" }, FormMethod.Post, new { enctype = "multipart/form-data", id = "formSuaSP" }))
+        @using (Html.BeginForm("Sua", "SanPham", new { area = "Admin" }, FormMethod.Post, new { id = "formSuaSP" }))
         {
             <div class="row g-3">
                 <div class="col-md-4">
@@ -60,8 +60,9 @@
                     <div class="sp-img-box">
                         <img src="@Url.Content(Model.hinh)" alt="@Model.tensanpham" class="sp-img-preview" />
                         <div class="sp-img-input">
-                            <input type="file" id="file_hinh" name="file_hinh" class="form-control" accept=".jpg,.jpeg,.png" />
-                            <small class="form-text">Chỉ chọn nếu muốn đổi ảnh.</small>
+                            <label class="form-label" for="txt_hinh" style="margin-top: 10px; margin-bottom: 4px;">Đổi tên file hình ảnh (để trống nếu không đổi)</label>
+                            <input type="text" id="txt_hinh" name="txt_hinh" class="form-control" placeholder="Ví dụ: laptop_new.jpg" />
+                            <small class="form-text">Chỉ nhập tên file mới. Hệ thống tự lưu vào <code>~/Content/images/sanpham/</code>.</small>
                         </div>
                     </div>
                 </div>

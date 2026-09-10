@@ -1,0 +1,168 @@
+﻿@using WebsiteThuongMaiDienTu.Models
+@model dathang
+@{
+    ViewBag.Title = "Chi tiết đơn hàng #" + Model.madathang;
+
+    string trangThaiText = "Chờ duyệt";
+    string trangThaiClass = "sp-badge-warning";
+    if (Model.trangthai == 1) { trangThaiText = "Đã duyệt"; trangThaiClass = "sp-badge-success"; }
+    else if (Model.trangthai == 2) { trangThaiText = "Từ chối"; trangThaiClass = "sp-badge-danger"; }
+}
+
+<div class="kh-container kh-container-wide">
+    <div class="kh-card">
+        <div class="kh-header">
+            <h2>
+                <i class="bi bi-receipt-cutoff" style="color: var(--brand-yellow);"></i>
+                Chi tiết đơn hàng #@Model.madathang
+            </h2>
+            <a href="@Url.Action("Index", "TraCuuDonHang")" class="btn-huy">
+                <i class="bi bi-arrow-left"></i> Tra cứu đơn khác
+            </a>
+        </div>
+
+        <!-- THÔNG TIN ĐƠN HÀNG & KHÁCH HÀNG -->
+        <div class="alert alert-info mb-4">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <strong>Khách hàng:</strong><br />
+                    @(Model.khachhang != null ? Model.khachhang.hoten : "—")
+                </div>
+                <div class="col-md-4">
+                    <strong>Số điện thoại:</strong><br />
+                    @(Model.khachhang != null && !string.IsNullOrEmpty(Model.khachhang.SDT) ? Model.khachhang.SDT : "—")
+                </div>
+                <div class="col-md-4">
+                    <strong>Trạng thái:</strong><br />
+                    <span class="sp-badge @trangThaiClass">@trangThaiText</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Ngày đặt:</strong><br />
+                    @Model.ngaydathang.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-4">
+                    <strong>Ngày giao mong muốn:</strong><br />
+                    @Model.ngaygiaohang.ToString("dd/MM/yyyy")
+                </div>
+                <div class="col-md-4">
+                    <strong>Hình thức nhận:</strong><br />
+                    @(Model.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                </div>
+                @if (!string.IsNullOrEmpty(Model.ghichu))
+                {
+                    <div class="col-12">
+                        <strong>Ghi chú:</strong> @Model.ghichu
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- BẢNG CHI TIẾT SẢN PHẨM -->
+        <h4 class="mb-3" style="color: var(--brand-dark);">
+            <i class="bi bi-box-seam" style="color: var(--brand-yellow);"></i> Sản phẩm đã đặt
+        </h4>
+
+        @if (Model.chitietdathangs != null && Model.chitietdathangs.Any())
+        {
+            <div class="table-responsive">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Sản phẩm</th>
+                            <th style="width: 15%;" class="text-center">SL Đặt</th>
+                            <th style="width: 15%;" class="text-center">SL Duyệt</th>
+                            <th style="width: 20%;" class="text-end">Đơn giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ct in Model.chitietdathangs)
+                        {
+                            <tr>
+                                <td data-label="Sản phẩm">
+                                    <div class="cart-product-cell">
+                                        @if (ct.sanpham != null && !string.IsNullOrEmpty(ct.sanpham.hinh))
+                                        {
+                                            <img src="@Url.Content(ct.sanpham.hinh)" alt="@ct.sanpham.tensanpham" class="cart-product-img" />
+                                        }
+                                        else
+                                        {
+                                            <div class="cart-product-img-placeholder">
+                                                <i class="bi bi-image"></i>
+                                            </div>
+                                        }
+                                        <div class="cart-product-info">
+                                            <strong>@(ct.sanpham != null ? ct.sanpham.tensanpham : "—")</strong>
+                                            <span class="text-muted">@(ct.sanpham != null ? ct.sanpham.masanpham : "")</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="SL Đặt" class="text-center">
+                                    <span class="sp-badge sp-badge-warning">@ct.soluongdat</span>
+                                </td>
+                                <td data-label="SL Duyệt" class="text-center">
+                                    @if (ct.soluongduyet.HasValue)
+                                    {
+                                        <span class="sp-badge sp-badge-success">@ct.soluongduyet</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                                <td data-label="Đơn giá" class="text-end">
+                                    <span class="cart-price">@string.Format("{0:N0}₫", ct.dongia)</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-end mt-3" style="font-size: 1.2rem;">
+                <strong>Tổng tiền tạm tính: </strong>
+                <span style="color: var(--brand-red); font-weight: 800;">
+                    @string.Format("{0:N0}₫", Model.chitietdathangs.Sum(ct => ct.thanhtien))
+                </span>
+            </div>
+        }
+
+        <!-- TRẠNG THÁI ĐƠN HÀNG -->
+        @if (Model.trangthai == 2)
+        {
+            <div class="alert alert-danger mt-4">
+                <i class="bi bi-x-circle-fill"></i>
+                <strong>Đơn hàng đã bị từ chối.</strong>
+                @(string.IsNullOrEmpty(Model.ghichu) ? "" : "Vui lòng liên hệ cửa hàng để biết thêm chi tiết.")
+            </div>
+        }
+        else if (Model.trangthai == 1)
+        {
+            <div class="alert alert-success mt-4">
+                <i class="bi bi-check-circle-fill"></i>
+                <strong>Đơn hàng đã được duyệt.</strong>
+                @if (Model.mahoadon.HasValue)
+                {
+                    <span> Mã hóa đơn chính thức của bạn là <strong>#@Model.mahoadon</strong>.</span>
+                }
+                <br /> Vui lòng chờ nhân viên liên hệ để tiến hành thanh toán và giao hàng.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-4">
+                <i class="bi bi-clock-fill"></i>
+                <strong>Đơn hàng đang chờ nhân viên duyệt.</strong>
+                Vui lòng đợi trong ít phút.
+            </div>
+        }
+
+        <div class="d-flex gap-2 mt-4">
+            <a href="@Url.Action("DanhSach", "SanPhamCongKhai")" class="btn-luu">
+                <i class="bi bi-bag"></i> Tiếp tục mua sắm
+            </a>
+            <a href="@Url.Action("Index", "Home")" class="btn-huy">
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+</div>

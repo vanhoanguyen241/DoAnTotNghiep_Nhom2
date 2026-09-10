@@ -14,7 +14,7 @@
             </div>
         }
 
-        @using (Html.BeginForm("TaoMoi", "SanPham", new { area = "Admin" }, FormMethod.Post, new { enctype = "multipart/form-data", id = "formThemSP", autocomplete = "off" }))
+        @using (Html.BeginForm("TaoMoi", "SanPham", new { area = "Admin" }, FormMethod.Post, new { id = "formThemSP", autocomplete = "off" }))
         {
             <div class="row g-3">
                 <div class="col-md-4">
@@ -54,9 +54,9 @@
                 </div>
 
                 <div class="col-12">
-                    <label class="form-label" for="file_hinh">Hình ảnh</label>
-                    <input type="file" id="file_hinh" name="file_hinh" class="form-control" accept=".jpg,.jpeg,.png" />
-                    <small class="form-text">Bỏ trống sẽ dùng ảnh mặc định.</small>
+                    <label class="form-label" for="txt_hinh">Tên file hình ảnh</label>
+                    <input type="text" id="txt_hinh" name="txt_hinh" class="form-control" placeholder="Ví dụ: laptop.jpg, iphone15.png" />
+                    <small class="form-text">Chỉ nhập tên file (vd: <code>laptop.jpg</code>). Hệ thống tự lưu vào <code>~/Content/images/sanpham/</code>. Bỏ trống sẽ dùng ảnh mặc định.</small>
                 </div>
 
                 <div class="col-12">
