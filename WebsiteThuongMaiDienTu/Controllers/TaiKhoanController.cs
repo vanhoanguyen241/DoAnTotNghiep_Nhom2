@@ -258,8 +258,9 @@ namespace WebsiteThuongMaiDienTu.Controllers
             tk.matkhau = matKhauMoi;
             db.SaveChanges();
 
-            TempData["ThongBaoThanhCong"] = "Đổi mật khẩu thành công! Vui lòng đăng nhập lại bằng mật khẩu mới.";
-            return RedirectToAction("DangXuat", "TaiKhoan", new { area = "" });
+            ViewBag.ThongBaoThanhCong = "Đổi mật khẩu thành công!";
+            ViewBag.TuDongDangXuat = true;
+            return View();
         }
         public ActionResult ThongTin()
         {

@@ -22,6 +22,22 @@
         {
             <div class="alert alert-success">
                 <i class="bi bi-check-circle-fill"></i> @ViewBag.ThongBaoThanhCong
+                @if (ViewBag.TuDongDangXuat == true)
+                {
+                    <br/><i class="bi bi-clock-history"></i><span> Hệ thống sẽ tự động đăng xuất sau <strong id="countdown" style="color: var(--brand-red);">5</strong> giây...</span>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                        var seconds = 5;
+                        var countdownEl = document.getElementById('countdown');
+                        var interval = setInterval(function () {
+                        seconds--;
+                        if (countdownEl) countdownEl.textContent = seconds;
+                        if (seconds <= 0) {
+                        clearInterval(interval);
+                        // Redirect về action Đăng xuất để clear Session
+                        window.location.href = '@Url.Action("DangXuat", "TaiKhoan", new { area = "" })';}}, 1000);});
+                    </script>
+                }
             </div>
         }
 
