@@ -3,7 +3,6 @@
 @{
     bool isAdmin = ViewBag.IsAdmin == true;
     int? maNV = Session["MaNV"] as int?;
-
     ViewBag.Title = isAdmin ? "Quản lý giao hàng" : "Đơn hàng của tôi";
 }
 
@@ -14,13 +13,9 @@
                 <i class="bi bi-truck" style="color: var(--brand-yellow);"></i>
                 @(isAdmin ? "Quản lý Giao hàng" : "Đơn hàng của tôi")
             </h2>
-
-            @if (isAdmin)
-            {
-                <a href="@Url.Action("ChoLapPhieu", "ChuyenHang", new { area = "Admin" })" class="btn-them">
-                    <i class="bi bi-plus-circle"></i> Đơn chờ lập phiếu
-                </a>
-            }
+            <a href="@Url.Action("ChoLapPhieu", "ChuyenHang", new { area = "Admin" })" class="btn-them">
+                <i class="bi bi-plus-circle"></i> Đơn chờ lập phiếu
+            </a>
         </div>
 
         @if (TempData["ThongBao"] != null)
@@ -42,7 +37,7 @@
                             <th>Khách hàng</th>
                             <th>Địa chỉ giao</th>
                             <th style="width: 160px;">Nhân viên giao</th>
-                            <th style="width: 110px;">Ngày giao</th>
+                            <th style="width: 140px;">Ngày giao</th>
                             <th style="width: 110px;" class="text-center">Trạng thái</th>
                             <th style="width: 150px;" class="text-center">Hành động</th>
                         </tr>
@@ -53,7 +48,6 @@
                             var hd = item.hoadon;
                             var kh = hd != null ? hd.khachhang : null;
                             var nv = item.nhanvien;
-
                             <tr>
                                 <td><strong>#@item.machuyenhang</strong></td>
                                 <td>
@@ -94,7 +88,24 @@
                                     }
                                 </td>
                                 <td>
-                                    @(item.ngaygiao != null ? item.ngaygiao.Value.ToString("dd/MM/yyyy") : "—")
+                                    @if (hd != null)
+                                    {
+                                        <div class="text-muted" style="font-size: 0.85rem;">
+                                            <small>Mong muốn: @hd.ngaygiaohang.ToString("dd/MM/yyyy")</small>
+                                        </div>
+                                        if (item.ngaygiao != null && item.ngaygiao.Value != DateTime.MinValue)
+                                        {
+                                            <div><strong>Thực tế: @item.ngaygiao.Value.ToString("dd/MM/yyyy")</strong></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-muted">Chưa giao</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
                                 </td>
                                 <td class="text-center">
                                     @if (item.daxuli)
@@ -107,16 +118,18 @@
                                     }
                                 </td>
                                 <td class="text-center">
-                                    @if (isAdmin)
+                                    @if (!item.daxuli)
                                     {
-                                        if (!item.daxuli)
-                                        {
-                                            <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                               class="btn-icon btn-sua"
-                                               title="Gán nhân viên giao">
-                                                <i class="bi bi-person-gear"></i>
-                                            </a>
+                                        <!-- Nút gán nhân viên: cả Admin và Nhân viên đều thấy -->
+                                        <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
+                                           class="btn-icon btn-sua"
+                                           title="Gán nhân viên giao">
+                                            <i class="bi bi-person-gear"></i>
+                                        </a>
 
+                                        <!-- Nút xác nhận nhanh: chỉ Admin -->
+                                        if (isAdmin)
+                                        {
                                             <a href="@Url.Action("XacNhanDaGiao", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
                                                class="btn-icon"
                                                style="background:#E8F5E9;color:#2E7D32;"
@@ -125,42 +138,32 @@
                                                 <i class="bi bi-check-circle-fill"></i>
                                             </a>
                                         }
-                                        else
-                                        {
-                                            <span class="text-muted">Hoàn thành</span>
-                                        }
                                     }
                                     else
                                     {
-                                        if (!item.daxuli && item.manv == maNV)
-                                        {
-                                            using (Html.BeginForm(
-                                                "XacNhanGiaoHang",
-                                                "ChuyenHang",
-                                                new { area = "Admin" },
-                                                FormMethod.Post,
-                                                new
-                                                {
-                                                    style = "display:inline;",
-                                                    onsubmit = "return confirm('Xác nhận đã giao hàng thành công cho khách hàng?');"
-                                                }))
-                                            {
-                                                <input type="hidden" name="id" value="@item.machuyenhang" />
+                                        <span class="text-muted">Hoàn thành</span>
+                                    }
 
-                                                <button type="submit"
-                                                        class="btn-luu"
-                                                        style="padding: 8px 16px; font-size: 0.85rem; border-radius: 6px;">
-                                                    <i class="bi bi-check-circle-fill"></i> Đã giao
-                                                </button>
-                                            }
-                                        }
-                                        else if (!item.daxuli)
+                                    <!-- Nút tự xác nhận của Nhân viên (chỉ hiện khi chưa giao + đúng NV được gán + không phải Admin) -->
+                                    @if (!isAdmin && !item.daxuli && item.manv == maNV)
+                                    {
+                                        using (Html.BeginForm(
+                                            "XacNhanGiaoHang",
+                                            "ChuyenHang",
+                                            new { area = "Admin" },
+                                            FormMethod.Post,
+                                            new
+                                            {
+                                                style = "display:inline;",
+                                                onsubmit = "return confirm('Xác nhận đã giao hàng thành công cho khách hàng?');"
+                                            }))
                                         {
-                                            <span class="text-muted">Chưa xử lý</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">Hoàn thành</span>
+                                            <input type="hidden" name="id" value="@item.machuyenhang" />
+                                            <button type="submit"
+                                                    class="btn-luu"
+                                                    style="padding: 8px 16px; font-size: 0.85rem; border-radius: 6px;">
+                                                <i class="bi bi-check-circle-fill"></i> Đã giao
+                                            </button>
                                         }
                                     }
                                 </td>

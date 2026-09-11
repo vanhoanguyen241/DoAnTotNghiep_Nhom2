@@ -126,7 +126,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (!int.TryParse(collection["txt_machuyenhang"], out id))
             {
                 return RedirectToAction("Index");
-            }
+            }    
 
             var ch = db.chuyenhangs.Find(id);
             if (ch == null)
@@ -156,6 +156,23 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View(ch);
             }
 
+            // CHẶN GÁN CHO ADMIN
+            if (string.Equals(nv.vaitro, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                ViewBag.ThongBao = "Không được gán Admin làm nhân viên giao hàng!";
+                NapDanhSachNhanVien(ch.manv);
+                return View(ch);
+            }
+
+            // BẮT BUỘC PHẢI CÓ SỐ ĐIỆN THOẠI
+            if (string.IsNullOrWhiteSpace(nv.dienthoai))
+            {
+                ViewBag.ThongBao = "Nhân viên \"" + nv.hoten + "\" chưa có số điện thoại liên hệ. Vui lòng cập nhật thông tin nhân viên trước!";
+                NapDanhSachNhanVien(ch.manv);
+                return View(ch);
+            }
+
+            // Lưu dữ liệu
             ch.manv = manv;
             db.SaveChanges();
 
@@ -197,7 +214,9 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // Nạp dropdown nhân viên giao hàng
         private void NapDanhSachNhanVien(int? maNvDaChon = null)
         {
+            // LỌC BỎ ADMIN KHỎI DROPDOWN
             var dsnv = db.nhanviens
+                .Where(n => n.vaitro != "Admin") // Không lấy tài khoản Admin
                 .OrderBy(n => n.hoten)
                 .ToList();
 

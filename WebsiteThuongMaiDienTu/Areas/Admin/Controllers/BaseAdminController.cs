@@ -45,8 +45,8 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     }
                 },
 
-                // Nhân viên xem giao hàng/đơn của mình và xác nhận giao hàng
-                { "ChuyenHang", new[] { "Index", "XacNhanGiaoHang" } }
+                // Nhân viên xem giao hàng/đơn của mình, xác nhận giao hàng và lập phiếu giao (để có phiếu mà gán)
+                { "ChuyenHang", new[] { "Index", "XacNhanGiaoHang", "ChoLapPhieu", "LapPhieu", "GanNhanVien" } }
             };
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
