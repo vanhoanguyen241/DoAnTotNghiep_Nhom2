@@ -17,75 +17,85 @@
                 bool isAdmin = ViewBag.IsAdmin == true;
             }
 
-            <ul class="list-unstyled">
-                <li>
-                    <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
-                        <i class="bi bi-speedometer2"></i> Trang chủ
-                    </a>
-                </li>
+        <ul class="list-unstyled">
+            <!-- TỔNG QUAN -->
+            <li>
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                    <i class="bi bi-speedometer2"></i> Trang chủ
+                </a>
+            </li>
 
-                <li>
-                    <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })">
-                        <i class="bi bi-people"></i> Khách hàng
-                    </a>
-                </li>
+            <!-- NHÓM 1: DANH MỤC & HÀNG HÓA -->
+            <li class="nav-group-title">Danh mục & Hàng hóa</li>
+            <li>
+                <a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })">
+                    <i class="bi bi-tags"></i> Loại sản phẩm
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })">
+                    <i class="bi bi-building"></i> Nhà sản xuất
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })">
+                    <i class="bi bi-box-seam"></i> Sản phẩm
+                </a>
+            </li>
 
-                <li>
-                    <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })">
-                        <i class="bi bi-box-seam"></i> Sản phẩm
-                    </a>
-                </li>
+            <!-- NHÓM 2: KHÁCH HÀNG -->
+            <li class="nav-group-title">Khách hàng</li>
+            <li>
+                <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })">
+                    <i class="bi bi-people"></i> Khách hàng
+                </a>
+            </li>
 
-                <li>
-                    <a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })">
-                        <i class="bi bi-tags"></i> Loại sản phẩm
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })">
-                        <i class="bi bi-building"></i> Nhà sản xuất
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })">
-                        <i class="bi bi-receipt"></i> Hoá đơn
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("Index", "ThanhToan", new { area = "Admin" })">
-                        <i class="bi bi-cash-coin"></i> Thanh toán
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })">
-                        <i class="bi bi-clipboard-check"></i> Duyệt đơn
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })">
-                        <i class="bi bi-truck"></i> @(isAdmin ? "Giao hàng" : "Đơn của tôi")
-                    </a>
-                </li>
-
-                <li>
-                    <a href="@Url.Action("DangXuat", "TaiKhoan", new { area = "Admin" })">
-                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                    </a>
-                </li>
-            </ul>
+            <!-- NHÓM 3: NGHIỆP VỤ BÁN HÀNG (LUỒNG XỬ LÝ) -->
+            <li class="nav-group-title">Nghiệp vụ bán hàng</li>
+            <li>
+                <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })">
+                    <i class="bi bi-clipboard-check"></i> Duyệt đơn hàng
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })">
+                    <i class="bi bi-receipt"></i> Hoá đơn
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "ThanhToan", new { area = "Admin" })">
+                    <i class="bi bi-cash-coin"></i> Thanh toán
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })">
+                    <i class="bi bi-truck"></i> @(isAdmin ? "Giao hàng" : "Đơn của tôi")
+                </a>
+            </li>
+        </ul>
         </nav>
 
         <main class="admin-content flex-grow-1">
             <header class="admin-topbar d-flex justify-content-between align-items-center">
+                <!-- Nút toggle sidebar cho mobile -->
                 <button class="btn btn-sm btn-dark d-md-none" id="toggleSidebar">
                     <i class="bi bi-list"></i>
                 </button>
-                <span>Xin chào, <strong>@Session["TenDangNhap"]</strong></span>
+
+                <!-- Lời chào -->
+                <span class="d-none d-sm-inline">
+                    Xin chào, <strong>@Session["TenDangNhap"]</strong>
+                </span>
+
+                <!-- Nút đăng xuất (ms-auto giúp đẩy sát lề phải) -->
+                <a href="@Url.Action("DangXuat", "TaiKhoan", new { area = "Admin" })"
+                   class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1 fw-bold ms-auto"
+                   title="Đăng xuất"
+                   onclick="return confirm('Bạn có chắc chắn muốn đăng xuất?');">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="d-none d-sm-inline">Đăng xuất</span>
+                </a>
             </header>
             <div class="admin-body p-4">
                 @RenderBody()

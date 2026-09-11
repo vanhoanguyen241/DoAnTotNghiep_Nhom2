@@ -29,7 +29,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             else
             {
                 int? maNV = Session["MaNV"] as int?;
-
                 dsPhieu = maNV.HasValue
                     ? db.chuyenhangs
                         .Where(ch => ch.manv == maNV.Value)
@@ -45,15 +44,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // Danh sách đơn đã thanh toán + giao tận nơi + chưa có phiếu giao
         public ActionResult ChoLapPhieu()
         {
-            // DB mới: hoadon không còn trangthaidon.
-            // Hóa đơn chỉ tồn tại sau khi đã duyệt (DuyetDon tạo) hoặc Admin tạo trực tiếp,
-            // nên chỉ cần lọc: đã thanh toán + giao tận nơi + chưa có phiếu giao.
             var dsCanLapPhieu = db.hoadons
                 .Where(h => h.dathanhtoan == true
                     && h.giaotannoi == true
                     && !h.chuyenhangs.Any())
                 .OrderByDescending(h => h.ngaydathang)
                 .ToList();
+
             return View(dsCanLapPhieu);
         }
 
@@ -67,16 +64,19 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
                 return RedirectToAction("ChoLapPhieu");
             }
+
             if (!hd.dathanhtoan)
             {
                 TempData["ThongBao"] = "Đơn hàng " + id + " chưa thanh toán, không thể lập phiếu giao!";
                 return RedirectToAction("ChoLapPhieu");
             }
+
             if (!hd.giaotannoi)
             {
                 TempData["ThongBao"] = "Đơn hàng " + id + " nhận tại cửa hàng, không cần phiếu giao!";
                 return RedirectToAction("ChoLapPhieu");
             }
+
             if (db.chuyenhangs.Any(chhang => chhang.mahoadon == id))
             {
                 TempData["ThongBao"] = "Đơn hàng " + id + " đã có phiếu giao hàng!";
@@ -133,6 +133,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
+
             if (ch.daxuli)
             {
                 TempData["ThongBao"] = "Phiếu giao " + id + " đã hoàn thành, không thể thay đổi nhân viên!";
@@ -162,7 +163,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Admin/ChuyenHang/XacNhanDaGiao/5
+        // GET: Admin/ChuyenHang/XacNhanDaGiao/5 (Dành cho Admin bấm xác nhận nhanh)
         public ActionResult XacNhanDaGiao(int id)
         {
             var ch = db.chuyenhangs.Find(id);
@@ -199,10 +200,11 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             var dsnv = db.nhanviens
                 .OrderBy(n => n.hoten)
                 .ToList();
+
             ViewBag.manv = new SelectList(dsnv, "manv", "hoten", maNvDaChon);
         }
 
-        // POST: Admin/ChuyenHang/XacNhanGiaoHang
+        // POST: Admin/ChuyenHang/XacNhanGiaoHang (Dành cho Nhân viên tự bấm xác nhận)
         [HttpPost]
         public ActionResult XacNhanGiaoHang(int id)
         {
@@ -218,13 +220,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (ch == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy đơn hàng hoặc bạn không có quyền giao đơn này!";
-                return RedirectToAction("CuaToi");
+                return RedirectToAction("Index");
             }
 
             if (ch.daxuli)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xác nhận giao trước đó!";
-                return RedirectToAction("CuaToi");
+                return RedirectToAction("Index");
             }
 
             // Cập nhật trạng thái
@@ -233,7 +235,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             db.SaveChanges();
 
             TempData["ThongBao"] = "Xác nhận giao hàng thành công!";
-            return RedirectToAction("CuaToi");
+            return RedirectToAction("Index");
         }
     }
 }

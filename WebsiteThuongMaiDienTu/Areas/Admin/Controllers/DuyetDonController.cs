@@ -109,6 +109,13 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     return RedirectToAction("ChiTiet", new { id = id });
                 }
 
+                if (slDuyet > ct.soluongdat)
+                {
+                    TempData["ThongBao"] = "Số lượng duyệt của sản phẩm \"" + sp.tensanpham
+                        + "\" không được lớn hơn số lượng khách đặt (" + ct.soluongdat + ")!";
+                    return RedirectToAction("ChiTiet", new { id = id });
+                }
+
                 soLuongDuyet[ct.masanpham] = slDuyet;
                 if (slDuyet > 0) allZero = false;
 

@@ -1557,6 +1557,26 @@ body {
         text-align: center;
         color: var(--brand-yellow);
     }
+
+/* ===== ADMIN SIDEBAR GROUP TITLE ===== */
+.admin-sidebar .nav-group-title {
+    padding: 18px 24px 8px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 700;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    list-style: none;
+    pointer-events: none; /* Không cho click vào tiêu đề nhóm */
+}
+
+    /* Loại bỏ border-top của nhóm đầu tiên */
+    .admin-sidebar .nav-group-title:first-of-type {
+        border-top: none;
+        margin-top: 0;
+    }
 /* Content area (bên phải sidebar) */
 .admin-content {
     margin-left: 250px;

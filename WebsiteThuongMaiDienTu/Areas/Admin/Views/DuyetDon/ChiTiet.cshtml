@@ -118,10 +118,11 @@ else
                                                    name="sl_@ct.masanpham"
                                                    class="form-control sl-duyet"
                                                    min="0"
-                                                   max="@ton"
+                                                   max="@Math.Min(ton, ct.soluongdat)"
                                                    value="@macDinh"
                                                    data-goc="@ct.soluongdat"
                                                    data-ton="@ton"
+                                                   data-dat="@ct.soluongdat"
                                                    style="text-align:center;font-weight:700;"
                                                    required />
                                         </td>
@@ -219,8 +220,17 @@ else
                     var price = parseInt(priceCell.textContent.replace(/[^\d]/g, ''), 10) || 0;
                     var sl = parseInt(input.value, 10) || 0;
                     if (sl < 0) sl = 0;
+
                     var ton = parseInt(input.getAttribute('data-ton'), 10) || 0;
-                    if (sl > ton) { sl = ton; input.value = ton; }
+                    var dat = parseInt(input.getAttribute('data-dat'), 10) || 0; // Lấy số lượng khách đặt
+
+                    // Chặn không cho vượt quá tồn kho VÀ số lượng khách đặt
+                    var maxAllowed = Math.min(ton, dat);
+                    if (sl > maxAllowed) {
+                        sl = maxAllowed;
+                        input.value = maxAllowed;
+                    }
+
                     var tt = price * sl;
                     tong += tt;
                     var ttCell = tr.querySelector('.thanh-tien');
