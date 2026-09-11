@@ -1,81 +1,37 @@
 ﻿@{
-    ViewBag.Title = "Tạo tài khoản";
+    ViewBag.Title = "Thêm nhân viên";
 }
 <div class="kh-form-container">
     <div class="kh-form-card">
         <div class="kh-form-header">
-            <h2><i class="bi bi-person-plus" style="color: var(--brand-yellow);"></i> Tạo tài khoản mới</h2>
+            <h2><i class="bi bi-person-plus" style="color: var(--brand-yellow);"></i> Thêm nhân viên mới</h2>
         </div>
         @if (ViewBag.ThongBao != null)
         {
             <div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao</div>
         }
-        @using (Html.BeginForm("TaoMoi", "TaiKhoan", new { area = "Admin" }, FormMethod.Post, new { id = "formThemTK", autocomplete = "off" }))
+        @using (Html.BeginForm("TaoMoi", "NhanVien", new { area = "Admin" }, FormMethod.Post, new { id = "formThemNV", autocomplete = "off" }))
         {
             <div class="mb-3">
-                <label class="form-label">Loại tài khoản <span class="text-danger">*</span></label>
-                <select name="txt_loai" id="txt_loai" class="form-select" required>
-                    <option value="">-- Chọn loại --</option>
-                    <option value="NhanVien">Nhân viên</option>
-                    <option value="KhachHang">Khách hàng</option>
-                </select>
+                <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                <input type="text" name="txt_hoten" class="form-control" placeholder="Nhập họ và tên" required />
             </div>
-
-            <div class="mb-3" id="div_manv" style="display:none;">
-                <label class="form-label">Chọn nhân viên <span class="text-danger">*</span></label>
-                @Html.DropDownList("txt_manv", (SelectList)ViewBag.manv, "-- Chọn nhân viên --", new { @class = "form-select" })
-                <small class="text-muted">Chỉ hiển thị nhân viên chưa có tài khoản.</small>
-            </div>
-
-            <div class="mb-3" id="div_makh" style="display:none;">
-                <label class="form-label">Chọn khách hàng <span class="text-danger">*</span></label>
-                @Html.DropDownList("txt_makh", (SelectList)ViewBag.makh, "-- Chọn khách hàng --", new { @class = "form-select" })
-                <small class="text-muted">Chỉ hiển thị khách hàng chưa có tài khoản.</small>
-            </div>
-
             <div class="mb-3">
-                <label class="form-label">Tên đăng nhập <span class="text-danger">*</span></label>
-                <input type="text" name="txt_tendangnhap" class="form-control" placeholder="Nhập tên đăng nhập" required />
+                <label class="form-label">Số điện thoại</label>
+                <input type="text" name="txt_dienthoai" class="form-control" placeholder="Nhập số điện thoại" />
             </div>
             <div class="mb-4">
-                <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                <input type="password" name="txt_matkhau" class="form-control" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required minlength="6" />
+                <label class="form-label">Vai trò <span class="text-danger">*</span></label>
+                <select name="txt_vaitro" class="form-select" required>
+                    <option value="">-- Chọn vai trò --</option>
+                    <option value="Admin">Admin</option>
+                    <option value="NhanVien">Nhân viên</option>
+                </select>
             </div>
             <div class="d-flex gap-2">
-                <button type="submit" class="btn-luu"><i class="bi bi-check-circle"></i> Tạo tài khoản</button>
-                <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })" class="btn-huy">Hủy bỏ</a>
+                <button type="submit" class="btn-luu"><i class="bi bi-check-circle"></i> Xác nhận Lưu</button>
+                <a href="@Url.Action("Index", "NhanVien", new { area = "Admin" })" class="btn-huy">Hủy bỏ</a>
             </div>
         }
     </div>
 </div>
-
-<script>
-    // JS ẩn/hiện dropdown chọn Nhân viên / Khách hàng
-    document.addEventListener('DOMContentLoaded', function () {
-        var loaiSelect = document.getElementById('txt_loai');
-        var divNv = document.getElementById('div_manv');
-        var divKh = document.getElementById('div_makh');
-        var selectNv = divNv.querySelector('select');
-        var selectKh = divKh.querySelector('select');
-
-        loaiSelect.addEventListener('change', function () {
-            var val = this.value;
-            if (val === 'NhanVien') {
-                divNv.style.display = 'block';
-                divKh.style.display = 'none';
-                selectNv.setAttribute('required', 'required');
-                selectKh.removeAttribute('required');
-            } else if (val === 'KhachHang') {
-                divNv.style.display = 'none';
-                divKh.style.display = 'block';
-                selectNv.removeAttribute('required');
-                selectKh.setAttribute('required', 'required');
-            } else {
-                divNv.style.display = 'none';
-                divKh.style.display = 'none';
-                selectNv.removeAttribute('required');
-                selectKh.removeAttribute('required');
-            }
-        });
-    });
-</script>
