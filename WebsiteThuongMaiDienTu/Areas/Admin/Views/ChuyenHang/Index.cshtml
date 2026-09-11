@@ -1,16 +1,26 @@
 ﻿@using WebsiteThuongMaiDienTu.Models
 @model List<chuyenhang>
 @{
-    ViewBag.Title = "Quản lý giao hàng";
+    bool isAdmin = ViewBag.IsAdmin == true;
+    int? maNV = Session["MaNV"] as int?;
+
+    ViewBag.Title = isAdmin ? "Quản lý giao hàng" : "Đơn hàng của tôi";
 }
 
 <div class="kh-container kh-container-wide">
     <div class="kh-card">
         <div class="kh-header">
-            <h2><i class="bi bi-truck" style="color: var(--brand-yellow);"></i> Quản lý Giao hàng</h2>
-            <a href="@Url.Action("ChoLapPhieu", "ChuyenHang", new { area = "Admin" })" class="btn-them">
-                <i class="bi bi-plus-circle"></i> Đơn chờ lập phiếu
-            </a>
+            <h2>
+                <i class="bi bi-truck" style="color: var(--brand-yellow);"></i>
+                @(isAdmin ? "Quản lý Giao hàng" : "Đơn hàng của tôi")
+            </h2>
+
+            @if (isAdmin)
+            {
+                <a href="@Url.Action("ChoLapPhieu", "ChuyenHang", new { area = "Admin" })" class="btn-them">
+                    <i class="bi bi-plus-circle"></i> Đơn chờ lập phiếu
+                </a>
+            }
         </div>
 
         @if (TempData["ThongBao"] != null)
@@ -34,7 +44,7 @@
                             <th style="width: 160px;">Nhân viên giao</th>
                             <th style="width: 110px;">Ngày giao</th>
                             <th style="width: 110px;" class="text-center">Trạng thái</th>
-                            <th style="width: 130px;" class="text-center">Hành động</th>
+                            <th style="width: 150px;" class="text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,24 +107,61 @@
                                     }
                                 </td>
                                 <td class="text-center">
-                                    @if (!item.daxuli)
+                                    @if (isAdmin)
                                     {
-                                        <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                           class="btn-icon btn-sua"
-                                           title="Gán nhân viên giao">
-                                            <i class="bi bi-person-gear"></i>
-                                        </a>
-                                        <a href="@Url.Action("XacNhanDaGiao", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                           class="btn-icon"
-                                           style="background:#E8F5E9;color:#2E7D32;"
-                                           title="Xác nhận đã giao hàng"
-                                           onclick="return confirm('Xác nhận phiếu giao #@item.machuyenhang đã giao hàng thành công?');">
-                                            <i class="bi bi-check-circle-fill"></i>
-                                        </a>
+                                        if (!item.daxuli)
+                                        {
+                                            <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
+                                               class="btn-icon btn-sua"
+                                               title="Gán nhân viên giao">
+                                                <i class="bi bi-person-gear"></i>
+                                            </a>
+
+                                            <a href="@Url.Action("XacNhanDaGiao", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
+                                               class="btn-icon"
+                                               style="background:#E8F5E9;color:#2E7D32;"
+                                               title="Xác nhận đã giao hàng"
+                                               onclick="return confirm('Xác nhận phiếu giao #@item.machuyenhang đã giao hàng thành công?');">
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Hoàn thành</span>
+                                        }
                                     }
                                     else
                                     {
-                                        <span class="text-muted">Hoàn thành</span>
+                                        if (!item.daxuli && item.manv == maNV)
+                                        {
+                                            using (Html.BeginForm(
+                                                "XacNhanGiaoHang",
+                                                "ChuyenHang",
+                                                new { area = "Admin" },
+                                                FormMethod.Post,
+                                                new
+                                                {
+                                                    style = "display:inline;",
+                                                    onsubmit = "return confirm('Xác nhận đã giao hàng thành công cho khách hàng?');"
+                                                }))
+                                            {
+                                                <input type="hidden" name="id" value="@item.machuyenhang" />
+
+                                                <button type="submit"
+                                                        class="btn-luu"
+                                                        style="padding: 8px 16px; font-size: 0.85rem; border-radius: 6px;">
+                                                    <i class="bi bi-check-circle-fill"></i> Đã giao
+                                                </button>
+                                            }
+                                        }
+                                        else if (!item.daxuli)
+                                        {
+                                            <span class="text-muted">Chưa xử lý</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Hoàn thành</span>
+                                        }
                                     }
                                 </td>
                             </tr>
@@ -125,9 +172,23 @@
         }
         else
         {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Chưa có phiếu giao hàng nào. Vào mục <strong>Đơn chờ lập phiếu</strong> để tạo phiếu mới.
-            </div>
+            if (isAdmin)
+            {
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    Chưa có phiếu giao hàng nào. Vào mục <strong>Đơn chờ lập phiếu</strong> để tạo phiếu mới.
+                </div>
+            }
+            else
+            {
+                <div class="empty-state" style="padding: 40px 20px;">
+                    <i class="bi bi-box-seam" style="font-size: 3rem; color: #ddd;"></i>
+                    <h4 style="color: #666; margin-top: 15px;">Không có đơn hàng nào được gán cho bạn</h4>
+                    <p class="text-muted">
+                        Tất cả các đơn hàng được phân công cho bạn đã được xử lý hoặc chưa có đơn nào được gán.
+                    </p>
+                </div>
+            }
         }
     </div>
 </div>

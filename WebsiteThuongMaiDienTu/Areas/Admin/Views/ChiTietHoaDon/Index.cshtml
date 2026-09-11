@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Chi tiết hóa đơn";
     var hoaDon = ViewBag.HoaDon as hoadon;
+    bool isAdmin = ViewBag.IsAdmin == true;
 }
 
 @if (hoaDon == null)
@@ -30,10 +31,13 @@ else
                 </h2>
 
                 <div class="d-flex gap-2">
-                    <a href="@Url.Action("TaoMoi", "ChiTietHoaDon", new { area = "Admin", id = hoaDon.mahoadon })"
-                       class="btn-them">
-                        <i class="bi bi-plus-circle"></i> Thêm chi tiết
-                    </a>
+                    @if (isAdmin)
+                    {
+                        <a href="@Url.Action("TaoMoi", "ChiTietHoaDon", new { area = "Admin", id = hoaDon.mahoadon })"
+                           class="btn-them">
+                            <i class="bi bi-plus-circle"></i> Thêm chi tiết
+                        </a>
+                    }
 
                     <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
                        class="btn-huy">
@@ -117,18 +121,25 @@ else
                                     </td>
 
                                     <td class="text-center">
-                                        <a href="@Url.Action("Sua", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
-                                           class="btn-icon btn-sua"
-                                           title="Sửa">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
+                                        @if (isAdmin)
+                                        {
+                                            <a href="@Url.Action("Sua", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
+                                               class="btn-icon btn-sua"
+                                               title="Sửa">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
 
-                                        <a href="@Url.Action("Xoa", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
-                                           class="btn-icon btn-xoa"
-                                           title="Xóa"
-                                           onclick="return confirm('Bạn có chắc chắn muốn xóa chi tiết hóa đơn này?');">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>
+                                            <a href="@Url.Action("Xoa", "ChiTietHoaDon", new { area = "Admin", mahoadon = item.mahoadon, masanpham = item.masanpham })"
+                                               class="btn-icon btn-xoa"
+                                               title="Xóa"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa chi tiết hóa đơn này?');">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
                                     </td>
                                 </tr>
                             }

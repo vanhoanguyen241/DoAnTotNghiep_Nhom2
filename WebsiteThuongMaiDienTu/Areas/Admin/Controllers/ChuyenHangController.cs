@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Collections.Generic;
 using WebsiteThuongMaiDienTu.Models;
 
 namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
@@ -10,12 +11,33 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         private QLBanHang_Model db = new QLBanHang_Model();
 
         // GET: Admin/ChuyenHang
-        // Danh sách toàn bộ phiếu giao hàng
+        // Admin xem toàn bộ phiếu giao hàng
+        // Nhân viên chỉ xem các phiếu được gán cho mình
         public ActionResult Index()
         {
-            var dsPhieu = db.chuyenhangs
-                .OrderByDescending(ch => ch.machuyenhang)
-                .ToList();
+            string vaiTro = Session["VaiTro"]?.ToString();
+            bool isAdmin = string.Equals(vaiTro, "Admin", StringComparison.OrdinalIgnoreCase);
+
+            List<chuyenhang> dsPhieu;
+
+            if (isAdmin)
+            {
+                dsPhieu = db.chuyenhangs
+                    .OrderByDescending(ch => ch.machuyenhang)
+                    .ToList();
+            }
+            else
+            {
+                int? maNV = Session["MaNV"] as int?;
+
+                dsPhieu = maNV.HasValue
+                    ? db.chuyenhangs
+                        .Where(ch => ch.manv == maNV.Value)
+                        .OrderByDescending(ch => ch.machuyenhang)
+                        .ToList()
+                    : new List<chuyenhang>();
+            }
+
             return View(dsPhieu);
         }
 
@@ -178,26 +200,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 .OrderBy(n => n.hoten)
                 .ToList();
             ViewBag.manv = new SelectList(dsnv, "manv", "hoten", maNvDaChon);
-        }
-
-        // GET: Admin/ChuyenHang/CuaToi
-        // Trang dành riêng cho nhân viên xem các đơn mình được giao
-        public ActionResult CuaToi()
-        {
-            int? maNV = Session["MaNV"] as int?;
-            if (!maNV.HasValue)
-            {
-                TempData["ThongBao"] = "Vui lòng đăng nhập với tư cách nhân viên!";
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
-            }
-
-            // Lấy danh sách đơn chưa giao (daxuli == false) và được gán cho nhân viên hiện tại
-            var dsDonCuaToi = db.chuyenhangs
-                .Where(ch => ch.manv == maNV.Value && ch.daxuli == false)
-                .OrderByDescending(ch => ch.machuyenhang)
-                .ToList();
-
-            return View(dsDonCuaToi);
         }
 
         // POST: Admin/ChuyenHang/XacNhanGiaoHang

@@ -243,7 +243,6 @@
     <Content Include="Areas\Admin\Views\ChuyenHang\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\ChoLapPhieu.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\GanNhanVien.cshtml" />
-    <Content Include="Areas\Admin\Views\ChuyenHang\CuaToi.cshtml" />
     <Content Include="Areas\Admin\Views\ThanhToan\DaThanhToan.cshtml" />
     <Content Include="Areas\Admin\Views\ThanhToan\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />

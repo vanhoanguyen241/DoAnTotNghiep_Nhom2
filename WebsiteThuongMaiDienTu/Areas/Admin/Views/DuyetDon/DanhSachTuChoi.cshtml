@@ -2,6 +2,7 @@
 @model List<dathang>
 @{
     ViewBag.Title = "Đơn hàng đã từ chối";
+    bool isAdmin = ViewBag.IsAdmin == true;
 }
 
 <div class="kh-container kh-container-wide">
@@ -51,12 +52,19 @@
                                     </small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.madathang })"
-                                       class="btn-icon btn-xoa"
-                                       title="Xóa đơn"
-                                       onclick="return confirm('XÓA VĨNH VIỄN đơn #@item.madathang?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </a>
+                                    @if (isAdmin)
+                                    {
+                                        <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.madathang })"
+                                           class="btn-icon btn-xoa"
+                                           title="Xóa đơn"
+                                           onclick="return confirm('XÓA VĨNH VIỄN đơn #@item.madathang?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
                                 </td>
                             </tr>
                         }

@@ -2,6 +2,7 @@
 @model List<khachhang>
 @{
     ViewBag.Title = "Quản lý khách hàng";
+    bool isAdmin = ViewBag.IsAdmin == true;
 }
 
 <div class="kh-container">
@@ -41,12 +42,21 @@
                             <td>@item.diachi</td>
                             <td>@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</td>
                             <td class="text-center">
-                                <a href="@Url.Action("Sua", "KhachHang", new { area = "Admin", id = item.makh })" class="btn-icon btn-sua" title="Sửa">
+                                <a href="@Url.Action("Sua", "KhachHang", new { area = "Admin", id = item.makh })"
+                                   class="btn-icon btn-sua"
+                                   title="Sửa">
                                     <i class="bi bi-pencil-fill"></i>
                                 </a>
-                                <a href="@Url.Action("Xoa", "KhachHang", new { area = "Admin", id = item.makh })" class="btn-icon btn-xoa" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
+
+                                @if (isAdmin)
+                                {
+                                    <a href="@Url.Action("Xoa", "KhachHang", new { area = "Admin", id = item.makh })"
+                                       class="btn-icon btn-xoa"
+                                       title="Xóa"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }
