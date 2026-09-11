@@ -138,6 +138,7 @@
     <Compile Include="Areas\Admin\Controllers\HoaDonController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LoaiSanPhamController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NhanVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamController.cs" />
     <Compile Include="Areas\Admin\Controllers\TaiKhoanController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThanhToanController.cs" />
@@ -245,6 +246,12 @@
     <Content Include="Areas\Admin\Views\ChuyenHang\GanNhanVien.cshtml" />
     <Content Include="Areas\Admin\Views\ThanhToan\DaThanhToan.cshtml" />
     <Content Include="Areas\Admin\Views\ThanhToan\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\TaiKhoan\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\TaiKhoan\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\TaiKhoan\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\TaoMoi.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\Sua.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

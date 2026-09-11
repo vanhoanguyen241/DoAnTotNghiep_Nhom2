@@ -73,6 +73,19 @@
                     <i class="bi bi-truck"></i> @(isAdmin ? "Giao hàng" : "Đơn của tôi")
                 </a>
             </li>
+
+            <!-- NHÓM 4: HỆ THỐNG -->
+            <li class="nav-group-title">Hệ thống</li>
+            <li>
+                <a href="@Url.Action("Index", "NhanVien", new { area = "Admin" })">
+                    <i class="bi bi-person-badge"></i> Nhân viên
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })">
+                    <i class="bi bi-key"></i> Tài khoản
+                </a>
+            </li>
         </ul>
         </nav>
 
