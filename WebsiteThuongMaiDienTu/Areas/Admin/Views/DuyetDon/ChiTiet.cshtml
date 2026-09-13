@@ -10,63 +10,68 @@
 
 @if (datHang == null)
 {
-    <div class="kh-container">
-        <div class="kh-card">
-            <div class="alert alert-danger">Không tìm thấy phiếu đặt hàng.</div>
-            <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn-huy">
-                <i class="bi bi-arrow-left"></i> Quay lại
-            </a>
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 text-center">
+                <div class="alert alert-danger">Không tìm thấy phiếu đặt hàng.</div>
+                <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn btn-light px-4 border shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại
+                </a>
+            </div>
         </div>
     </div>
 }
 else
 {
-    <div class="kh-container kh-container-wide">
-        <div class="kh-card">
-            <div class="kh-header">
-                <h2>
-                    <i class="bi bi-clipboard2-check" style="color: var(--brand-yellow);"></i>
+    <div class="container-fluid px-4 py-4">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
+                <h2 class="h4 mb-0 fw-bold text-dark">
+                    <i class="bi bi-clipboard2-check me-2" style="color: var(--brand-yellow);"></i>
                     Duyệt phiếu đặt hàng #@datHang.madathang
                 </h2>
-                <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn-huy"
-                   style="padding:10px 16px;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:8px;">
-                    <i class="bi bi-arrow-left"></i> Quay lại
+                <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })" class="btn btn-light px-4 border shadow-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại
                 </a>
             </div>
 
             @if (TempData["ThongBao"] != null)
             {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    @TempData["ThongBao"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="card-body pb-0">
+                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                        @TempData["ThongBao"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
             }
 
             <!-- Thông tin khách hàng & đơn -->
-            <div class="alert alert-info mb-4">
-                <div class="row g-2">
-                    <div class="col-md-3">
-                        <strong>Khách hàng:</strong><br />
-                        @(khachHang != null ? khachHang.hoten : "—")
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Số điện thoại:</strong><br />
-                        @(khachHang != null && !string.IsNullOrEmpty(khachHang.SDT) ? khachHang.SDT : "—")
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Ngày đặt / Ngày giao:</strong><br />
-                        @datHang.ngaydathang.ToString("dd/MM/yyyy") → @datHang.ngaygiaohang.ToString("dd/MM/yyyy")
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Hình thức:</strong><br />
-                        @(datHang.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
-                    </div>
-                    @if (!string.IsNullOrEmpty(datHang.ghichu))
-                    {
-                        <div class="col-12">
-                            <strong>Ghi chú:</strong> @datHang.ghichu
+            <div class="card-body p-4 pb-0">
+                <div class="alert alert-info mb-4">
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <strong>Khách hàng:</strong><br />
+                            @(khachHang != null ? khachHang.hoten : "—")
                         </div>
-                    }
+                        <div class="col-md-3">
+                            <strong>Số điện thoại:</strong><br />
+                            @(khachHang != null && !string.IsNullOrEmpty(khachHang.SDT) ? khachHang.SDT : "—")
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Ngày đặt / Ngày giao:</strong><br />
+                            @datHang.ngaydathang.ToString("dd/MM/yyyy") → @datHang.ngaygiaohang.ToString("dd/MM/yyyy")
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Hình thức:</strong><br />
+                            @(datHang.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                        </div>
+                        @if (!string.IsNullOrEmpty(datHang.ghichu))
+                        {
+                            <div class="col-12 mt-2">
+                                <strong>Ghi chú:</strong> @datHang.ghichu
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
 
@@ -77,18 +82,18 @@ else
                     <input type="hidden" name="madathang" value="@datHang.madathang" />
 
                     <div class="table-responsive">
-                        <table class="kh-table">
-                            <thead>
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
                                 <tr>
-                                    <th style="width: 120px;">Mã SP</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th style="width: 110px;" class="text-end">Đơn giá</th>
-                                    <th style="width: 120px;" class="text-center">Khách đặt</th>
-                                    <th style="width: 120px;" class="text-center">Tồn kho</th>
-                                    <th style="width: 170px;" class="text-center">
-                                        Số lượng duyệt <span class="text-danger">*</span>
+                                    <th style="width: 120px;" class="text-uppercase text-secondary small fw-bold">Mã SP</th>
+                                    <th class="text-uppercase text-secondary small fw-bold">Tên sản phẩm</th>
+                                    <th style="width: 110px;" class="text-end text-uppercase text-secondary small fw-bold">Đơn giá</th>
+                                    <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Khách đặt</th>
+                                    <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Tồn kho</th>
+                                    <th style="width: 170px;" class="text-center text-uppercase text-secondary small fw-bold">
+                                        Số lượng duyệt <span class="text-danger ms-1">*</span>
                                     </th>
-                                    <th style="width: 130px;" class="text-end">Thành tiền</th>
+                                    <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,37 +102,37 @@ else
                                     int ton = tonKho.ContainsKey(ct.masanpham) ? tonKho[ct.masanpham] : 0;
                                     int macDinh = Math.Min(ct.soluongdat, ton);
                                     <tr>
-                                        <td><strong>@ct.masanpham</strong></td>
+                                        <td><strong class="text-dark">@ct.masanpham</strong></td>
                                         <td>@(ct.sanpham != null ? ct.sanpham.tensanpham : "—")</td>
                                         <td class="text-end">@string.Format("{0:N0}₫", ct.dongia)</td>
                                         <td class="text-center">
-                                            <span class="sp-badge sp-badge-warning">@ct.soluongdat</span>
+                                            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">@ct.soluongdat</span>
                                         </td>
                                         <td class="text-center">
                                             @if (ton > 0)
                                             {
-                                                <span class="sp-badge sp-badge-success">@ton</span>
+                                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">@ton</span>
                                             }
                                             else
                                             {
-                                                <span class="sp-badge sp-badge-danger">Hết</span>
+                                                <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Hết</span>
                                             }
                                         </td>
                                         <td class="text-center">
                                             <input type="number"
                                                    name="sl_@ct.masanpham"
-                                                   class="form-control sl-duyet"
+                                                   class="form-control sl-duyet text-center fw-bold mx-auto"
                                                    min="0"
                                                    max="@Math.Min(ton, ct.soluongdat)"
                                                    value="@macDinh"
                                                    data-goc="@ct.soluongdat"
                                                    data-ton="@ton"
                                                    data-dat="@ct.soluongdat"
-                                                   style="text-align:center;font-weight:700;"
+                                                   style="max-width: 100px;"
                                                    required />
                                         </td>
                                         <td class="text-end">
-                                            <strong class="thanh-tien">
+                                            <strong class="thanh-tien text-danger">
                                                 @string.Format("{0:N0}₫", ct.dongia * macDinh)
                                             </strong>
                                         </td>
@@ -137,33 +142,34 @@ else
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3"
-                         style="border-top:2px solid #f0f0f0;">
-                        <div>
-                            <strong>Tổng tiền sau duyệt:</strong>
-                            <span id="tongTienMoi"
-                                  style="font-size:1.4rem;color:var(--brand-red);font-weight:800;margin-left:8px;">
-                                @string.Format("{0:N0}₫", datHang.chitietdathangs.Sum(ct => ct.thanhtien))
-                            </span>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn-huy"
-                                    style="padding:12px 20px;background:#FFEBEE;color:#C62828;border-radius:8px;font-weight:700;"
-                                    data-bs-toggle="modal" data-bs-target="#modalTuChoi">
-                                <i class="bi bi-x-octagon"></i> Từ chối đơn
-                            </button>
-                            <button type="submit" class="btn-luu"
-                                    onclick="return confirm('Xác nhận duyệt đơn với số lượng đã chọn?');">
-                                <i class="bi bi-check2-circle"></i> Duyệt đơn
-                            </button>
+                    <div class="card-body border-top">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div>
+                                <span class="text-secondary fw-normal">Tổng tiền sau duyệt:</span>
+                                <span id="tongTienMoi" class="h4 mb-0 text-danger fw-bold ms-2">
+                                    @string.Format("{0:N0}₫", datHang.chitietdathangs.Sum(ct => ct.thanhtien))
+                                </span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-danger"
+                                        data-bs-toggle="modal" data-bs-target="#modalTuChoi">
+                                    <i class="bi bi-x-octagon me-1"></i> Từ chối đơn
+                                </button>
+                                <button type="submit" class="btn btn-brand px-4"
+                                        onclick="return confirm('Xác nhận duyệt đơn với số lượng đã chọn?');">
+                                    <i class="bi bi-check2-circle me-1"></i> Duyệt đơn
+                                </button>
+                            </div>
                         </div>
                     </div>
                 }
             }
             else
             {
-                <div class="alert alert-warning">
-                    Phiếu đặt hàng này chưa có sản phẩm nào.
+                <div class="card-body pt-0">
+                    <div class="alert alert-warning mb-0">
+                        <i class="bi bi-exclamation-triangle me-1"></i> Phiếu đặt hàng này chưa có sản phẩm nào.
+                    </div>
                 </div>
             }
         </div>
@@ -172,32 +178,31 @@ else
     <!-- Modal Từ chối -->
     <div class="modal fade" id="modalTuChoi" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content border-0 shadow">
                 <form method="post" action="@Url.Action("TuChoi", "DuyetDon", new { area = "Admin" })">
                     <input type="hidden" name="id" value="@datHang.madathang" />
-                    <div class="modal-header" style="background:#FFEBEE;">
-                        <h5 class="modal-title" style="color:#C62828;">
-                            <i class="bi bi-x-octagon-fill"></i> Từ chối đơn #@datHang.madathang
+                    <div class="modal-header bg-danger-subtle text-danger-emphasis border-0">
+                        <h5 class="modal-title fw-bold">
+                            <i class="bi bi-x-octagon-fill me-1"></i> Từ chối đơn #@datHang.madathang
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label class="form-label">
-                            Lý do từ chối <span class="text-danger">*</span>
+                        <label class="form-label fw-bold">
+                            Lý do từ chối <span class="text-danger ms-1">*</span>
                         </label>
                         <textarea name="lydo" class="form-control" rows="4"
                                   placeholder="Ví dụ: Hết hàng, khách không liên hệ được..."
                                   required maxlength="500"></textarea>
-                        <small class="text-muted">
+                        <small class="text-muted d-block mt-2">
                             Lý do sẽ được nối vào phần ghi chú của phiếu đặt hàng.
                         </small>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-huy" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn-luu"
-                                style="background:#C62828;color:#fff;"
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger"
                                 onclick="return confirm('Xác nhận từ chối đơn hàng này?');">
-                            <i class="bi bi-x-octagon"></i> Xác nhận từ chối
+                            <i class="bi bi-x-octagon me-1"></i> Xác nhận từ chối
                         </button>
                     </div>
                 </form>

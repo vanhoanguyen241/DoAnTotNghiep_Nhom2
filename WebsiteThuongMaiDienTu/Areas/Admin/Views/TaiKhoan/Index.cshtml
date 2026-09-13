@@ -3,28 +3,30 @@
 @{
     ViewBag.Title = "Quản lý Tài khoản";
 }
-<div class="kh-container kh-container-wide">
-    <div class="kh-card">
-        <div class="kh-header">
-            <h2><i class="bi bi-key" style="color: var(--brand-yellow);"></i> Quản lý Tài khoản Nhân viên</h2>
-            <a href="@Url.Action("TaoMoi", "TaiKhoan", new { area = "Admin" })" class="btn-them">
-                <i class="bi bi-plus-circle"></i> Tạo tài khoản
+<div class="container-fluid px-4 py-4">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
+            <h2 class="h4 mb-0 fw-bold text-dark"><i class="bi bi-key me-2" style="color: var(--brand-yellow);"></i> Quản lý Tài khoản Nhân viên</h2>
+            <a href="@Url.Action("TaoMoi", "TaiKhoan", new { area = "Admin" })" class="btn btn-brand">
+                <i class="bi bi-plus-circle me-1"></i> Tạo tài khoản
             </a>
         </div>
         @if (TempData["ThongBao"] != null)
         {
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                @TempData["ThongBao"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card-body pb-0">
+                <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                    @TempData["ThongBao"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
         }
         <div class="table-responsive">
-            <table class="kh-table">
-                <thead>
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th>Tên đăng nhập</th>
-                        <th>Nhân viên</th>
-                        <th style="width: 150px;" class="text-center">Hành động</th>
+                        <th class="text-uppercase text-secondary small fw-bold">Tên đăng nhập</th>
+                        <th class="text-uppercase text-secondary small fw-bold">Nhân viên</th>
+                        <th style="width: 150px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,11 +34,11 @@
                     {
                         var nv = item.nhanvien;
                         <tr>
-                            <td><strong>@item.tendangnhap</strong></td>
+                            <td><strong class="text-dark">@item.tendangnhap</strong></td>
                             <td>@(nv != null ? nv.hoten : "—")</td>
                             <td class="text-center">
-                                <a href="@Url.Action("Sua", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn-icon btn-sua" title="Đổi mật khẩu"><i class="bi bi-key-fill"></i></a>
-                                <a href="@Url.Action("Xoa", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn-icon btn-xoa" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');"><i class="bi bi-trash-fill"></i></a>
+                                <a href="@Url.Action("Sua", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn btn-sm btn-light text-primary me-1" title="Đổi mật khẩu"><i class="bi bi-key-fill"></i></a>
+                                <a href="@Url.Action("Xoa", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn btn-sm btn-light text-danger" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');"><i class="bi bi-trash-fill"></i></a>
                             </td>
                         </tr>
                     }

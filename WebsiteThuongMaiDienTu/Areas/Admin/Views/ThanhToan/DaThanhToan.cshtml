@@ -5,43 +5,44 @@
     bool isAdmin = ViewBag.IsAdmin == true;
 }
 
-<div class="kh-container kh-container-wide">
-    <div class="kh-card">
-        <div class="kh-header">
-            <h2>
-                <i class="bi bi-check2-all" style="color:#2E7D32;"></i>
+<div class="container-fluid px-4 py-4">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
+            <h2 class="h4 mb-0 fw-bold text-dark">
+                <i class="bi bi-check2-all me-2" style="color:#2E7D32;"></i>
                 Hóa đơn đã thanh toán
             </h2>
 
             <a href="@Url.Action("Index", "ThanhToan", new { area = "Admin" })"
-               class="btn-huy"
-               style="padding:10px 16px;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:8px;">
-                <i class="bi bi-arrow-left"></i> Chờ thanh toán
+               class="btn btn-light px-4 border shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Chờ thanh toán
             </a>
         </div>
 
         @if (TempData["ThongBao"] != null)
         {
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                @TempData["ThongBao"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card-body pb-0">
+                <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                    @TempData["ThongBao"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
         }
 
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">
-                <table class="kh-table">
-                    <thead>
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th style="width: 80px;">Mã HĐ</th>
-                            <th style="width: 100px;" class="text-center">Mã đơn đặt</th>
-                            <th>Khách hàng</th>
-                            <th style="width: 120px;">SĐT</th>
-                            <th style="width: 110px;">Ngày đặt</th>
-                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
-                            <th style="width: 120px;" class="text-center">Thanh toán</th>
-                            <th style="width: 130px;" class="text-center">Hành động</th>
+                            <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã HĐ</th>
+                            <th style="width: 100px;" class="text-center text-uppercase text-secondary small fw-bold">Mã đơn đặt</th>
+                            <th class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
+                            <th style="width: 120px;" class="text-uppercase text-secondary small fw-bold">SĐT</th>
+                            <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày đặt</th>
+                            <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Tổng tiền</th>
+                            <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Thanh toán</th>
+                            <th style="width: 130px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,12 +55,12 @@
                             var kh = item.khachhang;
 
                             <tr>
-                                <td><strong>#@item.mahoadon</strong></td>
+                                <td><strong class="text-dark">#@item.mahoadon</strong></td>
 
                                 <td class="text-center">
                                     @if (donDat != null)
                                     {
-                                        <span class="sp-badge sp-badge-warning">#@donDat.madathang</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">#@donDat.madathang</span>
                                     }
                                     else
                                     {
@@ -80,16 +81,16 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <strong>@string.Format("{0:N0}₫", item.tongtien)</strong>
+                                    <strong class="text-danger">@string.Format("{0:N0}₫", item.tongtien)</strong>
                                 </td>
 
                                 <td class="text-center">
-                                    <span class="sp-badge sp-badge-success">Đã thanh toán</span>
+                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">Đã thanh toán</span>
                                 </td>
 
                                 <td class="text-center">
                                     <a href="@Url.Action("Index", "ChiTietHoaDon", new { area = "Admin", id = item.mahoadon })"
-                                       class="btn-icon btn-sua"
+                                       class="btn btn-sm btn-light text-primary me-1"
                                        title="Xem chi tiết hóa đơn">
                                         <i class="bi bi-eye-fill"></i>
                                     </a>
@@ -97,7 +98,7 @@
                                     @if (isAdmin)
                                     {
                                         <a href="@Url.Action("HuyThanhToan", "ThanhToan", new { area = "Admin", id = item.mahoadon })"
-                                           class="btn-icon btn-xoa"
+                                           class="btn btn-sm btn-light text-danger"
                                            title="Hủy xác nhận thanh toán"
                                            onclick="return confirm('Bạn có chắc chắn muốn hủy xác nhận thanh toán hóa đơn #@item.mahoadon?');">
                                             <i class="bi bi-x-circle-fill"></i>
@@ -112,8 +113,10 @@
         }
         else
         {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Chưa có hóa đơn nào được xác nhận thanh toán.
+            <div class="card-body">
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-1"></i> Chưa có hóa đơn nào được xác nhận thanh toán.
+                </div>
             </div>
         }
     </div>

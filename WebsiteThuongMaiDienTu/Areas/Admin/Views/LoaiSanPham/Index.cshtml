@@ -5,48 +5,48 @@
     bool isAdmin = ViewBag.IsAdmin == true;
 }
 
-<div class="kh-container">
-    <div class="kh-card">
-        <div class="kh-header">
-            <h2>
-                <i class="bi bi-tags-fill" style="color: var(--brand-yellow);"></i>
+<div class="container-fluid px-4 py-4">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
+            <h2 class="h4 mb-0 fw-bold text-dark">
+                <i class="bi bi-tags-fill me-2" style="color: var(--brand-yellow);"></i>
                 Quản lý Loại sản phẩm
             </h2>
 
             @if (isAdmin)
             {
-                <a href="@Url.Action("TaoMoi", "LoaiSanPham", new { area = "Admin" })" class="btn-them">
-                    <i class="bi bi-plus-circle"></i> Thêm loại mới
+                <a href="@Url.Action("TaoMoi", "LoaiSanPham", new { area = "Admin" })" class="btn btn-brand">
+                    <i class="bi bi-plus-circle me-1"></i> Thêm loại mới
                 </a>
             }
         </div>
 
         <div class="table-responsive">
-            <table class="kh-table">
-                <thead>
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
                     <tr>
-                        <th style="width: 150px;">Mã loại</th>
-                        <th>Tên loại sản phẩm</th>
-                        <th style="width: 120px;" class="text-center">Hành động</th>
+                        <th style="width: 150px;" class="text-uppercase text-secondary small fw-bold">Mã loại</th>
+                        <th class="text-uppercase text-secondary small fw-bold">Tên loại sản phẩm</th>
+                        <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td><strong>@item.maloaisanpham</strong></td>
+                            <td><strong class="text-dark">@item.maloaisanpham</strong></td>
                             <td>@item.tenloaisanpham</td>
                             <td class="text-center">
                                 @if (isAdmin)
                                 {
                                     <a href="@Url.Action("Sua", "LoaiSanPham", new { area = "Admin", id = item.maloaisanpham })"
-                                       class="btn-icon btn-sua"
+                                       class="btn btn-sm btn-light text-primary me-1"
                                        title="Sửa">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
 
                                     <a href="@Url.Action("Xoa", "LoaiSanPham", new { area = "Admin", id = item.maloaisanpham })"
-                                       class="btn-icon btn-xoa"
+                                       class="btn btn-sm btn-light text-danger"
                                        title="Xóa"
                                        onclick="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?');">
                                         <i class="bi bi-trash-fill"></i>
@@ -54,7 +54,7 @@
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Chỉ xem</span>
+                                    <span class="text-muted small">Chỉ xem</span>
                                 }
                             </td>
                         </tr>

@@ -2,41 +2,52 @@
     ViewBag.Title = "Tra cứu đơn hàng";
 }
 
-<div class="kh-form-container">
-    <div class="kh-form-card">
-        <div class="kh-form-header text-center">
-            <i class="bi bi-search" style="font-size: 3rem; color: var(--brand-yellow);"></i>
-            <h2>Tra cứu đơn hàng</h2>
-            <p class="text-muted">Nhập mã đơn hàng để kiểm tra trạng thái và chi tiết sản phẩm</p>
-        </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-search d-block mb-3" style="font-size: 3rem; color: var(--brand-yellow);"></i>
+                        <h3 class="fw-bold text-dark mb-2">
+                            Tra cứu đơn hàng
+                        </h3>
+                        <p class="text-muted mb-0">Nhập mã đơn hàng để kiểm tra trạng thái và chi tiết sản phẩm</p>
+                    </div>
 
-        @if (ViewBag.ThongBao != null)
-        {
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
-            </div>
-        }
+                    @if (ViewBag.ThongBao != null)
+                    {
+                        <div class="alert alert-danger border-0 bg-danger-subtle text-danger-emphasis rounded-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span>@ViewBag.ThongBao</span>
+                        </div>
+                    }
 
-        @using (Html.BeginForm("TimKiem", "TraCuuDonHang", FormMethod.Post, new { id = "formTraCuu" }))
-        {
-            <div class="form-group">
-                <label for="txt_madathang">Mã đơn hàng <span class="required">*</span></label>
-                <div class="input-icon">
-                    <i class="bi bi-receipt-cutoff"></i>
-                    <input type="number"
-                           class="form-control"
-                           id="txt_madathang"
-                           name="txt_madathang"
-                           placeholder="Ví dụ: 1, 2, 3..."
-                           required
-                           autofocus />
+                    @using (Html.BeginForm("TimKiem", "TraCuuDonHang", FormMethod.Post, new { id = "formTraCuu" }))
+                    {
+                        <div class="mb-4">
+                            <label for="txt_madathang" class="form-label fw-medium text-dark small mb-1">
+                                Mã đơn hàng <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-receipt-cutoff"></i></span>
+                                <input type="number"
+                                       class="form-control"
+                                       id="txt_madathang"
+                                       name="txt_madathang"
+                                       placeholder="Ví dụ: 1, 2, 3..."
+                                       required
+                                       autofocus />
+                            </div>
+                            <div class="form-text text-muted">Mã đơn hàng được cung cấp khi bạn đặt hàng thành công.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-brand w-100 py-2 fw-bold rounded-3 shadow-sm">
+                            <i class="bi bi-search me-1"></i> Tra cứu ngay
+                        </button>
+                    }
                 </div>
-                <small class="form-text">Mã đơn hàng được cung cấp khi bạn đặt hàng thành công.</small>
             </div>
-
-            <button type="submit" class="btn-luu w-100" style="margin-top: 10px;">
-                <i class="bi bi-search"></i> Tra cứu ngay
-            </button>
-        }
+        </div>
     </div>
 </div>

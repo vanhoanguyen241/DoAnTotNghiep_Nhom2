@@ -5,117 +5,114 @@
     string tenNSX = ViewBag.TenNSX as string;
 }
 
-<div class="product-detail-container">
-    <div class="product-detail-card">
-        <div class="product-detail-header">
-            <h2>@Model.tensanpham</h2>
-        </div>
-        <div class="product-detail-body">
-            <div class="row">
+<div class="container py-4">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4 p-md-5">
+            <div class="row g-4 g-md-5">
                 <!-- Cột ảnh -->
                 <div class="col-md-5">
-                    <div class="product-detail-gallery">
-                        @if (!string.IsNullOrEmpty(Model.hinh))
-                        {
-                            <img src="@Url.Content(Model.hinh)" alt="@Model.tensanpham" class="product-detail-main-img" />
-                        }
-                        else
-                        {
-                            <div class="product-detail-img-placeholder">
-                                <i class="bi bi-image"></i>
-                            </div>
-                        }
-                    </div>
+                    @if (!string.IsNullOrEmpty(Model.hinh))
+                    {
+                        <img src="@Url.Content(Model.hinh)" alt="@Model.tensanpham" class="img-fluid w-100 rounded-4 border object-fit-cover" style="max-height: 420px;" />
+                    }
+                    else
+                    {
+                        <div class="w-100 rounded-4 border bg-light d-flex align-items-center justify-content-center text-secondary" style="height: 320px;">
+                            <i class="bi bi-image opacity-50" style="font-size: 4rem;"></i>
+                        </div>
+                    }
                 </div>
 
                 <!-- Cột thông tin -->
                 <div class="col-md-7">
-                    <div class="product-detail-info">
-                        <h1 class="product-detail-name">@Model.tensanpham</h1>
+                    <h1 class="h3 fw-bold text-dark mb-3">@Model.tensanpham</h1>
 
-                        <!-- Hộp giá -->
-                        <div class="product-detail-price-box">
-                            <span class="product-detail-price-label">Giá bán</span>
-                            <span class="product-detail-price">@string.Format("{0:N0}₫", Model.dongia)</span>
+                    <!-- Hộp giá -->
+                    <div class="bg-light rounded-4 p-4 mb-4">
+                        <div class="text-secondary small text-uppercase fw-bold mb-1">Giá bán</div>
+                        <div class="h2 mb-0 text-danger fw-bold">@string.Format("{0:N0}₫", Model.dongia)</div>
+                    </div>
+
+                    <!-- Thông số -->
+                    <div class="list-group list-group-flush mb-4 border-top border-bottom">
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span class="text-secondary">Mã sản phẩm</span>
+                            <span class="fw-medium text-dark font-monospace">@Model.masanpham</span>
                         </div>
-
-                        <!-- Thông số -->
-                        <div class="product-detail-meta">
-                            <div class="product-detail-meta-item">
-                                <span class="product-detail-meta-label">Mã sản phẩm</span>
-                                <span class="product-detail-meta-value" style="font-family: monospace;">@Model.masanpham</span>
-                            </div>
-                            <div class="product-detail-meta-item">
-                                <span class="product-detail-meta-label">Loại sản phẩm</span>
-                                <span class="product-detail-meta-value">@tenLoai</span>
-                            </div>
-                            <div class="product-detail-meta-item">
-                                <span class="product-detail-meta-label">Nhà sản xuất</span>
-                                <span class="product-detail-meta-value">@tenNSX</span>
-                            </div>
-                            <div class="product-detail-meta-item">
-                                <span class="product-detail-meta-label">Bảo hành</span>
-                                <span class="product-detail-meta-value">@Model.thoigianbaohanh tháng</span>
-                            </div>
-                            <div class="product-detail-meta-item">
-                                <span class="product-detail-meta-label">Tình trạng</span>
-                                <span class="product-detail-meta-value">
-                                    @if (Model.soluonghienco > 0)
-                                    {
-                                        <span class="stock-badge in-stock">
-                                            <i class="bi bi-check-circle-fill"></i>
-                                            Còn hàng (@Model.soluonghienco)
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="stock-badge out-of-stock">
-                                            <i class="bi bi-x-circle-fill"></i>
-                                            Hết hàng
-                                        </span>
-                                    }
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span class="text-secondary">Loại sản phẩm</span>
+                            <span class="fw-medium text-dark">@tenLoai</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span class="text-secondary">Nhà sản xuất</span>
+                            <span class="fw-medium text-dark">@tenNSX</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span class="text-secondary">Bảo hành</span>
+                            <span class="fw-medium text-dark">@Model.thoigianbaohanh tháng</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span class="text-secondary">Tình trạng</span>
+                            @if (Model.soluonghienco > 0)
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-3 py-2">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Còn hàng (@Model.soluonghienco)
                                 </span>
-                            </div>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-3 py-2">
+                                    <i class="bi bi-x-circle-fill me-1"></i> Hết hàng
+                                </span>
+                            }
                         </div>
+                    </div>
 
-                        <!-- Mô tả -->
-                        <div class="product-detail-description">
-                            <h5><i class="bi bi-file-text"></i> Mô tả sản phẩm</h5>
-                            <p>@Model.mota</p>
-                        </div>
+                    <!-- Mô tả -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-file-text me-2" style="color: var(--brand-yellow);"></i> Mô tả sản phẩm
+                        </h5>
+                        <p class="text-secondary mb-0" style="line-height: 1.8;">@Model.mota</p>
+                    </div>
 
-                        <!-- Form thêm vào giỏ -->
-                        @if (Model.soluonghienco > 0)
-                        {
-                            <form method="post"
-                                  action="@Url.Action("Them", "GioHang", new { area = "" })"
-                                  class="add-to-cart-form">
-                                <div class="qty-selector">
-                                    <label for="sl">Số lượng:</label>
+                    <!-- Form thêm vào giỏ -->
+                    @if (Model.soluonghienco > 0)
+                    {
+                        <form method="post"
+                              action="@Url.Action("Them", "GioHang", new { area = "" })">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-auto">
+                                    <label for="sl" class="form-label fw-medium text-dark small mb-1">Số lượng</label>
                                     <input type="number"
                                            id="sl"
                                            name="sl"
                                            value="1"
                                            min="1"
                                            max="@Model.soluonghienco"
-                                           class="qty-input" />
+                                           class="form-control text-center fw-bold"
+                                           style="width: 100px;" />
                                 </div>
-                                <input type="hidden" name="id" value="@Model.masanpham" />
-                                <button type="submit" class="btn-add-to-cart">
-                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <div class="out-of-stock-alert">
-                                <i class="bi bi-exclamation-triangle-fill"></i>
-                                <span>Sản phẩm tạm thời hết hàng. Vui lòng quay lại sau.</span>
+                                <div class="col">
+                                    <input type="hidden" name="id" value="@Model.masanpham" />
+                                    <button type="submit" class="btn btn-brand w-100 py-2 fw-bold rounded-3 shadow-sm">
+                                        <i class="bi bi-cart-plus me-1"></i> Thêm vào giỏ hàng
+                                    </button>
+                                </div>
                             </div>
-                        }
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning border-0 bg-warning-subtle text-warning-emphasis rounded-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span>Sản phẩm tạm thời hết hàng. Vui lòng quay lại sau.</span>
+                        </div>
+                    }
 
-                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-back-list">
-                            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+                    <div class="mt-4">
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
                         </a>
                     </div>
                 </div>
