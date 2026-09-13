@@ -10,7 +10,7 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 py-3">
                     <h2 class="h4 mb-0 fw-bold text-dark">
-                        <i class="bi bi-pencil-square me-2" style="color: var(--brand-yellow);"></i> Cập nhật chi tiết hóa đơn #@Model.mahoadon
+                        <i class="bi bi-pencil-square me-2 text-brand-yellow"></i> Cập nhật chi tiết hóa đơn #@Model.mahoadon
                     </h2>
                 </div>
 
@@ -29,20 +29,12 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark">Mã hóa đơn</label>
-                            <input type="text"
-                                   class="form-control"
-                                   readonly
-                                   value="@Model.mahoadon"
-                                   style="background: #f8f9fa;" />
+                            <input type="text" class="form-control bg-readonly" readonly value="@Model.mahoadon" />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark">Sản phẩm</label>
-                            <input type="text"
-                                   class="form-control"
-                                   readonly
-                                   value="@(Model.sanpham != null ? Model.sanpham.tensanpham : Model.masanpham)"
-                                   style="background: #f8f9fa;" />
+                            <input type="text" class="form-control bg-readonly" readonly value="@(Model.sanpham != null ? Model.sanpham.tensanpham : Model.masanpham)" />
                         </div>
 
                         <div class="mb-3">

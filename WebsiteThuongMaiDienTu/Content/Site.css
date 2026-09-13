@@ -417,3 +417,58 @@ body {
         max-width: 880px;
     }
 }
+
+/* 18. UTILITY CLASSES */
+
+/* --- Text Colors --- */
+.text-brand-yellow {
+    color: var(--brand-yellow) !important;
+}
+
+.text-brand-red {
+    color: var(--brand-red) !important;
+}
+
+.text-brand-green {
+    color: #2E7D32 !important;
+}
+
+.text-brand-blue {
+    color: #1976D2 !important;
+}
+
+.text-brand-orange {
+    color: #F57F17 !important;
+}
+
+/* --- Background Colors --- */
+.bg-readonly {
+    background-color: #f8f9fa !important;
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, #1A1A1A 0%, #333 100%) !important;
+    color: #fff !important;
+}
+
+.bg-gradient-yellow {
+    background: linear-gradient(135deg, #FBD808 0%, #F0C400 100%) !important;
+}
+
+/* --- Borders (Dành riêng cho Admin Layout) --- */
+.border-sidebar {
+    border-color: rgba(255,255,255,.1) !important;
+}
+
+.border-sidebar-light {
+    border-color: rgba(255,255,255,.05) !important;
+}
+
+.border-topbar {
+    border-color: #eee !important;
+}
+
+/* --- Typography Helpers --- */
+.fs-hero {
+    font-size: 2.5rem !important;
+}

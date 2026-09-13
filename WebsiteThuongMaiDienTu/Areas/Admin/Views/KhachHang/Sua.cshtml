@@ -8,7 +8,7 @@
         <div class="col-12 col-lg-8 col-xl-6">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 py-3">
-                    <h2 class="h4 mb-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2" style="color: var(--brand-yellow);"></i> Cập nhật thông tin khách hàng</h2>
+                    <h2 class="h4 mb-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2 text-brand-yellow"></i> Cập nhật thông tin khách hàng</h2>
                 </div>
 
                 <div class="card-body p-4 pt-2">
@@ -16,8 +16,7 @@
                     {
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark">Mã khách hàng</label>
-                            <input type="number" id="txt_makh" name="txt_makh" class="form-control"
-                                   readonly value="@Model.makh" style="background: #f8f9fa;" />
+                            <input type="number" id="txt_makh" name="txt_makh" class="form-control bg-readonly" readonly value="@Model.makh" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold text-dark">Họ tên <span class="text-danger ms-1">*</span></label>

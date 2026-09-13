@@ -14,12 +14,11 @@
         }
         <!-- ═══ Sidebar ═══ -->
         <nav class="admin-sidebar" id="adminSidebar">
-            <div class="admin-brand px-4 py-3 fs-5 fw-bold border-bottom"
-                 style="border-color:rgba(255,255,255,.1) !important; letter-spacing:.5px;">
+            <div class="admin-brand px-4 py-3 fs-5 fw-bold border-bottom border-sidebar" style="letter-spacing:.5px;">
                 QHVD Tech @if (isAdmin)
-                {<span style="color:var(--brand-yellow);">Admin</span>}
+                {<span class="text-brand-yellow">Admin</span>}
                 else
-                {<span style="color:var(--brand-yellow);">Staff</span>}
+                {<span class="text-brand-yellow">Staff</span>}
             </div>
             <ul class="list-unstyled py-2 mb-0">
 
@@ -33,11 +32,7 @@
                 </li>
 
                 <!-- NHÓM 1: DANH MỤC & HÀNG HÓA -->
-                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
-                           text-white-50 border-top"
-                    style="font-size:.7rem; letter-spacing:1px;
-                           border-color:rgba(255,255,255,.05) !important;
-                           pointer-events:none;">
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold text-white-50 border-top border-sidebar-light" style="font-size:.7rem; letter-spacing:1px; pointer-events:none;">
                     Danh mục &amp; Hàng hóa
                 </li>
                 <li>
@@ -63,11 +58,7 @@
                 </li>
 
                 <!-- NHÓM 2: KHÁCH HÀNG -->
-                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
-                           text-white-50 border-top"
-                    style="font-size:.7rem; letter-spacing:1px;
-                           border-color:rgba(255,255,255,.05) !important;
-                           pointer-events:none;">
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold text-white-50 border-top border-sidebar-light" style="font-size:.7rem; letter-spacing:1px; pointer-events:none;">
                     Khách hàng
                 </li>
                 <li>
@@ -79,11 +70,7 @@
                 </li>
 
                 <!-- NHÓM 3: NGHIỆP VỤ BÁN HÀNG -->
-                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
-                           text-white-50 border-top"
-                    style="font-size:.7rem; letter-spacing:1px;
-                           border-color:rgba(255,255,255,.05) !important;
-                           pointer-events:none;">
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold text-white-50 border-top border-sidebar-light" style="font-size:.7rem; letter-spacing:1px; pointer-events:none;">
                     Nghiệp vụ bán hàng
                 </li>
                 <li>
@@ -118,11 +105,7 @@
                 <!-- NHÓM 4: HỆ THỐNG -->
                 @if (isAdmin)
                 {
-                    <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
-               text-white-50 border-top"
-                        style="font-size:.7rem; letter-spacing:1px;
-               border-color:rgba(255,255,255,.05) !important;
-               pointer-events:none;">
+                    <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold text-white-50 border-top border-sidebar-light" style="font-size:.7rem; letter-spacing:1px; pointer-events:none;">
                         Hệ thống
                     </li>
                     <li>
@@ -147,9 +130,7 @@
         <div class="admin-content flex-grow-1">
 
             <!-- Topbar -->
-            <div class="admin-topbar d-flex justify-content-between align-items-center
-                        bg-white px-4 py-3 border-bottom shadow-sm"
-                 style="border-color:#eee !important; font-size:.95rem;">
+            <div class="admin-topbar d-flex justify-content-between align-items-center bg-white px-4 py-3 border-bottom shadow-sm border-topbar" style="font-size:.95rem;">
 
                 <div class="d-flex align-items-center gap-3">
                     <!-- Nút toggle sidebar (chỉ hiện < md) -->

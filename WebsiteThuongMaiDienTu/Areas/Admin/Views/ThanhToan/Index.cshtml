@@ -8,13 +8,11 @@
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
             <h2 class="h4 mb-0 fw-bold text-dark">
-                <i class="bi bi-cash-coin me-2" style="color: var(--brand-yellow);"></i>
+                <i class="bi bi-cash-coin me-2 text-brand-yellow"></i>
                 Hóa đơn chờ xác nhận thanh toán
             </h2>
 
-            <a href="@Url.Action("DaThanhToan", "ThanhToan", new { area = "Admin" })"
-               class="btn btn-success px-4"
-               style="background:#E8F5E9;color:#2E7D32;border:none;">
+            <a href="@Url.Action("DaThanhToan", "ThanhToan", new { area = "Admin" })" class="btn btn-success px-4 text-brand-green" style="background:#E8F5E9;border:none;">
                 <i class="bi bi-check2-all me-1"></i> Danh sách đã thanh toán
             </a>
         </div>
