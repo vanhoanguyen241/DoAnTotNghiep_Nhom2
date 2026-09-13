@@ -12,135 +12,138 @@
 </head>
 <body>
     <div class="admin-wrapper d-flex">
-
+        @{
+            bool isAdmin = ViewBag.IsAdmin == true;
+        }
         <!-- ═══ Sidebar ═══ -->
         <nav class="admin-sidebar" id="adminSidebar">
             <div class="admin-brand px-4 py-3 fs-5 fw-bold border-bottom"
                  style="border-color:rgba(255,255,255,.1) !important; letter-spacing:.5px;">
-                QHVD Tech <span style="color:var(--brand-yellow);">Admin</span>
+                QHVD Tech @if (isAdmin)
+                {<span style="color:var(--brand-yellow);">Admin</span>}
+                else
+                {<span style="color:var(--brand-yellow);">Staff</span>}
             </div>
+            <ul class="list-unstyled py-2 mb-0">
 
-            @{
-                bool isAdmin = ViewBag.IsAdmin == true;
-            }
-
-        <ul class="list-unstyled py-2 mb-0">
-
-            <!-- TỔNG QUAN -->
-            <li>
-                <a href="@Url.Action("Index", "Home", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                <!-- TỔNG QUAN -->
+                <li>
+                    <a href="@Url.Action("Index", "Home", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-speedometer2"></i> Trang chủ
-                </a>
-            </li>
+                        <i class="bi bi-speedometer2"></i> Trang chủ
+                    </a>
+                </li>
 
-            <!-- NHÓM 1: DANH MỤC & HÀNG HÓA -->
-            <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
+                <!-- NHÓM 1: DANH MỤC & HÀNG HÓA -->
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
                            text-white-50 border-top"
-                style="font-size:.7rem; letter-spacing:1px;
+                    style="font-size:.7rem; letter-spacing:1px;
                            border-color:rgba(255,255,255,.05) !important;
                            pointer-events:none;">
-                Danh mục &amp; Hàng hóa
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                    Danh mục &amp; Hàng hóa
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-tags-fill"></i> Loại sản phẩm
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                        <i class="bi bi-tags-fill"></i> Loại sản phẩm
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-building"></i> Đơn vị sản xuất
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                        <i class="bi bi-building"></i> Đơn vị sản xuất
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-box-seam-fill"></i> Sản phẩm
-                </a>
-            </li>
+                        <i class="bi bi-box-seam-fill"></i> Sản phẩm
+                    </a>
+                </li>
 
-            <!-- NHÓM 2: KHÁCH HÀNG -->
-            <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
+                <!-- NHÓM 2: KHÁCH HÀNG -->
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
                            text-white-50 border-top"
-                style="font-size:.7rem; letter-spacing:1px;
+                    style="font-size:.7rem; letter-spacing:1px;
                            border-color:rgba(255,255,255,.05) !important;
                            pointer-events:none;">
-                Khách hàng
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                    Khách hàng
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-people-fill"></i> Khách hàng
-                </a>
-            </li>
+                        <i class="bi bi-people-fill"></i> Khách hàng
+                    </a>
+                </li>
 
-            <!-- NHÓM 3: NGHIỆP VỤ BÁN HÀNG -->
-            <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
+                <!-- NHÓM 3: NGHIỆP VỤ BÁN HÀNG -->
+                <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
                            text-white-50 border-top"
-                style="font-size:.7rem; letter-spacing:1px;
+                    style="font-size:.7rem; letter-spacing:1px;
                            border-color:rgba(255,255,255,.05) !important;
                            pointer-events:none;">
-                Nghiệp vụ bán hàng
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                    Nghiệp vụ bán hàng
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-receipt-cutoff"></i> Hóa đơn
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                        <i class="bi bi-receipt-cutoff"></i> Hóa đơn
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "DuyetDon", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-clipboard-check-fill"></i> Duyệt đơn
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "ThanhToan", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                        <i class="bi bi-clipboard-check-fill"></i> Duyệt đơn
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "ThanhToan", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
               text-decoration-none">
-                    <i class="bi bi-credit-card-fill"></i> Thanh toán
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                        <i class="bi bi-credit-card-fill"></i> Thanh toán
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })"
+                       class="d-flex align-items-center gap-2 px-4 py-2 text-white
                               text-decoration-none">
-                    <i class="bi bi-truck"></i> Giao hàng
-                </a>
-            </li>
+                        <i class="bi bi-truck"></i> Giao hàng
+                    </a>
+                </li>
 
-            <!-- NHÓM 4: HỆ THỐNG -->
-            <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
-                           text-white-50 border-top"
-                style="font-size:.7rem; letter-spacing:1px;
-                           border-color:rgba(255,255,255,.05) !important;
-                           pointer-events:none;">
-                Hệ thống
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
-                              text-decoration-none">
-                    <i class="bi bi-shield-lock-fill"></i> Tài khoản
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "NhanVien", new { area = "Admin" })"
-                   class="d-flex align-items-center gap-2 px-4 py-2 text-white
-                              text-decoration-none">
-                    <i class="bi bi-person-badge-fill"></i> Nhân viên
-                </a>
-            </li>
-        </ul>
+                <!-- NHÓM 4: HỆ THỐNG -->
+                @if (isAdmin)
+                {
+                    <li class="nav-group-title px-4 py-2 mt-2 text-uppercase fw-semibold
+               text-white-50 border-top"
+                        style="font-size:.7rem; letter-spacing:1px;
+               border-color:rgba(255,255,255,.05) !important;
+               pointer-events:none;">
+                        Hệ thống
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })"
+                           class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                  text-decoration-none">
+                            <i class="bi bi-shield-lock-fill"></i> Tài khoản
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "NhanVien", new { area = "Admin" })"
+                           class="d-flex align-items-center gap-2 px-4 py-2 text-white
+                  text-decoration-none">
+                            <i class="bi bi-person-badge-fill"></i> Nhân viên
+                        </a>
+                    </li>
+                }
+            </ul>
         </nav>
 
         <!-- ═══ Content area ═══ -->

@@ -122,37 +122,36 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return View();
             }
 
-            // ======================================================
-            // ADR-009: Kiểm tra SDT đã tồn tại trong khachhang chưa
-            // ======================================================
-            int maKhMoi;
-
+            // Kiểm tra SDT đã tồn tại trong khachhang chưa
             var khachCu = (from kh in db.khachhangs
                            where kh.SDT == Sodienthoai
                            select kh).FirstOrDefault();
 
+            // Nếu trùng SDT thì báo lỗi, không tự động gán makh cũ nữa
             if (khachCu != null)
             {
-                // SDT đã tồn tại -> dùng lại khách hàng cũ
-                maKhMoi = khachCu.makh;
+                ViewBag.ThongBao = "Số điện thoại này đã được sử dụng để đăng ký tài khoản! Vui lòng dùng số khác hoặc đăng nhập.";
+                return View();
             }
+
+            // SDT chưa tồn tại -> tạo khách hàng mới
+            int maKhMoi;
+            if (db.khachhangs.Any())
+            {
+                maKhMoi = db.khachhangs.Max(k => k.makh) + 1;
+            }    
             else
             {
-                // SDT chưa tồn tại -> tạo khách hàng mới
-                if (db.khachhangs.Any())
-                    maKhMoi = db.khachhangs.Max(k => k.makh) + 1;
-                else
-                    maKhMoi = 1;
+                maKhMoi = 1;
+            }    
 
-                khachhang kh_moi = new khachhang();
-                kh_moi.makh = maKhMoi;
-                kh_moi.hoten = Hoten;
-                kh_moi.diachi = Diachi;
-                kh_moi.SDT = Sodienthoai;
-
-                db.khachhangs.Add(kh_moi);
-                db.SaveChanges();
-            }
+            khachhang kh_moi = new khachhang();
+            kh_moi.makh = maKhMoi;
+            kh_moi.hoten = Hoten;
+            kh_moi.diachi = Diachi;
+            kh_moi.SDT = Sodienthoai;
+            db.khachhangs.Add(kh_moi);
+            db.SaveChanges();
 
             // Tạo tài khoản khách hàng
             taikhoan tk_moi = new taikhoan();

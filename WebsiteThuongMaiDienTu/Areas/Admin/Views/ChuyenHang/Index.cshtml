@@ -40,8 +40,9 @@
                             <th class="text-uppercase text-secondary small fw-bold">Địa chỉ giao</th>
                             <th style="width: 160px;" class="text-uppercase text-secondary small fw-bold">Nhân viên giao</th>
                             <th style="width: 140px;" class="text-uppercase text-secondary small fw-bold">Ngày giao</th>
+                            <th style="width: 110px;" class="text-center text-uppercase text-secondary small fw-bold">Thanh toán</th>
                             <th style="width: 110px;" class="text-center text-uppercase text-secondary small fw-bold">Trạng thái</th>
-                            <th style="width: 150px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
+                            <th style="width: 220px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,6 +111,16 @@
                                     }
                                 </td>
                                 <td class="text-center">
+                                    @if (hd != null && hd.dathanhtoan)
+                                    {
+                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">Đã TT</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Chưa TT</span>
+                                    }
+                                </td>
+                                <td class="text-center">
                                     @if (item.daxuli)
                                     {
                                         <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">Đã giao</span>
@@ -163,6 +174,29 @@
                                             <button type="submit"
                                                     class="btn btn-sm btn-brand">
                                                 <i class="bi bi-check-circle-fill me-1"></i> Đã giao
+                                            </button>
+                                        }
+                                    }
+
+                                    <!-- NÚT XÁC NHẬN THU TIỀN CHO NHÂN VIÊN -->
+                                    @if (!isAdmin && item.manv == maNV && hd != null && !hd.dathanhtoan)
+                                    {
+                                        using (Html.BeginForm(
+                                            "XacNhanThuTien",
+                                            "ChuyenHang",
+                                            new { area = "Admin" },
+                                            FormMethod.Post,
+                                            new
+                                            {
+                                                style = "display:inline;",
+                                                onsubmit = "return confirm('Xác nhận đã thu tiền từ khách hàng?');"
+                                            }))
+                                        {
+                                            <input type="hidden" name="id" value="@item.machuyenhang" />
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-success mt-1"
+                                                    title="Xác nhận đã thu tiền mặt">
+                                                <i class="bi bi-cash-coin me-1"></i> Đã thu tiền
                                             </button>
                                         }
                                     }

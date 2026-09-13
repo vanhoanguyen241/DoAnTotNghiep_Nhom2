@@ -141,14 +141,14 @@ namespace WebsiteThuongMaiDienTu.Controllers
                     return View("Index", sanPhams);
                 }
 
-                // Nếu SDT đã tồn tại thì dùng lại khách hàng cũ
+                // Nếu SDT đã tồn tại thì báo lỗi
                 var khachCu = db.khachhangs.FirstOrDefault(k => k.SDT == sdt);
-
                 if (khachCu != null)
                 {
-                    makh = khachCu.makh;
-                    khachHienTai = khachCu;
+                    ViewBag.ThongBao = "Số điện thoại này đã tồn tại trong hệ thống. Vui lòng sử dụng số khác hoặc đăng nhập nếu đã có tài khoản!";
+                    return View("Index", sanPhams);
                 }
+                // Tạo khách hàng mới
                 else
                 {
                     int maKhachHangMoi;

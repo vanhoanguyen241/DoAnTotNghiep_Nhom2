@@ -45,8 +45,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         public ActionResult ChoLapPhieu()
         {
             var dsCanLapPhieu = db.hoadons
-                .Where(h => h.dathanhtoan == true
-                    && h.giaotannoi == true
+                .Where(h => h.giaotannoi == true
                     && !h.chuyenhangs.Any())
                 .OrderByDescending(h => h.ngaydathang)
                 .ToList();
@@ -62,12 +61,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (hd == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
-                return RedirectToAction("ChoLapPhieu");
-            }
-
-            if (!hd.dathanhtoan)
-            {
-                TempData["ThongBao"] = "Đơn hàng " + id + " chưa thanh toán, không thể lập phiếu giao!";
                 return RedirectToAction("ChoLapPhieu");
             }
 
@@ -254,6 +247,45 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             db.SaveChanges();
 
             TempData["ThongBao"] = "Xác nhận giao hàng thành công!";
+            return RedirectToAction("Index");
+        }
+
+        // POST: Admin/ChuyenHang/XacNhanThuTien (Dành cho Nhân viên tự bấm xác nhận đã thu tiền)
+        [HttpPost]
+        public ActionResult XacNhanThuTien(int id)
+        {
+            int? maNV = Session["MaNV"] as int?;
+            if (!maNV.HasValue)
+            {
+                return RedirectToAction("DangNhap", "TaiKhoan", new { area = "" });
+            }
+
+            // Tìm phiếu giao hàng: phải đúng mã phiếu VÀ đúng nhân viên đang đăng nhập
+            var ch = db.chuyenhangs.FirstOrDefault(x => x.machuyenhang == id && x.manv == maNV.Value);
+            if (ch == null)
+            {
+                TempData["ThongBao"] = "Không tìm thấy đơn hàng hoặc bạn không có quyền thao tác!";
+                return RedirectToAction("Index");
+            }
+
+            var hd = ch.hoadon;
+            if (hd == null)
+            {
+                TempData["ThongBao"] = "Không tìm thấy hóa đơn liên quan!";
+                return RedirectToAction("Index");
+            }
+
+            if (hd.dathanhtoan)
+            {
+                TempData["ThongBao"] = "Hóa đơn này đã được thanh toán trước đó!";
+                return RedirectToAction("Index");
+            }
+
+            // Cập nhật trạng thái thanh toán
+            hd.dathanhtoan = true;
+            db.SaveChanges();
+
+            TempData["ThongBao"] = "Xác nhận đã thu tiền thành công cho hóa đơn #" + hd.mahoadon + "!";
             return RedirectToAction("Index");
         }
     }

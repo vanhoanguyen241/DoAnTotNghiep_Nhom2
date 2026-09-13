@@ -140,7 +140,7 @@ body {
         color: var(--brand-dark);
     }
 
-/* ===== 9b. NÚT 3 GẠCH MOBILE — SÁT GÓC PHẢI, KÍCH THƯỚC LỚN ===== */
+/* ===== 9b. NÚT 3 GẠCH MOBILE ===== */
 .mobile-menu-btn {
     margin-left: auto !important; /* đẩy sát mép phải */
     order: 99; /* luôn nằm cuối hàng trên < lg */
