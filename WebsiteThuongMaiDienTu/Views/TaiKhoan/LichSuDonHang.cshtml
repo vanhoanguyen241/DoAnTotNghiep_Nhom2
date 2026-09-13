@@ -3,44 +3,48 @@
     ViewBag.Title = "Lịch sử mua hàng";
 }
 
-<div class="kh-container kh-container-wide">
-    <div class="kh-card">
-        <div class="kh-header">
-            <h2><i class="bi bi-clock-history" style="color: var(--brand-yellow);"></i> Lịch sử mua hàng</h2>
-            <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn-huy">
-                <i class="bi bi-arrow-left"></i> Về trang chủ
-            </a>
+<div class="container py-4">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-white border-bottom py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h4 class="fw-bold text-dark mb-0">
+                    <i class="bi bi-clock-history me-2" style="color: var(--brand-yellow);"></i> Lịch sử mua hàng
+                </h4>
+                <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-light border px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Về trang chủ
+                </a>
+            </div>
         </div>
 
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">
-                <table class="kh-table">
-                    <thead>
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th style="width: 100px;">Mã đơn</th>
-                            <th style="width: 120px;">Ngày đặt</th>
-                            <th style="width: 120px;">Ngày giao</th>
-                            <th style="width: 120px;" class="text-center">Trạng thái</th>
-                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
-                            <th style="width: 100px;" class="text-center">Chi tiết</th>
+                            <th class="text-uppercase text-secondary small fw-bold py-3 ps-4" style="width: 100px;">Mã đơn</th>
+                            <th class="text-uppercase text-secondary small fw-bold py-3" style="width: 120px;">Ngày đặt</th>
+                            <th class="text-uppercase text-secondary small fw-bold py-3" style="width: 120px;">Ngày giao</th>
+                            <th class="text-center text-uppercase text-secondary small fw-bold py-3" style="width: 120px;">Trạng thái</th>
+                            <th class="text-end text-uppercase text-secondary small fw-bold py-3" style="width: 130px;">Tổng tiền</th>
+                            <th class="text-center text-uppercase text-secondary small fw-bold py-3 pe-4" style="width: 100px;">Chi tiết</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var dh in Model)
                         {
                             string trangThai = "Chờ duyệt";
-                            string colorClass = "sp-badge-warning";
+                            string colorClass = "bg-warning-subtle text-warning-emphasis";
 
                             if (dh.trangthai == 1)
                             {
                                 trangThai = "Đã duyệt";
-                                colorClass = "sp-badge-success";
+                                colorClass = "bg-success-subtle text-success-emphasis";
                             }
                             else if (dh.trangthai == 2)
                             {
                                 trangThai = "Từ chối";
-                                colorClass = "sp-badge-danger";
+                                colorClass = "bg-danger-subtle text-danger-emphasis";
                             }
 
                             decimal tongTien = dh.chitietdathangs != null
@@ -48,18 +52,18 @@
                                 : 0;
 
                             <tr>
-                                <td><strong>#@dh.madathang</strong></td>
-                                <td>@dh.ngaydathang.ToString("dd/MM/yyyy")</td>
-                                <td>@dh.ngaygiaohang.ToString("dd/MM/yyyy")</td>
-                                <td class="text-center">
-                                    <span class="sp-badge @colorClass">@trangThai</span>
+                                <td class="py-3 ps-4"><strong class="text-dark">#@dh.madathang</strong></td>
+                                <td class="py-3 text-secondary">@dh.ngaydathang.ToString("dd/MM/yyyy")</td>
+                                <td class="py-3 text-secondary">@dh.ngaygiaohang.ToString("dd/MM/yyyy")</td>
+                                <td class="py-3 text-center">
+                                    <span class="badge @colorClass rounded-pill px-3 py-2">@trangThai</span>
                                 </td>
-                                <td class="text-end" style="color: var(--brand-red); font-weight: 700;">
-                                    @string.Format("{0:N0}₫", tongTien)
+                                <td class="py-3 text-end">
+                                    <span class="text-danger fw-bold">@string.Format("{0:N0}₫", tongTien)</span>
                                 </td>
-                                <td class="text-center">
+                                <td class="py-3 pe-4 text-center">
                                     <a href="@Url.Action("KetQua", "TraCuuDonHang", new { id = dh.madathang, area = "" })"
-                                       class="btn-icon btn-sua"
+                                       class="btn btn-sm btn-light text-primary"
                                        title="Xem chi tiết">
                                         <i class="bi bi-eye-fill"></i>
                                     </a>
@@ -72,12 +76,12 @@
         }
         else
         {
-            <div class="empty-state">
-                <i class="bi bi-inbox"></i>
-                <h4>Bạn chưa có đơn hàng nào</h4>
-                <p>Hãy khám phá các sản phẩm của chúng tôi và đặt hàng ngay!</p>
-                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn-luu" style="margin-top: 16px;">
-                    <i class="bi bi-bag"></i> Mua sắm ngay
+            <div class="card-body text-center py-5">
+                <i class="bi bi-inbox text-muted mb-3 d-block opacity-50" style="font-size: 3.5rem;"></i>
+                <h4 class="fw-bold text-dark">Bạn chưa có đơn hàng nào</h4>
+                <p class="text-muted mb-4">Hãy khám phá các sản phẩm của chúng tôi và đặt hàng ngay!</p>
+                <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="btn btn-brand rounded-pill px-4">
+                    <i class="bi bi-bag me-1"></i> Mua sắm ngay
                 </a>
             </div>
         }

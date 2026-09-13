@@ -3,73 +3,87 @@
     ViewBag.Title = "Thông tin tài khoản";
 }
 
-<div class="login-container">
-    <div class="login-card">
-        <div class="login-header">
-            <h2><i class="bi bi-person-badge-fill" style="color: var(--brand-yellow);"></i> Thông tin tài khoản</h2>
-            <p>Cập nhật thông tin cá nhân của bạn</p>
-        </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-person-badge-fill me-2" style="color: var(--brand-yellow);"></i> Thông tin tài khoản
+                        </h3>
+                        <p class="text-muted mb-0">Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
 
-        @if (ViewBag.ThongBao != null)
-        {
-            <div class="alert alert-success">
-                <i class="bi bi-check-circle-fill"></i> @ViewBag.ThongBao
-            </div>
-        }
+                    @if (ViewBag.ThongBao != null)
+                    {
+                        <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis rounded-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>@ViewBag.ThongBao</span>
+                        </div>
+                    }
 
-        @using (Html.BeginForm("ThongTin", "TaiKhoan", FormMethod.Post, new { id = "formThongTin" }))
-        {
-            <div class="form-group">
-                <label for="txt_hoten">Họ và tên <span class="required">*</span></label>
-                <div class="input-icon">
-                    <i class="bi bi-person"></i>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_hoten"
-                           name="txt_hoten"
-                           value="@Model.hoten"
-                           placeholder="Nhập họ và tên"
-                           required
-                           maxlength="100" />
+                    @using (Html.BeginForm("ThongTin", "TaiKhoan", FormMethod.Post, new { id = "formThongTin" }))
+                    {
+                        <div class="mb-3">
+                            <label for="txt_hoten" class="form-label fw-medium text-dark small mb-1">
+                                Họ và tên <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-person"></i></span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="txt_hoten"
+                                       name="txt_hoten"
+                                       value="@Model.hoten"
+                                       placeholder="Nhập họ và tên"
+                                       required
+                                       maxlength="100" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_sdt" class="form-label fw-medium text-dark small mb-1">Số điện thoại</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-telephone"></i></span>
+                                <input type="tel"
+                                       class="form-control"
+                                       id="txt_sdt"
+                                       name="txt_sdt"
+                                       value="@Model.SDT"
+                                       placeholder="Nhập số điện thoại"
+                                       maxlength="15" />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="txt_diachi" class="form-label fw-medium text-dark small mb-1">
+                                Địa chỉ <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary align-items-start pt-2"><i class="bi bi-geo-alt"></i></span>
+                                <textarea class="form-control"
+                                          id="txt_diachi"
+                                          name="txt_diachi"
+                                          rows="3"
+                                          placeholder="Nhập địa chỉ chi tiết"
+                                          required
+                                          maxlength="200">@Model.diachi</textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-brand w-100 py-2 fw-bold rounded-3 shadow-sm">
+                            <i class="bi bi-save me-1"></i> Lưu thay đổi
+                        </button>
+                    }
+
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Index", "Home", new { area = "" })" class="text-decoration-none text-secondary small">
+                            <i class="bi bi-arrow-left me-1"></i> Về trang chủ
+                        </a>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="txt_sdt">Số điện thoại</label>
-                <div class="input-icon">
-                    <i class="bi bi-telephone"></i>
-                    <input type="tel"
-                           class="form-control"
-                           id="txt_sdt"
-                           name="txt_sdt"
-                           value="@Model.SDT"
-                           placeholder="Nhập số điện thoại"
-                           maxlength="15" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="txt_diachi">Địa chỉ <span class="required">*</span></label>
-                <div class="input-icon">
-                    <i class="bi bi-geo-alt"></i>
-                    <textarea class="form-control"
-                              id="txt_diachi"
-                              name="txt_diachi"
-                              rows="3"
-                              placeholder="Nhập địa chỉ chi tiết"
-                              required
-                              maxlength="200"
-                              style="padding-left: 45px;">@Model.diachi</textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-login">
-                <i class="bi bi-save"></i> Lưu thay đổi
-            </button>
-        }
-
-        <div class="register-link">
-            <a href="@Url.Action("Index", "Home", new { area = "" })">Về trang chủ</a>
         </div>
     </div>
 </div>

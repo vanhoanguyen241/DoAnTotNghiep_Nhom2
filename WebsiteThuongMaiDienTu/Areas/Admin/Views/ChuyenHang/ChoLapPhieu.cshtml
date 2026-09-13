@@ -4,40 +4,40 @@
     ViewBag.Title = "Đơn chờ lập phiếu giao";
 }
 
-<div class="kh-container kh-container-wide">
-    <div class="kh-card">
-        <div class="kh-header">
-            <h2>
-                <i class="bi bi-receipt-cutoff" style="color: var(--brand-yellow);"></i>
-                Đơn chờ lập phiếu giao
+<div class="container-fluid px-4 py-4">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
+            <h2 class="h4 mb-0 fw-bold text-dark">
+                <i class="bi bi-receipt-cutoff me-2" style="color: var(--brand-yellow);"></i> Đơn chờ lập phiếu giao
             </h2>
-            <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })" class="btn-huy"
-               style="padding:10px 16px;background:#f5f5f5;border:2px solid #e0e0e0;border-radius:8px;">
-                <i class="bi bi-arrow-left"></i> Quay lại
+            <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })" class="btn btn-light px-4 border shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Quay lại
             </a>
         </div>
 
         @if (TempData["ThongBao"] != null)
         {
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                @TempData["ThongBao"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card-body pb-0">
+                <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                    @TempData["ThongBao"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
         }
 
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">
-                <table class="kh-table">
-                    <thead>
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th style="width: 80px;">Mã HĐ</th>
-                            <th>Khách hàng</th>
-                            <th>Địa chỉ giao</th>
-                            <th style="width: 110px;">Ngày đặt</th>
-                            <th style="width: 110px;">Ngày giao</th>
-                            <th style="width: 130px;" class="text-end">Tổng tiền</th>
-                            <th style="width: 130px;" class="text-center">Hành động</th>
+                            <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã HĐ</th>
+                            <th class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
+                            <th class="text-uppercase text-secondary small fw-bold">Địa chỉ giao</th>
+                            <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày đặt</th>
+                            <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày giao</th>
+                            <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Tổng tiền</th>
+                            <th style="width: 130px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,7 +45,7 @@
                         {
                             var kh = item.khachhang;
                             <tr>
-                                <td><strong>#@item.mahoadon</strong></td>
+                                <td><strong class="text-dark">#@item.mahoadon</strong></td>
                                 <td>
                                     @(kh != null ? kh.hoten : "—")
                                     @if (kh != null && !string.IsNullOrEmpty(kh.SDT))
@@ -64,15 +64,14 @@
                                 </td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>@item.ngaygiaohang.ToString("dd/MM/yyyy")</td>
-                                <td class="text-end">
-                                    <strong>@string.Format("{0:N0}₫", item.tongtien)</strong>
+                                <td class="text-end text-danger fw-bold">
+                                    @string.Format("{0:N0}₫", item.tongtien)
                                 </td>
                                 <td class="text-center">
                                     <a href="@Url.Action("LapPhieu", "ChuyenHang", new { area = "Admin", id = item.mahoadon })"
-                                       class="btn-them"
-                                       style="padding:8px 14px;"
-                                       onclick="return confirm('Tạo phiếu giao hàng cho hóa đơn #@item.mahoadon?');">
-                                        <i class="bi bi-truck"></i> Lập phiếu
+                                       class="btn btn-sm btn-brand shadow-sm d-inline-flex align-items-center justify-content-center"
+                                       onclick="return confirm('Tạo phiếu giao hàng cho hóa đơn #@item.mahoadon?');" title="Lập phiếu">
+                                        <i class="bi bi-truck me-1"></i> Lập phiếu
                                     </a>
                                 </td>
                             </tr>
@@ -83,8 +82,10 @@
         }
         else
         {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> Hiện không có đơn hàng nào cần lập phiếu giao.
+            <div class="card-body">
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-1"></i> Hiện không có đơn hàng nào cần lập phiếu giao.
+                </div>
             </div>
         }
     </div>

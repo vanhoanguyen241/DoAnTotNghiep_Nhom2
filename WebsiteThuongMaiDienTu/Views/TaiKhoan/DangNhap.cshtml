@@ -2,56 +2,70 @@
     ViewBag.Title = "Đăng nhập";
 }
 
-<div class="login-container">
-    <div class="login-card">
-        <div class="login-header">
-            <h2><i class="bi bi-box-arrow-in-right" style="color: var(--brand-yellow);"></i> Đăng nhập</h2>
-            <p>Đăng nhập để tiếp tục mua sắm</p>
-        </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-box-arrow-in-right me-2" style="color: var(--brand-yellow);"></i> Đăng nhập
+                        </h3>
+                        <p class="text-muted mb-0">Đăng nhập để tiếp tục mua sắm</p>
+                    </div>
 
-        @if (ViewBag.ThongBao != null)
-        {
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao
-            </div>
-        }
+                    @if (ViewBag.ThongBao != null)
+                    {
+                        <div class="alert alert-danger border-0 bg-danger-subtle text-danger-emphasis rounded-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span>@ViewBag.ThongBao</span>
+                        </div>
+                    }
 
-        @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
-        {
-            <div class="form-group">
-                <label for="txt_tendangnhap">Tên đăng nhập <span class="required">*</span></label>
-                <div class="input-icon">
-                    <i class="bi bi-person"></i>
-                    <input type="text"
-                           class="form-control"
-                           id="txt_tendangnhap"
-                           name="txt_tendangnhap"
-                           placeholder="Nhập tên đăng nhập"
-                           required
-                           autofocus />
+                    @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
+                    {
+                        <div class="mb-3">
+                            <label for="txt_tendangnhap" class="form-label fw-medium text-dark small mb-1">
+                                Tên đăng nhập <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-person"></i></span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="txt_tendangnhap"
+                                       name="txt_tendangnhap"
+                                       placeholder="Nhập tên đăng nhập"
+                                       required
+                                       autofocus />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="txt_matkhau" class="form-label fw-medium text-dark small mb-1">
+                                Mật khẩu <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-secondary"><i class="bi bi-lock"></i></span>
+                                <input type="password"
+                                       class="form-control"
+                                       id="txt_matkhau"
+                                       name="txt_matkhau"
+                                       placeholder="Nhập mật khẩu"
+                                       required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-brand w-100 py-2 fw-bold rounded-3 shadow-sm">
+                            <i class="bi bi-check-circle me-1"></i> Đăng nhập
+                        </button>
+                    }
+
+                    <div class="text-center text-muted small mt-4">
+                        Chưa có tài khoản?
+                        <a href="@Url.Action("DangKy", "TaiKhoan")" class="fw-bold text-decoration-none">Đăng ký ngay</a>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="txt_matkhau">Mật khẩu <span class="required">*</span></label>
-                <div class="input-icon">
-                    <i class="bi bi-lock"></i>
-                    <input type="password"
-                           class="form-control"
-                           id="txt_matkhau"
-                           name="txt_matkhau"
-                           placeholder="Nhập mật khẩu"
-                           required />
-                </div>
-            </div>
-
-            <button type="submit" class="btn-login">
-                <i class="bi bi-check-circle"></i> Đăng nhập
-            </button>
-        }
-
-        <div class="register-link">
-            Chưa có tài khoản? <a href="@Url.Action("DangKy", "TaiKhoan")">Đăng ký ngay</a>
         </div>
     </div>
 </div>
