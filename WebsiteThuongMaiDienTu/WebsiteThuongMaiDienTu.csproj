@@ -187,6 +187,7 @@
     <Content Include="Content\images\banner1.png" />
     <Content Include="Content\images\banner2.png" />
     <Content Include="Content\images\banner3.png" />
+    <Content Include="Content\bootstrap-icons\bootstrap-icons.css" />
     <Content Include="Content\images\logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -252,6 +253,8 @@
     <Content Include="Areas\Admin\Views\TaiKhoan\Index.cshtml" />
     <Content Include="Areas\Admin\Views\NhanVien\TaoMoi.cshtml" />
     <Content Include="Areas\Admin\Views\NhanVien\Sua.cshtml" />
+    <Content Include="Content\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
