@@ -1,20 +1,22 @@
 ﻿@model IEnumerable<WebsiteThuongMaiDienTu.Models.loaisanpham>
 
-@*
-    Partial view hiển thị danh mục sản phẩm dạng dropdown.
-    Được gọi từ _Layout.cshtml bằng: @Html.Action("DanhMucNav", "Layout")
-*@
-
-<a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })" class="nav-dropdown-item">
-    <i class="bi bi-grid-3x3-gap"></i> Tất cả
+<a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })"
+   class="nav-dropdown-item d-flex align-items-center gap-2 px-3 py-2
+          text-decoration-none text-dark fw-medium rounded-2"
+   style="font-size:.9rem;">
+    <i class="bi bi-grid-3x3-gap text-secondary"></i> Tất cả
 </a>
 
 @if (Model != null && Model.Any())
 {
     foreach (var danhmuc in Model)
     {
-        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { maloai = danhmuc.maloaisanpham, area = "" })" class="nav-dropdown-item">
-            <i class="bi bi-box"></i> @danhmuc.tenloaisanpham
+        <a href="@Url.Action("DanhSach", "SanPhamCongKhai",
+                 new { maloai = danhmuc.maloaisanpham, area = "" })"
+           class="nav-dropdown-item d-flex align-items-center gap-2 px-3 py-2
+                  text-decoration-none text-dark rounded-2"
+           style="font-size:.9rem;">
+            <i class="bi bi-box text-secondary"></i> @danhmuc.tenloaisanpham
         </a>
     }
 }

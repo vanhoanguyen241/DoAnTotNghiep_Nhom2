@@ -4,239 +4,323 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - QHVD Tech</title>
-
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
-
 <body>
     @{
         var tenDangNhap = Session["TenDangNhap"] as string;
-
-        var gioHang = Session["GioHang"] as System.Collections.Generic.Dictionary<string, int>;
+        var gioHang = Session["GioHang"]
+                      as System.Collections.Generic.Dictionary<string, int>;
         int soLuongGioHang = 0;
-
         if (gioHang != null)
         {
-            foreach (var soLuong in gioHang.Values)
-            {
-                soLuongGioHang += soLuong;
-            }
+            foreach (var soLuong in gioHang.Values) { soLuongGioHang += soLuong; }
         }
     }
 
-    <header class="site-header">
-        <!-- Hàng 1: Logo + Tìm kiếm + Tài khoản/Giỏ hàng -->
+    <header class="site-header sticky-top" style="z-index:1030;">
+
+        <!-- ═══ Hàng 1: Logo + Tìm kiếm + Tài khoản / Giỏ hàng ═══ -->
         <div class="header-top">
-            <div class="site-container header-top-inner">
-                <a href="@Url.Action("Index", "Home", new { area = "" })" class="logo">
-                    <span class="logo-icon">
-                        <img src="~/Content/images/logo.png" alt="QHVD Tech" />
-                    </span>
+            <div class="site-container d-flex align-items-center h-100 gap-3 flex-wrap">
+
+                <!-- Logo -->
+                <a href="~/" class="logo text-decoration-none position-relative"
+                   style="z-index:2;">
+                    <img src="~/Content/images/logo.png"
+                         alt="QHVD Tech" class="logo-img" />
                 </a>
 
-                <form class="search-form"
-                      role="search"
-                      method="get"
-                      action="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })">
-                    <div class="input-group">
-                        <input type="text"
-                               name="tukhoa"
-                               class="form-control search-input"
-                               placeholder="Bạn muốn mua gì hôm nay?" />
-                        <button class="btn search-btn" type="submit">
+                <!-- Nút mở danh mục mobile (chỉ hiện < lg) -->
+                <button class="btn d-lg-none d-flex align-items-center justify-content-center
+               gap-1 fw-semibold text-dark border-0 rounded-3 mobile-menu-btn ms-auto"
+                        id="mobileProductToggle" type="button"
+                        aria-label="Mở danh mục sản phẩm" aria-expanded="false">
+                    <i class="bi bi-list"></i>
+                    <span class="d-none d-sm-inline">Sản phẩm</span>
+                </button>
+
+                <!-- Tìm kiếm -->
+                @using (Html.BeginForm("DanhSach", "SanPhamCongKhai",
+                    FormMethod.Get,
+                    new { @class = "search-form flex-grow-1 d-flex order-lg-0" }))
+                {
+                    <div class="search-box d-flex w-100 rounded-pill overflow-hidden shadow-sm
+                border border-light-subtle mx-auto">
+                        <input type="text" name="tukhoa"
+                               class="form-control border-0 rounded-0 ps-3 py-2"
+                               placeholder="Bạn cần tìm gì..."
+                               style="font-size:.92rem;" />
+                        <button type="submit"
+                                class="btn btn-brand rounded-0 px-3 d-flex
+                       align-items-center">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
-                </form>
+                }
 
-                <!-- Dropdown sản phẩm - chỉ hiện trên mobile -->
-                <div class="mobile-product-dropdown">
-                    <button type="button" class="mobile-product-toggle" id="mobileProductToggle">
-                        <i class="bi bi-box-seam"></i>
-                        <span class="action-label">Sản phẩm</span>
-                        <i class="bi bi-chevron-down nav-caret"></i>
-                    </button>
-                    <div class="mobile-product-menu" id="mobileProductMenu">
+                <!-- Nhóm icon: Tài khoản + Giỏ hàng (desktop — ẩn < lg) -->
+                <div class="d-none d-lg-flex align-items-center gap-3 ms-auto"
+                     style="white-space:nowrap;">
+
+                    <!-- Dropdown tài khoản desktop -->
+                    @if (!string.IsNullOrEmpty(tenDangNhap))
+                    {
+                        <div class="dropdown position-relative">
+                            <a href="#" class="d-flex align-items-center gap-1
+                                              text-dark text-decoration-none fw-semibold"
+                               id="userDropdown" role="button" aria-expanded="false"
+                               style="font-size:.92rem;">
+                                <i class="bi bi-person-circle fs-5"></i>
+                                <span>@tenDangNhap</span>
+                                <i class="bi bi-chevron-down"
+                                   style="font-size:.65rem;"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0
+                                       rounded-3 mt-2 py-2"
+                                aria-labelledby="userDropdown"
+                                style="min-width:200px; z-index:1050;">
+                                <li>
+                                    <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2"
+                                       href="@Url.Action("ThongTin","TaiKhoan")">
+                                        <i class="bi bi-person"></i> Tài khoản của tôi
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2"
+                                       href="@Url.Action("LichSuDonHang","TaiKhoan")">
+                                        <i class="bi bi-clock-history"></i> Lịch sử đơn hàng
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider mx-2" /></li>
+                                <li>
+                                    <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2
+                                              text-danger"
+                                       href="@Url.Action("DangXuat","TaiKhoan")">
+                                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("DangNhap","TaiKhoan")"
+                           class="d-flex align-items-center gap-1 text-dark
+                                  text-decoration-none fw-semibold"
+                           style="font-size:.92rem;">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span>Đăng nhập</span>
+                        </a>
+                    }
+
+                    <!-- Giỏ hàng desktop -->
+                    <a href="@Url.Action("Index","GioHang")"
+                       class="d-flex align-items-center gap-1 text-dark
+                              text-decoration-none fw-semibold position-relative"
+                       style="font-size:.92rem;">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        <span>Giỏ hàng</span>
+                        @if (soLuongGioHang > 0)
+                        {
+                            <span class="cart-badge position-absolute translate-middle
+                                         badge rounded-pill bg-danger"
+                                  style="top:2px; right:-14px; font-size:.65rem;">
+                                @soLuongGioHang
+                            </span>
+                        }
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ═══ Dropdown danh mục mobile (click) ═══ -->
+        <div class="mobile-product-dropdown" id="mobileProductMenu"
+             style="z-index:1050;">
+            <div class="site-container py-2">
+                @Html.Action("DanhMucNav", "Layout")
+            </div>
+        </div>
+
+        <!-- ═══ Hàng 2: Nav chính (desktop — ẩn < lg) ═══ -->
+        <nav class="main-nav d-none d-lg-block">
+            <div class="site-container d-flex justify-content-center align-items-center gap-1 py-0">
+
+                <!-- Trang chủ -->
+                <a href="@Url.Action("Index", "Home", new { area = "" })"
+                   class="nav-link-item px-3 py-2 text-decoration-none fw-semibold"
+                   style="font-size:.93rem;">
+                    <i class="bi bi-house-door-fill me-1"></i>Trang chủ
+                </a>
+
+                <!-- Dropdown "Sản phẩm" hover -->
+                <div class="has-dropdown position-relative">
+                    <a href="@Url.Action("DanhSach","SanPhamCongKhai")"
+                       class="nav-link-item d-flex align-items-center gap-1
+                              px-3 py-2 text-decoration-none fw-semibold"
+                       style="font-size:.93rem;">
+                        <i class="bi bi-grid-3x3-gap-fill"></i> Sản phẩm
+                        <i class="bi bi-chevron-down" style="font-size:.6rem;"></i>
+                    </a>
+                    <div class="nav-dropdown position-absolute bg-white shadow rounded-3
+                                border-0 py-2" style="min-width:220px; z-index:100;">
                         @Html.Action("DanhMucNav", "Layout")
                     </div>
                 </div>
 
-                <ul class="header-actions list-unstyled mb-0">
-                    <li>
-                        <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="action-item">
-                            <i class="bi bi-cart3"></i>
-                            <span class="cart-badge">@soLuongGioHang</span>
-                            <span class="action-label">Giỏ hàng</span>
-                        </a>
-                    </li>
-
-                    @if (!string.IsNullOrEmpty(tenDangNhap))
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="action-item user-dropdown-toggle dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i>
-                                <span>Xin chào, <strong>@tenDangNhap</strong></span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><h6 class="dropdown-header">Quản lý tài khoản</h6></li>
-                                <li>
-                                    <a class="dropdown-item" href="@Url.Action("ThongTin", "TaiKhoan", new { area = "" })">
-                                        <i class="bi bi-person-gear text-primary"></i>
-                                        <span>Thông tin tài khoản</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="@Url.Action("LichSuDonHang", "TaiKhoan", new { area = "" })">
-                                        <i class="bi bi-clock-history text-primary"></i>
-                                        <span>Lịch sử mua hàng</span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="@Url.Action("DoiMatKhau", "TaiKhoan", new { area = "" })">
-                                        <i class="bi bi-key text-warning"></i>
-                                        <span>Đổi mật khẩu</span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="@Url.Action("DangXuat", "TaiKhoan", new { area = "" })" style="color: #dc3545 !important;">
-                                        <i class="bi bi-box-arrow-right"></i>
-                                        <span>Đăng xuất</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })" class="action-item">
-                                <i class="bi bi-person"></i>
-                                <span class="action-label">Đăng nhập</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("DangKy", "TaiKhoan", new { area = "" })" class="action-item">
-                                <i class="bi bi-person-plus"></i>
-                                <span class="action-label">Đăng ký</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-
-        <!-- Hàng 2: Danh mục sản phẩm -->
-        <!-- ===== Thanh nav chính ===== -->
-        <nav class="main-nav">
-            <div class="site-container main-nav-inner">
-                <ul class="main-nav-list">
-                    <li>
-                        <a href="@Url.Action("Index", "Home", new { area = "" })">
-                            <i class="bi bi-house-door"></i> Trang chủ
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("GioiThieu", "Home", new { area = "" })">
-                            <i class="bi bi-info-circle"></i> Giới thiệu
-                        </a>
-                    </li>
-                    <li class="has-dropdown">
-                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai", new { area = "" })">
-                            <i class="bi bi-box-seam"></i> Sản phẩm <i class="bi bi-chevron-down nav-caret"></i>
-                        </a>
-                        <div class="nav-dropdown">
-                            @Html.Action("DanhMucNav", "Layout")
-                        </div>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "TraCuuDonHang", new { area = "" })">
-                            <i class="bi bi-search"></i> Tra cứu đơn hàng
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("TuyenDung", "Home", new { area = "" })">
-                            <i class="bi bi-briefcase"></i> Tuyển dụng
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("LienHe", "Home", new { area = "" })">
-                            <i class="bi bi-envelope"></i> Liên hệ
-                        </a>
-                    </li>
-                </ul>
+                <a href="@Url.Action("Index","TraCuuDonHang")"
+                   class="nav-link-item px-3 py-2 text-decoration-none fw-semibold"
+                   style="font-size:.93rem;">
+                    <i class="bi bi-search me-1"></i>Tra cứu đơn hàng
+                </a>
+                <a href="@Url.Action("GioiThieu","Home")"
+                   class="nav-link-item px-3 py-2 text-decoration-none fw-semibold"
+                   style="font-size:.93rem;">
+                    <i class="bi bi-info-circle me-1"></i>Giới thiệu
+                </a>
+                <a href="@Url.Action("TuyenDung","Home")"
+                   class="nav-link-item px-3 py-2 text-decoration-none fw-semibold"
+                   style="font-size:.93rem;">
+                    <i class="bi bi-briefcase me-1"></i>Tuyển dụng
+                </a>
+                <a href="@Url.Action("LienHe","Home")"
+                   class="nav-link-item px-3 py-2 text-decoration-none fw-semibold"
+                   style="font-size:.93rem;">
+                    <i class="bi bi-telephone me-1"></i>Liên hệ
+                </a>
             </div>
         </nav>
+
     </header>
 
-    <div class="site-container body-content">
+    <!-- ═══ Nội dung chính ═══ -->
+    <main class="body-content site-container py-3">
         @RenderBody()
+    </main>
 
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - QHVD Tech</p>
-        </footer>
-    </div>
+    <!-- ═══ Footer ═══ -->
+    <footer class="site-footer bg-dark text-white pt-5 pb-4">
+        <div class="site-container">
+            <div class="row g-4">
+                <div class="col-12 col-md-4">
+                    <h5 class="fw-bold mb-3">QHVD Tech</h5>
+                    <p class="text-white-50 mb-1" style="font-size:.9rem;">
+                        Cửa hàng công nghệ uy tín — Giá tốt mỗi ngày
+                    </p>
+                    <p class="text-white-50" style="font-size:.9rem;">
+                        <i class="bi bi-geo-alt-fill me-1"></i>
+                        123 Đường ABC, Quận XYZ, TP.HCM
+                    </p>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h6 class="fw-bold mb-3">Liên kết</h6>
+                    <ul class="list-unstyled" style="font-size:.9rem;">
+                        <li class="mb-2">
+                            <a href="@Url.Action("GioiThieu","Home")"
+                               class="text-white-50 text-decoration-none">Giới thiệu</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="@Url.Action("LienHe","Home")"
+                               class="text-white-50 text-decoration-none">Liên hệ</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="@Url.Action("DanhSach","SanPhamCongKhai")"
+                               class="text-white-50 text-decoration-none">Sản phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h6 class="fw-bold mb-3">Hỗ trợ</h6>
+                    <ul class="list-unstyled" style="font-size:.9rem;">
+                        <li class="mb-2">
+                            <a href="@Url.Action("Index","TraCuuDonHang")"
+                               class="text-white-50 text-decoration-none">Tra cứu đơn hàng</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="@Url.Action("TuyenDung","Home")"
+                               class="text-white-50 text-decoration-none">Tuyển dụng</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-secondary my-4" />
+            <p class="text-center text-white-50 mb-0" style="font-size:.85rem;">
+                &copy; @DateTime.Now.Year QHVD Tech — All rights reserved.
+            </p>
+        </div>
+    </footer>
 
-    <!-- Bottom navigation - chỉ hiện trên mobile -->
-    <nav class="mobile-bottom-nav">
-        <a href="@Url.Action("Index", "Home", new { area = "" })" class="bottom-nav-item">
-            <i class="bi bi-house-door"></i>
+    <!-- ═══ Bottom Nav Mobile (< lg) ═══ -->
+    <nav class="mobile-bottom-nav d-flex d-lg-none" style="z-index:1035;">
+        <a href="~/" class="bottom-nav-item text-decoration-none">
+            <i class="bi bi-house-door-fill"></i>
             <span>Trang chủ</span>
         </a>
-        <a href="@Url.Action("Index", "TraCuuDonHang", new { area = "" })" class="bottom-nav-item">
+        <a href="@Url.Action("Index","TraCuuDonHang")"
+           class="bottom-nav-item text-decoration-none">
             <i class="bi bi-search"></i>
             <span>Tra cứu</span>
         </a>
-        <a href="@Url.Action("GioiThieu", "Home", new { area = "" })" class="bottom-nav-item">
+        <a href="@Url.Action("GioiThieu","Home")"
+           class="bottom-nav-item text-decoration-none">
             <i class="bi bi-info-circle"></i>
             <span>Giới thiệu</span>
         </a>
-        <a href="@Url.Action("Index", "GioHang", new { area = "" })" class="bottom-nav-item">
+        <a href="@Url.Action("Index","GioHang")"
+           class="bottom-nav-item text-decoration-none position-relative">
             <i class="bi bi-cart3"></i>
             <span>Giỏ hàng</span>
             @if (soLuongGioHang > 0)
             {
-                <span class="bottom-nav-badge">@soLuongGioHang</span>
+                <span class="bottom-nav-badge position-absolute badge rounded-pill
+                             bg-danger"
+                      style="top:2px; right:50%; transform:translateX(120%);
+                             font-size:.6rem;">
+                    @soLuongGioHang
+                </span>
             }
         </a>
-        <a href="@Url.Action("LienHe", "Home", new { area = "" })" class="bottom-nav-item">
-            <i class="bi bi-envelope"></i>
+        <a href="@Url.Action("LienHe","Home")"
+           class="bottom-nav-item text-decoration-none">
+            <i class="bi bi-telephone"></i>
             <span>Liên hệ</span>
         </a>
+
+        <!-- Tài khoản (dropup hoặc link đăng nhập) -->
         @if (!string.IsNullOrEmpty(tenDangNhap))
         {
-            <div class="bottom-nav-item dropup" style="position: relative;">
-                <a class="dropdown-toggle text-decoration-none text-dark" href="#" id="mobileUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; padding: 4px 0;">
-                    <i class="bi bi-person-circle" style="font-size: 1.4rem;"></i>
-                    <span style="font-size: 0.7rem; margin-top: 2px;">Tài khoản</span>
+            <div class="dropup bottom-nav-item position-relative">
+                <a href="#" class="d-flex flex-column align-items-center
+                                   text-decoration-none"
+                   id="mobileUserDropdown" role="button" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Tài khoản</span>
                 </a>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="mobileUserDropdown">
+                <ul class="dropdown-menu shadow border-0 rounded-3 py-2 mb-2"
+                    aria-labelledby="mobileUserDropdown"
+                    style="min-width:200px; z-index:1050;">
                     <li>
-                        <a class="dropdown-item" href="@Url.Action("ThongTin", "TaiKhoan", new { area = "" })">
-                            <i class="bi bi-person-gear text-primary"></i> Thông tin
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2"
+                           href="@Url.Action("ThongTin","TaiKhoan")">
+                            <i class="bi bi-person"></i> Tài khoản của tôi
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="@Url.Action("LichSuDonHang", "TaiKhoan", new { area = "" })">
-                            <i class="bi bi-clock-history text-primary"></i> Lịch sử mua
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2"
+                           href="@Url.Action("LichSuDonHang","TaiKhoan")">
+                            <i class="bi bi-clock-history"></i> Lịch sử đơn
                         </a>
                     </li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li><hr class="dropdown-divider mx-2" /></li>
                     <li>
-                        <a class="dropdown-item" href="@Url.Action("DoiMatKhau", "TaiKhoan", new { area = "" })">
-                            <i class="bi bi-key text-warning"></i> Đổi mật khẩu
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" href="@Url.Action("DangXuat", "TaiKhoan", new { area = "" })" style="color: #dc3545 !important;">
+                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2
+                                  text-danger"
+                           href="@Url.Action("DangXuat","TaiKhoan")">
                             <i class="bi bi-box-arrow-right"></i> Đăng xuất
                         </a>
                     </li>
@@ -245,8 +329,10 @@
         }
         else
         {
-            <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })" class="bottom-nav-item">
-                <i class="bi bi-person"></i><span>Đăng nhập</span>
+            <a href="@Url.Action("DangNhap","TaiKhoan")"
+               class="bottom-nav-item text-decoration-none">
+                <i class="bi bi-person-circle"></i>
+                <span>Đăng nhập</span>
             </a>
         }
     </nav>
@@ -256,49 +342,63 @@
     @RenderSection("scripts", required: false)
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-
+    /* ── Mobile product dropdown toggle ── */
+    (function () {
         var toggle = document.getElementById('mobileProductToggle');
-        var dropdown = toggle ? toggle.closest('.mobile-product-dropdown') : null;
-        if (toggle && dropdown) {
+        var menu = document.getElementById('mobileProductMenu');
+        if (toggle && menu) {
             toggle.addEventListener('click', function (e) {
                 e.stopPropagation();
-                dropdown.classList.toggle('open');
+                menu.classList.toggle('open');
             });
             document.addEventListener('click', function (e) {
-                if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('open');
+                if (!menu.contains(e.target) && e.target !== toggle) {
+                    menu.classList.remove('open');
                 }
             });
         }
+    })();
 
-        function setupDropdown(toggleId, menuSelector) {
-            var toggleBtn = document.getElementById(toggleId);
-            var menu = document.querySelector(menuSelector);
+    /* ── Dropdown tài khoản: bấm icon để mở, bấm lần nữa để đóng (toggle) ── */
+    function setupDropdown(triggerId) {
+        var trigger = document.getElementById(triggerId);
+        if (!trigger) return;
+        var menu = trigger.nextElementSibling
+            || trigger.parentElement.querySelector('.dropdown-menu');
+        if (!menu) return;
 
-            if (toggleBtn && menu) {
-                toggleBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
-                        if (m !== menu) m.classList.remove('show');
-                    });
-                    menu.classList.toggle('show');
-                    toggleBtn.setAttribute('aria-expanded', menu.classList.contains('show'));
-                });
-                document.addEventListener('click', function (e) {
-                    if (!toggleBtn.contains(e.target) && !menu.contains(e.target)) {
-                        menu.classList.remove('show');
-                        toggleBtn.setAttribute('aria-expanded', 'false');
-                    }
-                });
+        trigger.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var isOpen = menu.classList.contains('show');
+
+            // Đóng tất cả dropdown đang mở (kể cả chính nó)
+            document.querySelectorAll('.dropdown-menu.show')
+                .forEach(function (m) { m.classList.remove('show'); });
+            // Reset aria-expanded của cả 2 trigger
+            ['userDropdown', 'mobileUserDropdown'].forEach(function (id) {
+                var t = document.getElementById(id);
+                if (t) t.setAttribute('aria-expanded', 'false');
+            });
+
+            // Nếu trước đó đang đóng -> mở; đang mở -> đã bị đóng ở trên, không mở lại
+            if (!isOpen) {
+                menu.classList.add('show');
+                trigger.setAttribute('aria-expanded', 'true');
             }
-        }
+        });
 
-        setupDropdown('userDropdown', '.dropdown-menu[aria-labelledby="userDropdown"]');
-        setupDropdown('mobileUserDropdown', '.dropdown-menu[aria-labelledby="mobileUserDropdown"]');
-    });
+        // Bấm ra ngoài vùng trigger + menu thì đóng
+        document.addEventListener('click', function (e) {
+            if (!menu.contains(e.target) && !trigger.contains(e.target)) {
+                menu.classList.remove('show');
+                trigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+    setupDropdown('userDropdown');
+    setupDropdown('mobileUserDropdown');
 </script>
-
 </body>
 </html>
