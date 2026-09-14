@@ -3,6 +3,14 @@
 @{
     ViewBag.Title = "Quản lý khách hàng";
     bool isAdmin = ViewBag.IsAdmin == true;
+
+    var grid = new WebGrid(
+        source: Model,
+        rowsPerPage: 10,
+        canPage: true,
+        canSort: true,
+        defaultSort: "makh"
+    );
 }
 
 <div class="container-fluid px-4 py-4">
@@ -27,46 +35,44 @@
             </div>
         }
 
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã KH</th>
-                        <th class="text-uppercase text-secondary small fw-bold">Họ tên</th>
-                        <th class="text-uppercase text-secondary small fw-bold">Địa chỉ</th>
-                        <th class="text-uppercase text-secondary small fw-bold">Số điện thoại</th>
-                        <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td><strong class="text-dark">@item.makh</strong></td>
-                            <td>@item.hoten</td>
-                            <td>@item.diachi</td>
-                            <td>@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</td>
-                            <td class="text-center">
-                                <a href="@Url.Action("Sua", "KhachHang", new { area = "Admin", id = item.makh })"
-                                   class="btn btn-sm btn-light text-primary me-1"
-                                   title="Sửa">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
-
-                                @if (isAdmin)
-                                {
-                                    <a href="@Url.Action("Xoa", "KhachHang", new { area = "Admin", id = item.makh })"
-                                       class="btn btn-sm btn-light text-danger"
-                                       title="Xóa"
-                                       onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="card-body">
+            @grid.GetHtml(
+                tableStyle: "table table-hover align-middle mb-0",
+                headerStyle: "table-light text-uppercase small text-secondary fw-bold",
+                footerStyle: "webgrid-pager",
+                mode: WebGridPagerModes.All,
+                firstText: "«",
+                previousText: "‹",
+                nextText: "›",
+                lastText: "»",
+                numericLinksCount: 3,
+                columns: grid.Columns(
+                    grid.Column("makh", header: "Mã KH"),
+                    grid.Column("hoten", header: "Họ tên"),
+                    grid.Column("diachi", header: "Địa chỉ"),
+                    grid.Column(
+                        header: "Số điện thoại",
+                        format: @<span>@(string.IsNullOrEmpty(item.SDT) ? "—" : item.SDT)</span>
+),
+grid.Column(
+header: "Hành động",
+format: @<text>
+    <a href="@Url.Action("Sua", "KhachHang", new { area = "Admin", id = item.makh })"
+       class="btn btn-sm btn-light text-primary me-1" title="Sửa">
+        <i class="bi bi-pencil-fill"></i>
+    </a>
+    @if (isAdmin)
+    {
+        <a href="@Url.Action("Xoa", "KhachHang", new { area = "Admin", id = item.makh })"
+           class="btn btn-sm btn-light text-danger" title="Xóa"
+           onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+            <i class="bi bi-trash-fill"></i>
+        </a>
+    }
+</text>
+)
+)
+)
         </div>
     </div>
 </div>
