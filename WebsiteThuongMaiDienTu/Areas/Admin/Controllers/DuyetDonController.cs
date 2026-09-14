@@ -201,7 +201,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             dh.mahoadon = hd.mahoadon;
             db.SaveChanges();
 
-            TempData["ThongBao"] = "Duyệt đơn hàng thành công! Đã tạo hóa đơn #" + hd.mahoadon;
+            TempData["ThongBao"] = "Duyệt đơn hàng thành công! Đã tạo hóa đơn " + hd.mahoadon;
             return RedirectToAction("Index");
         }
 

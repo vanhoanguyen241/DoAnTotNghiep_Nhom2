@@ -12,13 +12,6 @@
                 <i class="bi bi-receipt me-2 text-brand-yellow"></i>
                 Quản lý Hóa đơn
             </h2>
-
-            @if (isAdmin)
-            {
-                <a href="@Url.Action("TaoMoi", "HoaDon", new { area = "Admin" })" class="btn btn-brand">
-                    <i class="bi bi-plus-circle me-1"></i> Thêm hóa đơn
-                </a>
-            }
         </div>
 
         @if (TempData["ThongBao"] != null)
@@ -38,13 +31,12 @@
                     <thead class="table-light">
                         <tr>
                             <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã HĐ</th>
-                            <th style="width: 100px;" class="text-center text-uppercase text-secondary small fw-bold">Mã đơn đặt</th>
+                            <th style="width: 110px;" class="text-center text-uppercase text-secondary small fw-bold">Mã đơn đặt</th>
                             <th class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
                             <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày đặt</th>
                             <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày giao</th>
                             <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Tổng tiền</th>
                             <th style="width: 120px;" class="text-center text-uppercase text-secondary small fw-bold">Thanh toán</th>
-                            <th style="width: 100px;" class="text-center text-uppercase text-secondary small fw-bold">Giao tận nơi</th>
                             <th style="width: 150px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                         </tr>
                     </thead>
@@ -89,31 +81,13 @@
                                 </td>
 
                                 <td class="text-center">
-                                    @if (item.giaotannoi)
-                                    {
-                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">Có</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted small">Không</span>
-                                    }
-                                </td>
-
-                                <td class="text-center">
                                     <a href="@Url.Action("Index", "ChiTietHoaDon", new { area = "Admin", id = item.mahoadon })"
                                        class="btn btn-sm btn-light text-primary me-1"
                                        title="Xem chi tiết">
                                         <i class="bi bi-eye-fill"></i>
                                     </a>
-
                                     @if (isAdmin)
                                     {
-                                        <a href="@Url.Action("Sua", "HoaDon", new { area = "Admin", id = item.mahoadon })"
-                                           class="btn btn-sm btn-light text-primary me-1"
-                                           title="Sửa">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-
                                         <a href="@Url.Action("Xoa", "HoaDon", new { area = "Admin", id = item.mahoadon })"
                                            class="btn btn-sm btn-light text-danger"
                                            title="Xóa"
@@ -136,7 +110,7 @@
         {
             <div class="card-body">
                 <div class="alert alert-info mb-0">
-                    <i class="bi bi-info-circle me-1"></i> Chưa có hóa đơn nào. Nhấn nút <strong>Thêm hóa đơn</strong> để tạo mới.
+                    <i class="bi bi-info-circle me-1"></i> Chưa có hóa đơn nào.
                 </div>
             </div>
         }

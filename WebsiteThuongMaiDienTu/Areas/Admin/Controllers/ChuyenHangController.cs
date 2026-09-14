@@ -285,7 +285,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             hd.dathanhtoan = true;
             db.SaveChanges();
 
-            TempData["ThongBao"] = "Xác nhận đã thu tiền thành công cho hóa đơn #" + hd.mahoadon + "!";
+            TempData["ThongBao"] = "Xác nhận đã thu tiền thành công cho hóa đơn " + hd.mahoadon + "!";
             return RedirectToAction("Index");
         }
     }

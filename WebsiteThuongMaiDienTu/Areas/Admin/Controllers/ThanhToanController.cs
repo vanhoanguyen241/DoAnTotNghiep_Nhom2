@@ -51,7 +51,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
             if (hd.dathanhtoan)
             {
-                TempData["ThongBao"] = "Hóa đơn #" + id + " đã được thanh toán trước đó!";
+                TempData["ThongBao"] = "Hóa đơn " + id + " đã được thanh toán trước đó!";
                 return RedirectToAction("DaThanhToan");
             }
 
@@ -59,7 +59,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             hd.dathanhtoan = true;
             db.SaveChanges();
 
-            TempData["ThongBao"] = "Đã xác nhận thanh toán cho hóa đơn #" + id + "!";
+            TempData["ThongBao"] = "Đã xác nhận thanh toán cho hóa đơn " + id + "!";
             return RedirectToAction("Index");
         }
 
@@ -76,7 +76,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
             if (!hd.dathanhtoan)
             {
-                TempData["ThongBao"] = "Hóa đơn #" + id + " chưa được xác nhận thanh toán!";
+                TempData["ThongBao"] = "Hóa đơn " + id + " chưa được xác nhận thanh toán!";
                 return RedirectToAction("Index");
             }
 
@@ -84,14 +84,14 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             bool coPhieuGiao = db.chuyenhangs.Any(ch => ch.mahoadon == id);
             if (coPhieuGiao)
             {
-                TempData["ThongBao"] = "Không thể hủy thanh toán vì hóa đơn #" + id + " đã có phiếu giao hàng!";
+                TempData["ThongBao"] = "Không thể hủy thanh toán vì hóa đơn " + id + " đã có phiếu giao hàng!";
                 return RedirectToAction("DaThanhToan");
             }
 
             hd.dathanhtoan = false;
             db.SaveChanges();
 
-            TempData["ThongBao"] = "Đã hủy xác nhận thanh toán cho hóa đơn #" + id + "!";
+            TempData["ThongBao"] = "Đã hủy xác nhận thanh toán cho hóa đơn " + id + "!";
             return RedirectToAction("DaThanhToan");
         }
     }

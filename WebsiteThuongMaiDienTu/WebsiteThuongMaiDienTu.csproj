@@ -291,11 +291,7 @@
     <Content Include="Areas\Admin\Views\SanPham\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\HoaDon\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\HoaDon\TaoMoi.cshtml" />
-    <Content Include="Areas\Admin\Views\HoaDon\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\ChiTietHoaDon\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ChiTietHoaDon\TaoMoi.cshtml" />
-    <Content Include="Areas\Admin\Views\ChiTietHoaDon\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\Index.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\ChiTiet.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\DanhSachTuChoi.cshtml" />
