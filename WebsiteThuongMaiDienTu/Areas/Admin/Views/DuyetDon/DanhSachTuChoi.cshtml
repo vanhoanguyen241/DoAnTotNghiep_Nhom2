@@ -44,7 +44,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td><strong class="text-dark">#@item.madathang</strong></td>
+                                <td><strong class="text-dark">@item.madathang</strong></td>
                                 <td>@(item.khachhang != null ? item.khachhang.hoten : "—")</td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>
@@ -58,7 +58,7 @@
                                         <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.madathang })"
                                            class="btn btn-sm btn-light text-danger"
                                            title="Xóa đơn"
-                                           onclick="return confirm('XÓA VĨNH VIỄN đơn #@item.madathang?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
+                                           onclick="return confirm('XÓA VĨNH VIỄN đơn @item.madathang?\nKhách hàng sẽ không thể tra cứu lại đơn này.\nTiếp tục?');">
                                             <i class="bi bi-trash-fill"></i>
                                         </a>
                                     }

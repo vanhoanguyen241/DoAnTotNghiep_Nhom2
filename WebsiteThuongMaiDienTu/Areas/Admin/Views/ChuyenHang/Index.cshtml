@@ -52,11 +52,11 @@
                             var kh = hd != null ? hd.khachhang : null;
                             var nv = item.nhanvien;
                             <tr>
-                                <td><strong class="text-dark">#@item.machuyenhang</strong></td>
+                                <td><strong class="text-dark">@item.machuyenhang</strong></td>
                                 <td>
                                     <a href="@Url.Action("Index", "ChiTietHoaDon", new { area = "Admin", id = item.mahoadon })"
                                        title="Xem chi tiết hóa đơn" class="text-decoration-none fw-medium text-primary">
-                                        #@item.mahoadon
+                                        @item.mahoadon
                                     </a>
                                 </td>
                                 <td>

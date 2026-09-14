@@ -53,12 +53,12 @@
                             var kh = item.khachhang;
 
                             <tr>
-                                <td><strong class="text-dark">#@item.mahoadon</strong></td>
+                                <td><strong class="text-dark">@item.mahoadon</strong></td>
 
                                 <td class="text-center">
                                     @if (donDat != null)
                                     {
-                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">#@donDat.madathang</span>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">@donDat.madathang</span>
                                     }
                                     else
                                     {
@@ -96,7 +96,7 @@
                                 <td class="text-center">
                                     <a href="@Url.Action("DuyetThanhToan", "ThanhToan", new { area = "Admin", id = item.mahoadon })"
                                        class="btn btn-sm btn-brand px-3"
-                                       onclick="return confirm('Xác nhận khách hàng đã thanh toán hóa đơn #@item.mahoadon?');">
+                                       onclick="return confirm('Xác nhận khách hàng đã thanh toán hóa đơn @item.mahoadon?');">
                                         <i class="bi bi-cash-coin me-1"></i> Duyệt thanh toán
                                     </a>
                                 </td>

@@ -45,7 +45,7 @@
                         {
                             var kh = item.khachhang;
                             <tr>
-                                <td><strong class="text-dark">#@item.mahoadon</strong></td>
+                                <td><strong class="text-dark">@item.mahoadon</strong></td>
                                 <td>
                                     @(kh != null ? kh.hoten : "—")
                                     @if (kh != null && !string.IsNullOrEmpty(kh.SDT))
@@ -70,7 +70,7 @@
                                 <td class="text-center">
                                     <a href="@Url.Action("LapPhieu", "ChuyenHang", new { area = "Admin", id = item.mahoadon })"
                                        class="btn btn-sm btn-brand shadow-sm d-inline-flex align-items-center justify-content-center"
-                                       onclick="return confirm('Tạo phiếu giao hàng cho hóa đơn #@item.mahoadon?');" title="Lập phiếu">
+                                       onclick="return confirm('Tạo phiếu giao hàng cho hóa đơn @item.mahoadon?');" title="Lập phiếu">
                                         <i class="bi bi-truck me-1"></i> Lập phiếu
                                     </a>
                                 </td>
