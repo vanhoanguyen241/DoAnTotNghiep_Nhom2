@@ -150,21 +150,14 @@
     var daDangNhap = @(Session["TenDangNhap"] != null ? "true" : "false");
 
     function xuLyDatHang() {
-        // Nếu đã đăng nhập → không hỏi, vào thẳng trang đặt hàng
+        // Nếu đã đăng nhập thì vào thẳng trang đặt hàng
         if (daDangNhap) {
             window.location.href = '@Url.Action("Index", "DatHang", new { area = "" })';
             return;
         }
 
-        // Chưa đăng nhập → hỏi ý kiến
-        var ketQua = confirm("Bạn có muốn đăng ký / đăng nhập không?\n(Có thể bỏ qua)");
-        if (ketQua) {
-            // Bấm OK → qua trang đăng nhập, đăng nhập xong tự về trang chủ
-            window.location.href = '@Url.Action("DangNhap", "TaiKhoan", new { area = "" })';
-        } else {
-            // Bấm Cancel → qua trang đặt hàng, focus thẳng vào ô họ tên
-            window.location.href = '@Url.Action("Index", "DatHang", new { area = "", focus = "1" })';
-        }
+        // Chưa đăng nhập thì chuyển qua trang đăng nhập, kèm cờ dathang=1
+        window.location.href = '@Url.Action("DangNhap", "TaiKhoan", new { area = "", dathang = true })';
     }
     </script>
 </div>

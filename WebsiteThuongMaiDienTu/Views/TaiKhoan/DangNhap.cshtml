@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Đăng nhập";
+    bool fromDatHang = ViewBag.FromDatHang == true;
 }
 
 <div class="container py-5 min-vh-75 d-flex align-items-center">
@@ -24,6 +25,10 @@
 
                     @using (Html.BeginForm("DangNhap", "TaiKhoan", FormMethod.Post))
                     {
+                        if (fromDatHang)
+                        {
+                            <input type="hidden" name="dathang" value="true" />
+                        }
                         <div class="mb-3">
                             <label for="txt_tendangnhap" class="form-label fw-medium text-dark small mb-1">
                                 Tên đăng nhập <span class="text-danger">*</span>
@@ -58,12 +63,36 @@
                         <button type="submit" class="btn btn-brand w-100 py-2 fw-bold rounded-3 shadow-sm">
                             <i class="bi bi-check-circle me-1"></i> Đăng nhập
                         </button>
+
+                        if (fromDatHang)
+                        {
+                            <div class="mt-3">
+                                <a href="@Url.Action("Index", "DatHang", new { area = "", focus = 1 })"
+                                   class="btn btn-outline-secondary w-100 py-2 fw-bold rounded-3">
+                                    <i class="bi bi-fast-forward me-1"></i>
+                                    Bỏ qua, tiếp tục đặt hàng
+                                </a>
+                            </div>
+                        }
                     }
 
-                    <div class="text-center text-muted small mt-4">
-                        Chưa có tài khoản?
-                        <a href="@Url.Action("DangKy", "TaiKhoan")" class="fw-bold text-decoration-none">Đăng ký ngay</a>
-                    </div>
+                <div class="text-center text-muted small mt-4">
+                    Chưa có tài khoản?
+                    @if (fromDatHang)
+                    {
+                        <a href="@Url.Action("DangKy", "TaiKhoan", new { area = "", dathang = true })"
+                           class="fw-bold text-decoration-none">
+                            Đăng ký ngay
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("DangKy", "TaiKhoan")"
+                           class="fw-bold text-decoration-none">
+                            Đăng ký ngay
+                        </a>
+                    }
+                </div>
                 </div>
             </div>
         </div>

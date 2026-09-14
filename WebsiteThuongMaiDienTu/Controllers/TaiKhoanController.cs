@@ -14,14 +14,15 @@ namespace WebsiteThuongMaiDienTu.Controllers
         QLBanHang_Model db = new QLBanHang_Model();
 
         // GET: TaiKhoan/DangNhap
-        public ActionResult DangNhap()
+        public ActionResult DangNhap(bool dathang = false)
         {
+            ViewBag.FromDatHang = dathang;
             return View();
         }
 
         // POST: TaiKhoan/DangNhap
         [HttpPost]
-        public ActionResult DangNhap(FormCollection collection)
+        public ActionResult DangNhap(FormCollection collection, bool dathang = false)
         {
             var Tendangnhap = collection["txt_tendangnhap"];
             var Matkhau = collection["txt_matkhau"];
@@ -29,6 +30,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
             if (string.IsNullOrEmpty(Tendangnhap) || string.IsNullOrEmpty(Matkhau))
             {
                 ViewBag.ThongBao = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
@@ -58,6 +60,12 @@ namespace WebsiteThuongMaiDienTu.Controllers
                     Session["LoaiTaiKhoan"] = "KhachHang";
                     Session["MaKH"] = tk_login.makh;
 
+                    // Nếu vào từ luồng đặt hàng thì quay lại trang đặt hàng
+                    if (dathang)
+                    {
+                        return RedirectToAction("Index", "DatHang", new { area = "", focus = 1 });
+                    }
+
                     return RedirectToAction("Index", "Home", new { area = "" });
                 }
             }
@@ -67,18 +75,20 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 return View();
             }
 
+            ViewBag.FromDatHang = dathang;
             return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         // GET: TaiKhoan/DangKy
-        public ActionResult DangKy()
+        public ActionResult DangKy(bool dathang = false)
         {
+            ViewBag.FromDatHang = dathang;
             return View();
         }
 
         // POST: TaiKhoan/DangKy
         [HttpPost]
-        public ActionResult DangKy(FormCollection collection)
+        public ActionResult DangKy(FormCollection collection, bool dathang = false)
         {
             var Tendangnhap = (collection["txt_tendangnhap"] ?? "").Trim();
             var Matkhau = (collection["txt_matkhau"] ?? "").Trim();
@@ -96,18 +106,21 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 || string.IsNullOrEmpty(Sodienthoai))
             {
                 ViewBag.ThongBao = "Vui lòng điền đầy đủ thông tin bắt buộc!";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
             if (Matkhau.Length < 6)
             {
                 ViewBag.ThongBao = "Mật khẩu phải có ít nhất 6 ký tự!";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
             if (Matkhau != Xacnhanmk)
             {
                 ViewBag.ThongBao = "Mật khẩu xác nhận không khớp!";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
@@ -119,6 +132,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
             if (tk_tontai != null)
             {
                 ViewBag.ThongBao = "Tên đăng nhập đã tồn tại!";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
@@ -131,6 +145,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
             if (khachCu != null)
             {
                 ViewBag.ThongBao = "Số điện thoại này đã được sử dụng để đăng ký tài khoản! Vui lòng dùng số khác hoặc đăng nhập.";
+                ViewBag.FromDatHang = dathang;
                 return View();
             }
 
@@ -139,17 +154,18 @@ namespace WebsiteThuongMaiDienTu.Controllers
             if (db.khachhangs.Any())
             {
                 maKhMoi = db.khachhangs.Max(k => k.makh) + 1;
-            }    
+            }
             else
             {
                 maKhMoi = 1;
-            }    
+            }
 
             khachhang kh_moi = new khachhang();
             kh_moi.makh = maKhMoi;
             kh_moi.hoten = Hoten;
             kh_moi.diachi = Diachi;
             kh_moi.SDT = Sodienthoai;
+
             db.khachhangs.Add(kh_moi);
             db.SaveChanges();
 
@@ -163,7 +179,19 @@ namespace WebsiteThuongMaiDienTu.Controllers
             db.taikhoans.Add(tk_moi);
             db.SaveChanges();
 
+            // Nếu đăng ký từ luồng đặt hàng thì cho đăng nhập luôn rồi quay lại trang đặt hàng
+            if (dathang)
+            {
+                Session["TenDangNhap"] = Tendangnhap;
+                Session["LoaiTaiKhoan"] = "KhachHang";
+                Session["MaKH"] = maKhMoi;
+
+                return RedirectToAction("Index", "DatHang", new { area = "", focus = 1 });
+            }
+
             ViewBag.ThongBaoThanhCong = "Đăng ký thành công! Vui lòng đăng nhập.";
+            ViewBag.FromDatHang = dathang;
+
             return View();
         }
 
