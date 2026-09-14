@@ -354,6 +354,7 @@
     <Content Include="Views\TaiKhoan\DoiMatKhau.cshtml" />
     <Content Include="Views\TaiKhoan\LichSuDonHang.cshtml" />
     <Content Include="Views\TaiKhoan\ThongTin.cshtml" />
+    <Content Include="Views\Shared\_DanhMucFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

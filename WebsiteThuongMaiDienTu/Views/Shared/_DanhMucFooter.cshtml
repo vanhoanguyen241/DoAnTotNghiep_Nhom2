@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WebsiteThuongMaiDienTu.Models.loaisanpham>
+
+@if (Model != null && Model.Any())
+{
+    var danhMucList = Model.ToList();
+    var cot1 = danhMucList.Take(4);
+    var cot2 = danhMucList.Skip(4).Take(4);
+
+    <div class="row g-3">
+        <!-- Cột 1: 4 loại đầu -->
+        <div class="col-6">
+            <ul class="list-unstyled mb-0" style="font-size:.9rem;">
+                @foreach (var danhmuc in cot1)
+                {
+                    <li class="mb-2">
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai",
+                               new { maloai = danhmuc.maloaisanpham, area = "" })"
+                           class="text-white-50 text-decoration-none d-flex align-items-center gap-2">
+                            @danhmuc.tenloaisanpham
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Cột 2: 4 loại tiếp theo -->
+        <div class="col-6">
+            <ul class="list-unstyled mb-0" style="font-size:.9rem;">
+                @foreach (var danhmuc in cot2)
+                {
+                    <li class="mb-2">
+                        <a href="@Url.Action("DanhSach", "SanPhamCongKhai",
+                               new { maloai = danhmuc.maloaisanpham, area = "" })"
+                           class="text-white-50 text-decoration-none d-flex align-items-center gap-2">
+                            @danhmuc.tenloaisanpham
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

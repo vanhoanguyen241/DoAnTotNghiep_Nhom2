@@ -210,7 +210,8 @@
     <footer class="site-footer bg-dark text-white pt-5 pb-4">
         <div class="site-container">
             <div class="row g-4">
-                <div class="col-12 col-md-4">
+                <!-- Cột 1: Thông tin cửa hàng -->
+                <div class="col-12 col-md-5">
                     <h5 class="fw-bold mb-3">QHVD Tech</h5>
                     <p class="text-white-50 mb-1" style="font-size:.9rem;">
                         Cửa hàng công nghệ uy tín — Giá tốt mỗi ngày
@@ -220,35 +221,11 @@
                         123 Đường ABC, Phường XYZ, TP.HCM
                     </p>
                 </div>
-                <div class="col-6 col-md-4">
-                    <h6 class="fw-bold mb-3">Liên kết</h6>
-                    <ul class="list-unstyled" style="font-size:.9rem;">
-                        <li class="mb-2">
-                            <a href="@Url.Action("GioiThieu","Home")"
-                               class="text-white-50 text-decoration-none">Giới thiệu</a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="@Url.Action("LienHe","Home")"
-                               class="text-white-50 text-decoration-none">Liên hệ</a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="@Url.Action("DanhSach","SanPhamCongKhai")"
-                               class="text-white-50 text-decoration-none">Sản phẩm</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-6 col-md-4">
-                    <h6 class="fw-bold mb-3">Hỗ trợ</h6>
-                    <ul class="list-unstyled" style="font-size:.9rem;">
-                        <li class="mb-2">
-                            <a href="@Url.Action("Index","TraCuuDonHang")"
-                               class="text-white-50 text-decoration-none">Tra cứu đơn hàng</a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="@Url.Action("TuyenDung","Home")"
-                               class="text-white-50 text-decoration-none">Tuyển dụng</a>
-                        </li>
-                    </ul>
+
+                <!-- Cột 2: Danh mục sản phẩm (chia 2 cột con, mỗi cột 4 loại) -->
+                <div class="col-12 col-md-7">
+                    <h6 class="fw-bold mb-3">Liên kết nhanh</h6>
+                    @Html.Action("DanhMucFooter", "Layout")
                 </div>
             </div>
             <hr class="border-secondary my-4" />
