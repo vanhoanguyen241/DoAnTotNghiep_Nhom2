@@ -19,6 +19,8 @@
 
     var hoaDon = Model.hoadon;
     bool daThanhToan = hoaDon != null && hoaDon.dathanhtoan;
+    var phieuGiao = hoaDon?.chuyenhangs?.FirstOrDefault();
+    bool daGiaoHang = phieuGiao != null && phieuGiao.daxuli;
 }
 
 <div class="container py-4">
@@ -212,25 +214,65 @@
     {
         if (daThanhToan)
         {
-            <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis rounded-4 p-4 d-flex gap-3 mb-4">
-                <i class="bi bi-check-circle-fill" style="font-size: 1.5rem;"></i>
-                <div>
-                    <h5 class="alert-heading fw-bold mb-1">Đã thanh toán thành công</h5>
-                    <p class="mb-0">
-                        @if (Model.mahoadon.HasValue) { <span>Mã hóa đơn của bạn là <strong>@Model.mahoadon</strong>.</span> }
-                        @(Model.giaotannoi ? "Đơn hàng sẽ được giao tới địa chỉ của bạn." : "Vui lòng nhận hàng tại cửa hàng.")
-                    </p>
+            if (Model.giaotannoi)
+            {
+                if (daGiaoHang)
+                {
+                    <!-- TRẠNG THÁI 1: ĐÃ THANH TOÁN + ĐÃ GIAO HÀNG THÀNH CÔNG -->
+                    <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis rounded-4 p-4 d-flex gap-3 mb-4">
+                        <i class="bi bi-check-circle-fill" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <h5 class="alert-heading fw-bold mb-1">Đã giao hàng thành công</h5>
+                            <p class="mb-0">
+                                @if (Model.mahoadon.HasValue)
+                                {<span>Mã hóa đơn của bạn là <strong>@Model.mahoadon</strong>.</span>}
+                                Đơn hàng đã được giao tới địa chỉ của bạn thành công. Cảm ơn bạn đã mua sắm!
+                            </p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- TRẠNG THÁI 2: ĐÃ THANH TOÁN + ĐANG CHỜ GIAO / ĐANG GIAO -->
+                    <div class="alert alert-info border-0 bg-info-subtle text-info-emphasis rounded-4 p-4 d-flex gap-3 mb-4">
+                        <i class="bi bi-truck" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <h5 class="alert-heading fw-bold mb-1">Đã thanh toán - Đang giao hàng</h5>
+                            <p class="mb-0">
+                                @if (Model.mahoadon.HasValue)
+                                {<span>Mã hóa đơn của bạn là <strong>@Model.mahoadon</strong>.</span>}
+                                Đơn hàng đã được thanh toán và đang được nhân viên giao tới địa chỉ của bạn.
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- TRẠNG THÁI 3: ĐÃ THANH TOÁN + NHẬN TẠI CỬA HÀNG -->
+                <div class="alert alert-success border-0 bg-success-subtle text-success-emphasis rounded-4 p-4 d-flex gap-3 mb-4">
+                    <i class="bi bi-check-circle-fill" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <h5 class="alert-heading fw-bold mb-1">Đã thanh toán thành công</h5>
+                        <p class="mb-0">
+                            @if (Model.mahoadon.HasValue)
+                            {<span>Mã hóa đơn của bạn là <strong>@Model.mahoadon</strong>.</span>}
+                            Vui lòng đến cửa hàng để nhận hàng.
+                        </p>
+                    </div>
                 </div>
-            </div>
+            }
         }
         else
         {
+            <!-- TRẠNG THÁI 4: ĐÃ DUYỆT NHƯNG CHƯA THANH TOÁN -->
             <div class="alert alert-warning border-0 bg-warning-subtle text-warning-emphasis rounded-4 p-4 d-flex gap-3 mb-4">
                 <i class="bi bi-cash-coin" style="font-size: 1.5rem;"></i>
                 <div>
                     <h5 class="alert-heading fw-bold mb-1">Đã duyệt - Chưa thanh toán</h5>
                     <p class="mb-0">
-                        @if (Model.mahoadon.HasValue) { <span>Mã hóa đơn <strong>@Model.mahoadon</strong>.</span> }
+                        @if (Model.mahoadon.HasValue)
+                        {<span>Mã hóa đơn <strong>@Model.mahoadon</strong>.</span>}
                         Vui lòng hoàn tất thanh toán để đơn hàng được xử lý.
                     </p>
                 </div>

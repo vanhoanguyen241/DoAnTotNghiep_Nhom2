@@ -35,10 +35,10 @@ namespace WebsiteThuongMaiDienTu.Controllers
         public ActionResult KetQua(int id)
         {
             // Lấy đầy đủ thông tin:
-            // Đơn hàng -> Khách hàng -> Hóa đơn -> Chi tiết đơn -> Sản phẩm
+            // Đơn hàng -> Khách hàng -> Hóa đơn -> Phiếu giao hàng -> Chi tiết đơn -> Sản phẩm
             var donHang = db.dathangs
                 .Include(d => d.khachhang)
-                .Include(d => d.hoadon)
+                .Include(d => d.hoadon.chuyenhangs)
                 .Include(d => d.chitietdathangs.Select(ct => ct.sanpham))
                 .FirstOrDefault(d => d.madathang == id);
 
@@ -47,7 +47,6 @@ namespace WebsiteThuongMaiDienTu.Controllers
                 ViewBag.ThongBao = "Không tìm thấy đơn hàng với mã \"" + id + "\". Vui lòng kiểm tra lại!";
                 return View("Index");
             }
-
             return View(donHang);
         }
     }
