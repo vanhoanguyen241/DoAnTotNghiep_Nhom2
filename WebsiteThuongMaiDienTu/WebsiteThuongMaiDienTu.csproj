@@ -188,6 +188,13 @@
     <Content Include="Content\images\banner3.png" />
     <Content Include="Content\bootstrap-icons\bootstrap-icons.css" />
     <Content Include="Content\images\sanpham\default.png" />
+    <Content Include="Content\images\sanpham\DH1.png" />
+    <Content Include="Content\images\sanpham\DH2.png" />
+    <Content Include="Content\images\sanpham\DH3.png" />
+    <Content Include="Content\images\sanpham\DH4.png" />
+    <Content Include="Content\images\sanpham\DH5.png" />
+    <Content Include="Content\images\sanpham\DH6.png" />
+    <Content Include="Content\images\sanpham\DH7.png" />
     <Content Include="Content\images\sanpham\DT1.png" />
     <Content Include="Content\images\sanpham\DT2.png" />
     <Content Include="Content\images\sanpham\DT3.png" />
