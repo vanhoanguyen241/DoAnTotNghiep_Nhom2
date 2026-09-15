@@ -65,10 +65,12 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         public ActionResult Sua(FormCollection collection)
         {
             int id;
-            if (!int.TryParse(collection["txt_manv"], out id)) return RedirectToAction("Index");
+            if (!int.TryParse(collection["txt_manv"], out id))
+                return RedirectToAction("Index");
 
             var nv = db.nhanviens.Find(id);
-            if (nv == null) return HttpNotFound();
+            if (nv == null)
+                return HttpNotFound();
 
             string hoten = collection["txt_hoten"]?.Trim();
             string dienthoai = collection["txt_dienthoai"]?.Trim();
@@ -80,9 +82,22 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 return View(nv);
             }
 
-            if (string.IsNullOrEmpty(vaitro) || (vaitro != "Admin" && vaitro != "NhanVien"))
+            if (string.IsNullOrEmpty(vaitro)
+                || (vaitro != "Admin" && vaitro != "NhanVien"))
             {
                 ViewBag.ThongBao = "Vai trò không hợp lệ!";
+                return View(nv);
+            }
+
+            // Không cho Admin tự hạ vai trò của chính mình xuống Nhân viên
+            int? maNVHienTai = Session["MaNV"] as int?;
+
+            if (maNVHienTai.HasValue
+                && maNVHienTai.Value == id
+                && string.Equals(nv.vaitro, "Admin")
+                && string.Equals(vaitro, "NhanVien"))
+            {
+                ViewBag.ThongBao = "Bạn không thể tự hạ vai trò Admin của chính mình xuống Nhân viên!";
                 return View(nv);
             }
 
@@ -91,6 +106,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             nv.vaitro = vaitro;
 
             db.SaveChanges();
+
             TempData["ThongBao"] = "Cập nhật nhân viên thành công!";
             return RedirectToAction("Index");
         }

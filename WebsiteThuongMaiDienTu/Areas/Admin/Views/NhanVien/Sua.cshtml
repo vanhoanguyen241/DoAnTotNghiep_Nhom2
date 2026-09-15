@@ -2,6 +2,9 @@
 @model nhanvien
 @{
     ViewBag.Title = "Sửa nhân viên";
+    int? maNVHienTai = Session["MaNV"] as int?;
+    bool dangSuaChinhMinh = maNVHienTai.HasValue && maNVHienTai.Value == Model.manv;
+    bool laAdmin = string.Equals(Model.vaitro, "Admin");
 }
 <div class="container-fluid px-4 py-4">
     <div class="row justify-content-center">
@@ -30,9 +33,30 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold text-dark">Vai trò <span class="text-danger ms-1">*</span></label>
                             <select name="txt_vaitro" class="form-select" required>
-                                <option value="Admin" @(Model.vaitro == "Admin" ? "selected" : "")>Admin</option>
-                                <option value="NhanVien" @(Model.vaitro == "NhanVien" ? "selected" : "")>Nhân viên</option>
+                                <option value="Admin" @(Model.vaitro == "Admin" ? "selected" : "")>
+                                    Admin
+                                </option>
+
+                                @if (dangSuaChinhMinh && laAdmin)
+                                {
+                                    <option value="NhanVien" disabled>
+                                        Nhân viên
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="NhanVien" @(Model.vaitro == "NhanVien" ? "selected" : "")>
+                                        Nhân viên
+                                    </option>
+                                }
                             </select>
+
+                            @if (dangSuaChinhMinh && laAdmin)
+                            {
+                                <small class="text-muted">
+                                    Bạn không thể tự hạ vai trò Admin của chính mình.
+                                </small>
+                            }
                         </div>
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-brand px-4"><i class="bi bi-check-circle me-1"></i> Lưu thay đổi</button>

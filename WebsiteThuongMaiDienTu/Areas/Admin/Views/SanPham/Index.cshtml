@@ -38,21 +38,21 @@
             </div>
         }
 
-        <div class="card-body">
-            @grid.GetHtml(
-                tableStyle: "table table-hover align-middle mb-0",
-                headerStyle: "table-light text-uppercase small text-secondary fw-bold",
-                footerStyle: "webgrid-pager",
-                mode: WebGridPagerModes.All,
-                firstText: "«",
-                previousText: "‹",
-                nextText: "›",
-                lastText: "»",
-                numericLinksCount: 3,
-                columns: grid.Columns(
-                    grid.Column(
-                        header: "Ảnh",
-                        format: @<img src="@Url.Content(item.hinh)" alt="@item.tensanpham" class="thumb-48" />
+    <div class="card-body">
+        @grid.GetHtml(
+            tableStyle: "table table-hover align-middle mb-0",
+            headerStyle: "table-light text-uppercase small text-secondary fw-bold",
+            footerStyle: "webgrid-pager",
+            mode: WebGridPagerModes.All,
+            firstText: "«",
+            previousText: "‹",
+            nextText: "›",
+            lastText: "»",
+            numericLinksCount: 3,
+            columns: grid.Columns(
+                grid.Column(
+                    header: "Ảnh",
+                    format: @<img src="@Url.Content(item.hinh)" alt="@item.tensanpham" class="thumb-48" />
 ),
 grid.Column("masanpham", header: "Mã SP"),
 grid.Column("tensanpham", header: "Tên sản phẩm"),
@@ -63,52 +63,47 @@ format: @<span>@string.Format("{0:N0}₫", item.dongia)</span>
 grid.Column(
 header: "Tồn kho",
 format: @<text>
-    @if (item.soluonghienco > 0)
-    {
-        <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">@item.soluonghienco</span>
-    }
-    else
-    {
-        <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Hết hàng</span>
-    }
-</text>
+        @if (item.soluonghienco > 0)
+        {
+            <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">@item.soluonghienco</span>
+        }
+        else
+        {
+            <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Hết hàng</span>
+        }
+    </text>
 ),
 grid.Column(
-header: "Quảng cáo",
-format: @<text>
-    @if (item.quangcao == true)
-    {
-        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2">Có</span>
-    }
-    else
-    {
-        <span class="text-muted small">Không</span>
-    }
-</text>
+ header: "Quảng cáo",
+ format: @<text>
+        <div class="d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" @(item.quangcao == true ? "checked" : "") disabled style="cursor: not-allowed;" />
+        </div>
+    </text>
 ),
 grid.Column(
 header: "Hành động",
 format: @<text>
-    @if (isAdmin)
-    {
-        <a href="@Url.Action("Sua", "SanPham", new { area = "Admin", id = item.masanpham })"
-           class="btn btn-sm btn-light text-primary me-1" title="Sửa">
-            <i class="bi bi-pencil-fill"></i>
-        </a>
-        <a href="@Url.Action("Xoa", "SanPham", new { area = "Admin", id = item.masanpham })"
-           class="btn btn-sm btn-light text-danger" title="Xóa"
-           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
-            <i class="bi bi-trash-fill"></i>
-        </a>
-    }
-    else
-    {
-        <span class="text-muted small">Chỉ xem</span>
-    }
-</text>
+        @if (isAdmin)
+        {
+            <a href="@Url.Action("Sua", "SanPham", new { area = "Admin", id = item.masanpham })"
+               class="btn btn-sm btn-light text-primary me-1" title="Sửa">
+                <i class="bi bi-pencil-fill"></i>
+            </a>
+            <a href="@Url.Action("Xoa", "SanPham", new { area = "Admin", id = item.masanpham })"
+               class="btn btn-sm btn-light text-danger" title="Xóa"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                <i class="bi bi-trash-fill"></i>
+            </a>
+        }
+        else
+        {
+            <span class="text-muted small">Chỉ xem</span>
+        }
+    </text>
 )
 )
 )
-        </div>
+    </div>
     </div>
 </div>

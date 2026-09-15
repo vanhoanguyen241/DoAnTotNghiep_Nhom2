@@ -64,27 +64,23 @@
                                     </small>
                                 </td>
                                 <td class="text-center">
+                                    <!-- Nhân viên và Admin đều được phép mở lại đơn -->
+                                    <a href="@Url.Action("MoLaiDon", "DuyetDon", new { area = "Admin", id = item.madathang })"
+                                       class="btn btn-sm btn-light text-success me-1"
+                                       title="Mở lại đơn để duyệt"
+                                       onclick="return confirm('Bạn có chắc chắn muốn MỞ LẠI đơn @item.madathang để duyệt lại?');">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </a>
+
+                                    <!-- Chỉ Admin được xóa đơn -->
                                     @if (isAdmin)
                                     {
-                                        <!-- NÚT MỞ LẠI ĐƠN -->
-                                        <a href="@Url.Action("MoLaiDon", "DuyetDon", new { area = "Admin", id = item.madathang })"
-                                           class="btn btn-sm btn-light text-success me-1"
-                                           title="Mở lại đơn để duyệt"
-                                           onclick="return confirm('Bạn có chắc chắn muốn MỞ LẠI đơn @item.madathang để duyệt lại?');">
-                                            <i class="bi bi-arrow-counterclockwise"></i>
-                                        </a>
-
-                                        <!-- NÚT XÓA ĐƠN -->
                                         <a href="@Url.Action("XoaDonTuChoi", "DuyetDon", new { area = "Admin", id = item.madathang })"
                                            class="btn btn-sm btn-light text-danger"
                                            title="Xóa đơn"
                                            onclick="return confirm('XÓA VĨNH VIỄN đơn @item.madathang? Khách hàng sẽ không thể tra cứu lại đơn này. Tiếp tục?');">
                                             <i class="bi bi-trash-fill"></i>
                                         </a>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted small">—</span>
                                     }
                                 </td>
                             </tr>
