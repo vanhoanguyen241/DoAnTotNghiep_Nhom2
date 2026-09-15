@@ -1,209 +1,267 @@
-﻿@{
-    ViewBag.Title = "Trang chủ quản trị";
-    bool isAdmin = ViewBag.IsAdmin == true;
+﻿@using WebsiteThuongMaiDienTu.Models
+@{
+    ViewBag.Title = "Tổng quan quản trị";
+
+    // Stats
+    int tongSanPham = ViewBag.TongSanPham ?? 0;
+    int donChoDuyet = ViewBag.DonChoDuyet ?? 0;
+    int tongKhachHang = ViewBag.TongKhachHang ?? 0;
+    int tongHoaDon = ViewBag.TongHoaDon ?? 0;
+
+    // Data for Tabs
+    var dsSanPham = ViewBag.DSSanPham as List<sanpham> ?? new List<sanpham>();
+    var dsKhachHang = ViewBag.DSKhachHang as List<khachhang> ?? new List<khachhang>();
+    var dsDonHang = ViewBag.DSDonHang as List<dathang> ?? new List<dathang>();
+    var dsHoaDon = ViewBag.DSHoaDon as List<hoadon> ?? new List<hoadon>();
 }
 
 <div class="container-fluid px-4 py-4">
-    <!-- Tiêu đề -->
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="h4 mb-1 fw-bold text-dark">
-                <i class="bi bi-speedometer2 me-2 text-brand-yellow"></i>
-                Trang chủ quản trị
+                Xin chào, <span class="text-brand-yellow">@Session["TenDangNhap"]</span>!
             </h2>
-            <p class="text-muted mb-0">
-                Xin chào <strong>@Session["TenDangNhap"]</strong>, đây là tổng quan các chức năng của hệ thống.
-            </p>
+            <p class="text-muted mb-0">Tổng quan dữ liệu hệ thống (Chế độ xem nhanh).</p>
         </div>
-        <div class="d-none d-md-block">
-            <span class="text-muted small bg-light px-3 py-2 rounded-pill">
-                <i class="bi bi-calendar3 me-1"></i> @DateTime.Now.ToString("dd/MM/yyyy")
-            </span>
+        <div class="d-none d-md-block text-end">
+            <div class="text-muted small">Hôm nay</div>
+            <div class="fw-bold text-dark">@DateTime.Now.ToString("dd/MM/yyyy")</div>
         </div>
     </div>
 
-    @if (TempData["ThongBao"] != null)
-    {
-        <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
-            @TempData["ThongBao"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    <div class="row g-4">
-
-        <!-- ═══ NHÓM 1: DANH MỤC & HÀNG HÓA ═══ -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 py-3 px-4">
-                    <h5 class="fw-bold text-dark mb-0">
-                        <i class="bi bi-box-seam-fill me-2 text-brand-yellow"></i>
-                        Danh mục & Hàng hóa
-                    </h5>
-                </div>
-                <div class="card-body p-4 pt-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "LoaiSanPham", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-tags-fill text-primary"></i>
-                                <span><strong>Loại sản phẩm</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Quản lý danh mục sản phẩm (Điện thoại, Laptop...)</small>
-                        </li>
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "DonViSanXuat", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-building text-info"></i>
-                                <span><strong>Đơn vị sản xuất</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Quản lý nhà sản xuất (Apple, Samsung...)</small>
-                        </li>
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-box-seam text-success"></i>
-                                <span><strong>Sản phẩm</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Thêm, sửa, xóa sản phẩm và quản lý tồn kho</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- ═══ NHÓM 2: KHÁCH HÀNG ═══ -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 py-3 px-4">
-                    <h5 class="fw-bold text-dark mb-0">
-                        <i class="bi bi-people-fill me-2 text-brand-yellow"></i>
-                        Khách hàng
-                    </h5>
-                </div>
-                <div class="card-body p-4 pt-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-person-lines-fill text-warning"></i>
-                                <span><strong>Quản lý Khách hàng</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Thêm, sửa thông tin khách hàng. Không xóa nếu đã có hóa đơn.</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- ═══ NHÓM 3: NGHIỆP VỤ BÁN HÀNG ═══ -->
-        <div class="col-md-6 col-xl-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-header bg-white border-0 py-3 px-4">
-                    <h5 class="fw-bold text-dark mb-0">
-                        <i class="bi bi-receipt-cutoff me-2 text-brand-yellow"></i>
-                        Nghiệp vụ bán hàng
-                    </h5>
-                </div>
-                <div class="card-body p-4 pt-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-receipt text-primary"></i>
-                                <span><strong>Hóa đơn</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Tạo mới, sửa, xóa hóa đơn bán hàng</small>
-                        </li>
-                        <li class="list-group-item border-0 px-0 py-2">
-                            <a href="@Url.Action("Index", "ChuyenHang", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-truck text-info"></i>
-                                <span><strong>Giao hàng</strong></span>
-                            </a>
-                            <small class="text-muted d-block ms-4">Lập phiếu giao, gán nhân viên, xác nhận đã giao</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- ═══ NHÓM 4: HỆ THỐNG (Chỉ Admin) ═══ -->
-        @if (isAdmin)
-        {
-            <div class="col-md-6 col-xl-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-white border-0 py-3 px-4">
-                        <h5 class="fw-bold text-dark mb-0">
-                            <i class="bi bi-shield-lock-fill me-2 text-brand-yellow"></i>
-                            Hệ thống <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill small ms-1">Admin</span>
-                        </h5>
-                    </div>
-                    <div class="card-body p-4 pt-0">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item border-0 px-0 py-2">
-                                <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                    <i class="bi bi-key-fill text-secondary"></i>
-                                    <span><strong>Tài khoản</strong></span>
-                                </a>
-                                <small class="text-muted d-block ms-4">Tạo tài khoản đăng nhập cho nhân viên</small>
-                            </li>
-                            <li class="list-group-item border-0 px-0 py-2">
-                                <a href="@Url.Action("Index", "NhanVien", new { area = "Admin" })" class="text-decoration-none text-dark d-flex align-items-center gap-2">
-                                    <i class="bi bi-person-badge text-dark"></i>
-                                    <span><strong>Nhân viên</strong></span>
-                                </a>
-                                <small class="text-muted d-block ms-4">Quản lý thông tin và vai trò nhân viên</small>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        }
-
-        <!-- ═══ GHI CHÚ QUY TRÌNH ═══ -->
-        <div class="col-12">
-            <div class="card border-0 shadow-sm rounded-4 border-start border-4 text-brand-yellow" style="border- !important;">
+    <!-- Hàng 1: Thẻ thống kê -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 bg-gradient-yellow text-dark">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold text-dark mb-3">
-                        <i class="bi bi-lightbulb-fill me-2 text-brand-yellow"></i>
-                        Quy trình xử lý đơn hàng
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-3 col-6">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary px-2 py-2">1</span>
-                                <div>
-                                    <strong class="text-dark small d-block">Khách đặt hàng</strong>
-                                    <small class="text-muted">Phiếu đặt hàng chờ duyệt</small>
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-uppercase small fw-bold opacity-75">Sản phẩm</div>
+                            <div class="h2 mb-0 fw-bold mt-1">@tongSanPham</div>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-2 py-2">2</span>
-                                <div>
-                                    <strong class="text-dark small d-block">Duyệt đơn</strong>
-                                    <small class="text-muted">Kiểm tra kho → Tạo hóa đơn</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-2 py-2">3</span>
-                                <div>
-                                    <strong class="text-dark small d-block">Thanh toán</strong>
-                                    <small class="text-muted">Xác nhận đã nhận tiền</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge rounded-pill bg-info bg-opacity-10 text-info px-2 py-2">4</span>
-                                <div>
-                                    <strong class="text-dark small d-block">Giao hàng</strong>
-                                    <small class="text-muted">Lập phiếu → Giao → Hoàn tất</small>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="bg-white bg-opacity-25 rounded-3 p-3"><i class="bi bi-box-seam-fill fs-2"></i></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #fff3cd;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-uppercase small fw-bold text-warning-emphasis">Đơn chờ duyệt</div>
+                            <div class="h2 mb-0 fw-bold text-warning-emphasis mt-1">@donChoDuyet</div>
+                        </div>
+                        <div class="bg-warning bg-opacity-25 rounded-3 p-3 text-warning-emphasis"><i class="bi bi-hourglass-split fs-2"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #d1e7dd;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-uppercase small fw-bold text-success-emphasis">Khách hàng</div>
+                            <div class="h2 mb-0 fw-bold text-success-emphasis mt-1">@tongKhachHang</div>
+                        </div>
+                        <div class="bg-success bg-opacity-25 rounded-3 p-3 text-success-emphasis"><i class="bi bi-people-fill fs-2"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: #cfe2ff;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-uppercase small fw-bold text-primary-emphasis">Hóa đơn</div>
+                            <div class="h2 mb-0 fw-bold text-primary-emphasis mt-1">@tongHoaDon</div>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 rounded-3 p-3 text-primary-emphasis"><i class="bi bi-receipt-cutoff fs-2"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Hàng 2: Tab Xem nhanh dữ liệu -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white border-0 pt-3 px-4">
+            <ul class="nav nav-tabs admin-dashboard-tabs" id="dashboardTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="sp-tab" data-bs-toggle="tab" data-bs-target="#sp-pane" type="button" role="tab">
+                        <i class="bi bi-box-seam me-1"></i> Sản phẩm
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="kh-tab" data-bs-toggle="tab" data-bs-target="#kh-pane" type="button" role="tab">
+                        <i class="bi bi-people me-1"></i> Khách hàng
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="dh-tab" data-bs-toggle="tab" data-bs-target="#dh-pane" type="button" role="tab">
+                        <i class="bi bi-clipboard-data me-1"></i> Đơn đặt hàng
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="hd-tab" data-bs-toggle="tab" data-bs-target="#hd-pane" type="button" role="tab">
+                        <i class="bi bi-receipt me-1"></i> Hóa đơn
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="tab-content" id="dashboardTabContent">
+
+                <!-- TAB 1: SẢN PHẨM -->
+                <div class="tab-pane fade show active" id="sp-pane" role="tabpanel">
+                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Hiển thị 10 sản phẩm mới nhất (Chỉ xem)</span>
+                        <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })" class="btn btn-sm btn-brand">Xem tất cả &rarr;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:60px;">Ảnh</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th class="text-end">Đơn giá</th>
+                                    <th class="text-center">Tồn kho</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var sp in dsSanPham)
+                                {
+                                    <tr>
+                                        <td><img src="@Url.Content(sp.hinh)" class="thumb-48" alt="img" /></td>
+                                        <td><strong>@sp.masanpham</strong></td>
+                                        <td>@sp.tensanpham</td>
+                                        <td class="text-end text-danger fw-bold">@string.Format("{0:N0}₫", sp.dongia)</td>
+                                        <td class="text-center">
+                                            @if (sp.soluonghienco > 0)
+                                            {
+                                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">@sp.soluonghienco</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Hết</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 2: KHÁCH HÀNG -->
+                <div class="tab-pane fade" id="kh-pane" role="tabpanel">
+                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Hiển thị 10 khách hàng mới nhất (Chỉ xem)</span>
+                        <a href="@Url.Action("Index", "KhachHang", new { area = "Admin" })" class="btn btn-sm btn-brand">Xem tất cả &rarr;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:80px;">Mã KH</th>
+                                    <th>Họ tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var kh in dsKhachHang)
+                                {
+                                    <tr>
+                                        <td><strong>@kh.makh</strong></td>
+                                        <td>@kh.hoten</td>
+                                        <td>@(string.IsNullOrEmpty(kh.SDT) ? "—" : kh.SDT)</td>
+                                        <td class="text-muted small">@kh.diachi</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: ĐƠN ĐẶT HÀNG (Chỉ hiển thị checkbox) -->
+                <div class="tab-pane fade" id="dh-pane" role="tabpanel">
+                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Hiển thị 10 đơn đặt hàng gần nhất (Chỉ xem)</span>
+                        <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })" class="btn btn-sm btn-brand">Xem tất cả &rarr;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:80px;">Mã đơn</th>
+                                    <th>Khách hàng</th>
+                                    <th>Ngày đặt</th>
+                                    <th class="text-center">Đã duyệt</th>
+                                    <th class="text-end">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var dh in dsDonHang)
+                                {
+                                    decimal tongTien = dh.chitietdathangs != null ? dh.chitietdathangs.Sum(ct => ct.thanhtien) : 0;
+                                    bool daDuyet = dh.trangthai == 1;
+                                    <tr>
+                                        <td><strong>@dh.madathang</strong></td>
+                                        <td>@(dh.khachhang != null ? dh.khachhang.hoten : "—")</td>
+                                        <td>@dh.ngaydathang.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input" @(daDuyet ? "checked" : "") disabled />
+                                        </td>
+                                        <td class="text-end text-danger fw-bold">@string.Format("{0:N0}₫", tongTien)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: HÓA ĐƠN (Chỉ hiển thị checkbox) -->
+                <div class="tab-pane fade" id="hd-pane" role="tabpanel">
+                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Hiển thị 10 hóa đơn mới nhất (Chỉ xem)</span>
+                        <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })" class="btn btn-sm btn-brand">Xem tất cả &rarr;</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:80px;">Mã HĐ</th>
+                                    <th>Khách hàng</th>
+                                    <th>Ngày lập</th>
+                                    <th class="text-center">Thanh toán</th>
+                                    <th class="text-end">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var hd in dsHoaDon)
+                                {
+                                    <tr>
+                                        <td><strong>@hd.mahoadon</strong></td>
+                                        <td>@(hd.khachhang != null ? hd.khachhang.hoten : "—")</td>
+                                        <td>@hd.ngaydathang.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">
+                                            <input type="checkbox" class="form-check-input" @(hd.dathanhtoan ? "checked" : "") disabled />
+                                        </td>
+                                        <td class="text-end text-danger fw-bold">@string.Format("{0:N0}₫", hd.tongtien)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>

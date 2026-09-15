@@ -33,7 +33,6 @@
                         <tr>
                             <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã HĐ</th>
                             <th class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
-                            <th class="text-uppercase text-secondary small fw-bold">Địa chỉ giao</th>
                             <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày đặt</th>
                             <th style="width: 110px;" class="text-uppercase text-secondary small fw-bold">Ngày giao</th>
                             <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Tổng tiền</th>
@@ -48,19 +47,6 @@
                                 <td><strong class="text-dark">@item.mahoadon</strong></td>
                                 <td>
                                     @(kh != null ? kh.hoten : "—")
-                                    @if (kh != null && !string.IsNullOrEmpty(kh.SDT))
-                                    {
-                                        <br />
-                                        <small class="text-muted">@kh.SDT</small>
-                                    }
-                                </td>
-                                <td>
-                                    @(kh != null ? kh.diachi : "—")
-                                    @if (!string.IsNullOrEmpty(item.ghichu))
-                                    {
-                                        <br />
-                                        <small class="text-muted" title="@item.ghichu">@item.ghichu</small>
-                                    }
                                 </td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>@item.ngaygiaohang.ToString("dd/MM/yyyy")</td>
