@@ -5,7 +5,6 @@
     var hoaDon = ViewBag.HoaDon as hoadon;
     bool isAdmin = ViewBag.IsAdmin == true;
 }
-
 @if (hoaDon == null)
 {
     <div class="container-fluid px-4 py-4">
@@ -29,7 +28,6 @@ else
                     <i class="bi bi-receipt-cutoff me-2 text-brand-yellow"></i> Chi tiết hóa đơn @hoaDon.mahoadon
                 </h2>
                 <div class="d-flex gap-2">
-                    @* Nút duyệt thanh toán — bên trái nút Danh sách hóa đơn *@
                     @if (!hoaDon.dathanhtoan)
                     {
                         <a href="@Url.Action("DuyetThanhToan", "ThanhToan", new { area = "Admin", id = hoaDon.mahoadon })"
@@ -44,7 +42,6 @@ else
                     </a>
                 </div>
             </div>
-
             @if (TempData["ThongBao"] != null)
             {
                 <div class="card-body pb-0">
@@ -54,8 +51,7 @@ else
                     </div>
                 </div>
             }
-
-            <!-- Khu vực xanh dương — ĐÃ BỎ TỔNG TIỀN, thêm đầy đủ thông tin -->
+            <!-- Khu vực thông tin -->
             <div class="card-body p-4 pb-0">
                 <div class="alert alert-info mb-4">
                     <div class="row g-3">
@@ -92,7 +88,7 @@ else
                         </div>
                         <div class="col-md-3">
                             <strong>Hình thức nhận:</strong><br />
-                            @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                                    @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
                         </div>
                         @if (!string.IsNullOrEmpty(hoaDon.ghichu))
                         {
@@ -103,7 +99,6 @@ else
                     </div>
                 </div>
             </div>
-
             <!-- Bảng chi tiết sản phẩm -->
             @if (Model != null && Model.Any())
             {
@@ -132,7 +127,6 @@ else
                         </tbody>
                     </table>
                 </div>
-                <!-- Tổng tiền nằm ở cuối bảng, KHÔNG nằm trong khu vực xanh -->
                 <div class="card-body">
                     <div class="text-end mt-2">
                         <h4 class="mb-0">

@@ -7,7 +7,6 @@
     var tonKho = ViewBag.TonKho as Dictionary<string, int>;
     if (tonKho == null) { tonKho = new Dictionary<string, int>(); }
 }
-
 @if (datHang == null)
 {
     <div class="container-fluid px-4 py-4">
@@ -34,7 +33,6 @@ else
                     <i class="bi bi-arrow-left me-1"></i> Quay lại
                 </a>
             </div>
-
             @if (TempData["ThongBao"] != null)
             {
                 <div class="card-body pb-0">
@@ -44,7 +42,6 @@ else
                     </div>
                 </div>
             }
-
             <!-- Thông tin khách hàng & đơn -->
             <div class="card-body p-4 pb-0">
                 <div class="alert alert-info mb-4">
@@ -63,8 +60,8 @@ else
                         </div>
                         <div class="col-md-3">
                             <strong>Hình thức:</strong><br />
-                            @(datHang.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
-                        </div>
+                                    @(datHang.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                            </div>
                         @if (!string.IsNullOrEmpty(datHang.ghichu))
                         {
                             <div class="col-12 mt-2">
@@ -74,13 +71,11 @@ else
                     </div>
                 </div>
             </div>
-
             @if (Model != null && Model.Any())
             {
                 using (Html.BeginForm("XuLyDuyet", "DuyetDon", new { area = "Admin" }, FormMethod.Post, new { id = "formDuyetDon" }))
                 {
                     <input type="hidden" name="madathang" value="@datHang.madathang" />
-
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
@@ -141,7 +136,6 @@ else
                             </tbody>
                         </table>
                     </div>
-
                     <div class="card-body border-top">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <div>
@@ -174,7 +168,6 @@ else
             }
         </div>
     </div>
-
     <!-- Modal Từ chối -->
     <div class="modal fade" id="modalTuChoi" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -209,14 +202,11 @@ else
             </div>
         </div>
     </div>
-
     <script>
-        // Tính lại thành tiền + tổng tiền khi nhân viên thay đổi số lượng duyệt
         (function () {
             function formatVND(n) {
                 return new Intl.NumberFormat('vi-VN').format(n) + '₫';
             }
-
             function recalc() {
                 var tong = 0;
                 document.querySelectorAll('.sl-duyet').forEach(function (input) {
@@ -225,17 +215,10 @@ else
                     var price = parseInt(priceCell.textContent.replace(/[^\d]/g, ''), 10) || 0;
                     var sl = parseInt(input.value, 10) || 0;
                     if (sl < 0) sl = 0;
-
                     var ton = parseInt(input.getAttribute('data-ton'), 10) || 0;
-                    var dat = parseInt(input.getAttribute('data-dat'), 10) || 0; // Lấy số lượng khách đặt
-
-                    // Chặn không cho vượt quá tồn kho VÀ số lượng khách đặt
+                    var dat = parseInt(input.getAttribute('data-dat'), 10) || 0;
                     var maxAllowed = Math.min(ton, dat);
-                    if (sl > maxAllowed) {
-                        sl = maxAllowed;
-                        input.value = maxAllowed;
-                    }
-
+                    if (sl > maxAllowed) { sl = maxAllowed; input.value = maxAllowed; }
                     var tt = price * sl;
                     tong += tt;
                     var ttCell = tr.querySelector('.thanh-tien');
@@ -244,13 +227,9 @@ else
                 var el = document.getElementById('tongTienMoi');
                 if (el) el.textContent = formatVND(tong);
             }
-
             document.addEventListener('input', function (e) {
-                if (e.target && e.target.classList && e.target.classList.contains('sl-duyet')) {
-                    recalc();
-                }
+                if (e.target && e.target.classList && e.target.classList.contains('sl-duyet')) recalc();
             });
-
             document.addEventListener('DOMContentLoaded', recalc);
         })();
     </script>
