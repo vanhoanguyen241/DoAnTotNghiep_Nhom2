@@ -5,6 +5,7 @@
     int? maNV = Session["MaNV"] as int?;
     ViewBag.Title = isAdmin ? "Quản lý giao hàng" : "Đơn hàng của tôi";
 }
+
 <div class="container-fluid px-4 py-4">
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
@@ -16,6 +17,7 @@
                 <i class="bi bi-plus-circle me-1"></i> Đơn chờ lập phiếu
             </a>
         </div>
+
         @if (TempData["ThongBao"] != null)
         {
             <div class="card-body pb-0">
@@ -25,6 +27,7 @@
                 </div>
             </div>
         }
+
         @if (Model != null && Model.Any())
         {
             <div class="table-responsive">
@@ -33,12 +36,11 @@
                         <tr>
                             <th style="width: 80px;" class="text-uppercase text-secondary small fw-bold">Mã phiếu</th>
                             <th style="width: 90px;" class="text-uppercase text-secondary small fw-bold">Hóa đơn</th>
-                            <th class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
-                            <th class="text-uppercase text-secondary small fw-bold">Địa chỉ giao</th>
+                            <th style="width: 160px;" class="text-uppercase text-secondary small fw-bold">Khách hàng</th>
                             <th style="width: 160px;" class="text-uppercase text-secondary small fw-bold">Nhân viên giao</th>
                             <th style="width: 140px;" class="text-uppercase text-secondary small fw-bold">Ngày giao</th>
-                            <th style="width: 110px;" class="text-center text-uppercase text-secondary small fw-bold">Thanh toán</th>
-                            <th style="width: 110px;" class="text-center text-uppercase text-secondary small fw-bold">Đã giao</th>
+                            <th style="width: 140px;" class="text-center text-uppercase text-secondary small fw-bold">Thanh toán</th>
+                            <th style="width: 100px;" class="text-center text-uppercase text-secondary small fw-bold">Đã giao</th>
                             <th style="width: 220px;" class="text-center text-uppercase text-secondary small fw-bold">Hành động</th>
                         </tr>
                     </thead>
@@ -58,19 +60,6 @@
                                 </td>
                                 <td>
                                     @(kh != null ? kh.hoten : "—")
-                                    @if (kh != null && !string.IsNullOrEmpty(kh.SDT))
-                                    {
-                                        <br />
-                                        <small class="text-muted">@kh.SDT</small>
-                                    }
-                                </td>
-                                <td>
-                                    @(kh != null ? kh.diachi : "—")
-                                    @if (hd != null && !string.IsNullOrEmpty(hd.ghichu))
-                                    {
-                                        <br />
-                                        <small class="text-muted" title="@hd.ghichu">@hd.ghichu</small>
-                                    }
                                 </td>
                                 <td>
                                     @if (nv != null)
@@ -116,20 +105,21 @@
                                 <td class="text-center">
                                     @if (!item.daxuli)
                                     {
-                                        <!-- Nút gán nhân viên -->
+                                        <!-- Nút gán nhân viên: cả Admin và Nhân viên đều thấy -->
                                         <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
                                            class="btn btn-sm btn-light text-primary me-1"
                                            title="Gán nhân viên giao">
                                             <i class="bi bi-person-gear"></i>
                                         </a>
+
                                         <!-- Nút xác nhận nhanh: chỉ Admin -->
                                         if (isAdmin)
                                         {
                                             <a href="@Url.Action("XacNhanDaGiao", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                               class="btn btn-sm btn-outline-success"
+                                               class="btn btn-sm btn-success d-inline-flex align-items-center gap-1"
                                                title="Xác nhận đã giao hàng"
                                                onclick="return confirm('Xác nhận phiếu giao @item.machuyenhang đã giao hàng thành công?');">
-                                                <i class="bi bi-check-circle-fill"></i>
+                                                <i class="bi bi-check-circle-fill"></i> Đã giao
                                             </a>
                                         }
                                     }
@@ -137,7 +127,8 @@
                                     {
                                         <span class="text-muted small">Hoàn thành</span>
                                     }
-                                    <!-- Nút tự xác nhận của Nhân viên -->
+
+                                    <!-- Nút tự xác nhận của Nhân viên (chỉ hiện khi chưa giao + đúng NV được gán + không phải Admin) -->
                                     @if (!isAdmin && !item.daxuli && item.manv == maNV)
                                     {
                                         using (Html.BeginForm(
@@ -152,11 +143,13 @@
                                             }))
                                         {
                                             <input type="hidden" name="id" value="@item.machuyenhang" />
-                                            <button type="submit" class="btn btn-sm btn-brand">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-brand">
                                                 <i class="bi bi-check-circle-fill me-1"></i> Đã giao
                                             </button>
                                         }
                                     }
+
                                     <!-- NÚT XÁC NHẬN THU TIỀN CHO NHÂN VIÊN -->
                                     @if (!isAdmin && item.manv == maNV && hd != null && !hd.dathanhtoan)
                                     {
@@ -172,7 +165,8 @@
                                             }))
                                         {
                                             <input type="hidden" name="id" value="@item.machuyenhang" />
-                                            <button type="submit" class="btn btn-sm btn-outline-success mt-1"
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-success mt-1"
                                                     title="Xác nhận đã thu tiền mặt">
                                                 <i class="bi bi-cash-coin me-1"></i> Đã thu tiền
                                             </button>
