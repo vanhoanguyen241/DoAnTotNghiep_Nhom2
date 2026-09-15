@@ -292,14 +292,11 @@
     <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\HoaDon\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ChiTietHoaDon\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\DuyetDon\Index.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\ChiTiet.cshtml" />
     <Content Include="Areas\Admin\Views\DuyetDon\DanhSachTuChoi.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\ChoLapPhieu.cshtml" />
     <Content Include="Areas\Admin\Views\ChuyenHang\GanNhanVien.cshtml" />
-    <Content Include="Areas\Admin\Views\ThanhToan\DaThanhToan.cshtml" />
-    <Content Include="Areas\Admin\Views\ThanhToan\Index.cshtml" />
     <Content Include="Areas\Admin\Views\NhanVien\Index.cshtml" />
     <Content Include="Areas\Admin\Views\TaiKhoan\TaoMoi.cshtml" />
     <Content Include="Areas\Admin\Views\TaiKhoan\Sua.cshtml" />

@@ -12,9 +12,17 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         // GET: Admin/HoaDon
         public ActionResult Index()
         {
+            // Danh sách hóa đơn (như cũ)
             var dshd = db.hoadons
                 .OrderByDescending(h => h.ngaydathang)
                 .ToList();
+
+            // Danh sách đơn chờ duyệt (gộp từ DuyetDon)
+            var dsChoDuyet = db.dathangs
+                .Where(d => d.trangthai == 0)
+                .OrderByDescending(d => d.ngaydathang)
+                .ToList();
+            ViewBag.DsChoDuyet = dsChoDuyet;
 
             return View(dshd);
         }

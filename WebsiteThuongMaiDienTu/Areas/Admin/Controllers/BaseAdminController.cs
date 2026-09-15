@@ -30,7 +30,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 { "ChiTietHoaDon", new[] { "Index" } },
 
                 // Nhân viên được xem và duyệt thanh toán, không được huỷ thanh toán
-                { "ThanhToan", new[] { "Index", "DaThanhToan", "DuyetThanhToan" } },
+                { "ThanhToan", new[] { "DuyetThanhToan" } },
 
                 // Nhân viên được xem, duyệt, từ chối đơn; không được xoá đơn từ chối
                 {

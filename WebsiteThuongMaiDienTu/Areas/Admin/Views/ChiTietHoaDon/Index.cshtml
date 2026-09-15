@@ -11,10 +11,7 @@
     <div class="container-fluid px-4 py-4">
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4 text-center">
-                <div class="alert alert-danger">
-                    Không tìm thấy hóa đơn.
-                </div>
-
+                <div class="alert alert-danger">Không tìm thấy hóa đơn.</div>
                 <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })" class="btn btn-light px-4 border shadow-sm">
                     <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách hóa đơn
                 </a>
@@ -26,14 +23,21 @@ else
 {
     <div class="container-fluid px-4 py-4">
         <div class="card border-0 shadow-sm rounded-4">
+            <!-- Header -->
             <div class="card-header bg-white d-flex justify-content-between align-items-center border-0 py-3">
                 <h2 class="h4 mb-0 fw-bold text-dark">
                     <i class="bi bi-receipt-cutoff me-2 text-brand-yellow"></i> Chi tiết hóa đơn @hoaDon.mahoadon
                 </h2>
-
                 <div class="d-flex gap-2">
-
-
+                    @* Nút duyệt thanh toán — bên trái nút Danh sách hóa đơn *@
+                    @if (!hoaDon.dathanhtoan)
+                    {
+                        <a href="@Url.Action("DuyetThanhToan", "ThanhToan", new { area = "Admin", id = hoaDon.mahoadon })"
+                           class="btn btn-success shadow-sm d-inline-flex align-items-center"
+                           onclick="return confirm('Xác nhận khách hàng đã thanh toán hóa đơn @hoaDon.mahoadon?');">
+                            <i class="bi bi-cash-coin me-1"></i> Duyệt thanh toán
+                        </a>
+                    }
                     <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
                        class="btn btn-light border shadow-sm">
                         <i class="bi bi-arrow-left me-1"></i> Danh sách hóa đơn
@@ -51,19 +55,30 @@ else
                 </div>
             }
 
+            <!-- Khu vực xanh dương — ĐÃ BỎ TỔNG TIỀN, thêm đầy đủ thông tin -->
             <div class="card-body p-4 pb-0">
                 <div class="alert alert-info mb-4">
-                    <div class="row g-2">
-                        <div class="col-md-3">
+                    <div class="row g-3">
+                        <div class="col-md-4">
                             <strong>Khách hàng:</strong><br />
                             @(hoaDon.khachhang != null ? hoaDon.khachhang.hoten : "—")
                         </div>
-
+                        <div class="col-md-4">
+                            <strong>Số điện thoại:</strong><br />
+                            @(hoaDon.khachhang != null && !string.IsNullOrEmpty(hoaDon.khachhang.SDT) ? hoaDon.khachhang.SDT : "—")
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Địa chỉ:</strong><br />
+                            @(hoaDon.khachhang != null ? hoaDon.khachhang.diachi : "—")
+                        </div>
                         <div class="col-md-3">
                             <strong>Ngày đặt:</strong><br />
                             @hoaDon.ngaydathang.ToString("dd/MM/yyyy")
                         </div>
-
+                        <div class="col-md-3">
+                            <strong>Ngày giao:</strong><br />
+                            @hoaDon.ngaygiaohang.ToString("dd/MM/yyyy")
+                        </div>
                         <div class="col-md-3">
                             <strong>Thanh toán:</strong><br />
                             @if (hoaDon.dathanhtoan)
@@ -75,54 +90,49 @@ else
                                 <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Chưa thanh toán</span>
                             }
                         </div>
-
                         <div class="col-md-3">
-                            <strong>Tổng tiền:</strong><br />
-                            <span class="text-danger fw-bold">@string.Format("{0:N0}₫", hoaDon.tongtien)</span>
+                            <strong>Hình thức nhận:</strong><br />
+                            @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
                         </div>
+                        @if (!string.IsNullOrEmpty(hoaDon.ghichu))
+                        {
+                            <div class="col-12">
+                                <strong>Ghi chú:</strong> @hoaDon.ghichu
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
 
+            <!-- Bảng chi tiết sản phẩm -->
             @if (Model != null && Model.Any())
             {
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 120px;" class="text-uppercase text-secondary small fw-bold">Mã SP</th>
+                                <th style="width:120px;" class="text-uppercase text-secondary small fw-bold">Mã SP</th>
                                 <th class="text-uppercase text-secondary small fw-bold">Tên sản phẩm</th>
-                                <th style="width: 100px;" class="text-center text-uppercase text-secondary small fw-bold">Số lượng</th>
-                                <th style="width: 130px;" class="text-end text-uppercase text-secondary small fw-bold">Đơn giá</th>
-                                <th style="width: 140px;" class="text-end text-uppercase text-secondary small fw-bold">Thành tiền</th>
+                                <th style="width:100px;" class="text-center text-uppercase text-secondary small fw-bold">Số lượng</th>
+                                <th style="width:130px;" class="text-end text-uppercase text-secondary small fw-bold">Đơn giá</th>
+                                <th style="width:140px;" class="text-end text-uppercase text-secondary small fw-bold">Thành tiền</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach (var item in Model)
                             {
                                 <tr>
                                     <td><strong class="text-dark">@item.masanpham</strong></td>
-
-                                    <td>
-                                        @(item.sanpham != null ? item.sanpham.tensanpham : "—")
-                                    </td>
-
+                                    <td>@(item.sanpham != null ? item.sanpham.tensanpham : "—")</td>
                                     <td class="text-center fw-medium">@item.soluong</td>
-
-                                    <td class="text-end">
-                                        @string.Format("{0:N0}₫", item.dongia)
-                                    </td>
-
-                                    <td class="text-end fw-bold text-danger">
-                                        @string.Format("{0:N0}₫", item.thanhtien)
-                                    </td>
+                                    <td class="text-end">@string.Format("{0:N0}₫", item.dongia)</td>
+                                    <td class="text-end fw-bold text-danger">@string.Format("{0:N0}₫", item.thanhtien)</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-
+                <!-- Tổng tiền nằm ở cuối bảng, KHÔNG nằm trong khu vực xanh -->
                 <div class="card-body">
                     <div class="text-end mt-2">
                         <h4 class="mb-0">

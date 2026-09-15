@@ -9,17 +9,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
     public class DuyetDonController : BaseAdminController
     {
         private QLBanHang_Model db = new QLBanHang_Model();
-
-        // GET: Admin/DuyetDon
-        public ActionResult Index()
-        {
-            var dsChoDuyet = db.dathangs
-                .Where(d => d.trangthai == 0)
-                .OrderByDescending(d => d.ngaydathang)
-                .ToList();
-            return View(dsChoDuyet);
-        }
-
         // GET: Admin/DuyetDon/ChiTiet/5
         public ActionResult ChiTiet(int id)
         {
@@ -27,12 +16,12 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (dh == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
             if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
 
             ViewBag.DatHang = dh;
@@ -59,18 +48,18 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         {
             int id;
             if (!int.TryParse(collection["madathang"], out id))
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
 
             var dh = db.dathangs.Find(id);
             if (dh == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
             if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
 
             var dsChiTiet = db.chitietdathangs
@@ -140,7 +129,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 db.SaveChanges();
 
                 TempData["ThongBao"] = "Đơn hàng đã được tự động từ chối (không có sản phẩm nào được duyệt)!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
 
             // Tạo hóa đơn mới từ các dòng được duyệt
@@ -202,7 +191,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             db.SaveChanges();
 
             TempData["ThongBao"] = "Duyệt đơn hàng thành công! Đã tạo hóa đơn " + hd.mahoadon;
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
         }
 
         // POST: Admin/DuyetDon/TuChoi
@@ -213,12 +202,12 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (dh == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
             if (dh.trangthai != 0)
             {
                 TempData["ThongBao"] = "Đơn hàng này đã được xử lý!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
             }
 
             dh.trangthai = 2;
@@ -229,7 +218,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             db.SaveChanges();
 
             TempData["ThongBao"] = "Đã từ chối đơn hàng!";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "HoaDon", new { area = "Admin" });
         }
 
         // GET: Admin/DuyetDon/DanhSachTuChoi
