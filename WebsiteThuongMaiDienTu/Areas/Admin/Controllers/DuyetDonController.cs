@@ -255,5 +255,35 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             TempData["ThongBao"] = "Đã xóa đơn hàng bị từ chối!";
             return RedirectToAction("DanhSachTuChoi");
         }
+
+        // GET: Admin/DuyetDon/MoLaiDon/5
+        public ActionResult MoLaiDon(int id)
+        {
+            var dh = db.dathangs.Find(id);
+            if (dh == null)
+            {
+                TempData["ThongBao"] = "Không tìm thấy đơn đặt hàng!";
+                return RedirectToAction("DanhSachTuChoi");
+            }
+
+            if (dh.trangthai != 2)
+            {
+                TempData["ThongBao"] = "Chỉ có thể mở lại đơn hàng đã bị từ chối!";
+                return RedirectToAction("DanhSachTuChoi");
+            }
+
+            // 1. Cập nhật trạng thái về Chờ duyệt (0)
+            dh.trangthai = 0;
+
+            // 2. Lưu vết vào ghi chú
+            string ghiChuMoLai = " | Đã mở lại đơn để duyệt lại vào " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            dh.ghichu = (dh.ghichu ?? "") + ghiChuMoLai;
+            if (dh.ghichu.Length > 1000) dh.ghichu = dh.ghichu.Substring(0, 1000);
+
+            db.SaveChanges();
+
+            TempData["ThongBao"] = "Đã mở lại đơn hàng " + id + " thành công! Đơn sẽ xuất hiện ở danh sách chờ duyệt.";
+            return RedirectToAction("DanhSachTuChoi");
+        }
     }
 }

@@ -41,7 +41,8 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                         "ChiTiet",
                         "XuLyDuyet",
                         "TuChoi",
-                        "DanhSachTuChoi"
+                        "DanhSachTuChoi",
+                        "MoLaiDon"
                     }
                 },
 
