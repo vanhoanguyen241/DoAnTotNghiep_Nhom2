@@ -59,7 +59,16 @@
                                     </a>
                                 </td>
                                 <td>
-                                    @(kh != null ? kh.hoten : "—")
+                                    @if (kh != null)
+                                    {
+                                        <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = kh.makh })" class="text-decoration-none fw-medium text-primary">
+                                            @kh.hoten
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>—</span>
+                                    }
                                 </td>
                                 <td>
                                     @if (nv != null)

@@ -16,7 +16,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 { "TaiKhoan", new[] { "DangXuat" } },
 
                 // Nhân viên được xem, thêm, sửa khách hàng; không xoá
-                { "KhachHang", new[] { "Index", "TaoMoi", "Sua" } },
+                { "KhachHang", new[] { "Index", "TaoMoi", "Sua", "ChiTiet" } },
 
                 // Nhân viên chỉ xem sản phẩm
                 { "SanPham", new[] { "Index" } },

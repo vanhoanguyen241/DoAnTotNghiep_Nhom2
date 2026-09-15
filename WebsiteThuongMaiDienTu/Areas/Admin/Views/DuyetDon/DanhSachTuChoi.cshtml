@@ -45,7 +45,18 @@
                         {
                             <tr>
                                 <td><strong class="text-dark">@item.madathang</strong></td>
-                                <td>@(item.khachhang != null ? item.khachhang.hoten : "—")</td>
+                                <td>
+                                    @if (item.khachhang != null)
+                                    {
+                                        <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = item.khachhang.makh })" class="text-decoration-none fw-medium text-primary" title="Xem thông tin KH">
+                                            @item.khachhang.hoten
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>—</span>
+                                    }
+                                </td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     <small class="text-muted">

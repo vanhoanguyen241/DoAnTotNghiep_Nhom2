@@ -213,7 +213,18 @@
                                     bool daDuyet = dh.trangthai == 1;
                                     <tr>
                                         <td><strong>@dh.madathang</strong></td>
-                                        <td>@(dh.khachhang != null ? dh.khachhang.hoten : "—")</td>
+                                        <td>
+                                            @if (dh.khachhang != null)
+                                            {
+                                                <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = dh.khachhang.makh })" class="text-decoration-none fw-medium text-primary">
+                                                    @dh.khachhang.hoten
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span>—</span>
+                                            }
+                                        </td>
                                         <td>@dh.ngaydathang.ToString("dd/MM/yyyy")</td>
                                         <td class="text-center">
                                             <input type="checkbox" class="form-check-input" @(daDuyet ? "checked" : "") disabled />
@@ -248,7 +259,18 @@
                                 {
                                     <tr>
                                         <td><strong>@hd.mahoadon</strong></td>
-                                        <td>@(hd.khachhang != null ? hd.khachhang.hoten : "—")</td>
+                                        <td>
+                                            @if (hd.khachhang != null)
+                                            {
+                                                <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = hd.khachhang.makh })" class="text-decoration-none fw-medium text-primary" title="Xem thông tin KH">
+                                                    @hd.khachhang.hoten
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span>—</span>
+                                            }
+                                        </td>
                                         <td>@hd.ngaydathang.ToString("dd/MM/yyyy")</td>
                                         <td class="text-center">
                                             <input type="checkbox" class="form-check-input" @(hd.dathanhtoan ? "checked" : "") disabled />

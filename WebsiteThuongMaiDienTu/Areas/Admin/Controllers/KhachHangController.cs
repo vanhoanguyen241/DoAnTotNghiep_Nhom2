@@ -96,5 +96,17 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        // GET: Admin/KhachHang/ChiTiet/5
+        public ActionResult ChiTiet(int id)
+        {
+            var kh = db.khachhangs.Find(id);
+            if (kh == null)
+            {
+                TempData["ThongBao"] = "Không tìm thấy khách hàng!";
+                return RedirectToAction("Index");
+            }
+            return View(kh);
+        }
     }
 }

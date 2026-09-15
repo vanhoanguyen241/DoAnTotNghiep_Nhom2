@@ -32,7 +32,16 @@
                             </div>
                             <div class="col-md-4">
                                 <strong>Khách hàng:</strong><br />
-                                @(kh != null ? kh.hoten : "—")
+                                @if (kh != null)
+                                {
+                                    <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = kh.makh })" class="text-decoration-none fw-medium text-primary">
+                                        @kh.hoten
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span>—</span>
+                                }
                             </div>
                             <div class="col-md-4">
                                 <strong>Số điện thoại:</strong><br />

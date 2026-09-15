@@ -48,7 +48,16 @@ else
                     <div class="row g-2">
                         <div class="col-md-3">
                             <strong>Khách hàng:</strong><br />
-                            @(khachHang != null ? khachHang.hoten : "—")
+                            @if (khachHang != null)
+                            {
+                                <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = khachHang.makh })" class="text-decoration-none fw-medium text-primary">
+                                    @khachHang.hoten
+                                </a>
+                            }
+                            else
+                            {
+                                <span>—</span>
+                            }
                         </div>
                         <div class="col-md-3">
                             <strong>Số điện thoại:</strong><br />

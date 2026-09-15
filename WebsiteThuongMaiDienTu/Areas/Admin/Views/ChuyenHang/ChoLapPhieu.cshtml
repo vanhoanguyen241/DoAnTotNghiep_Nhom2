@@ -46,7 +46,16 @@
                             <tr>
                                 <td><strong class="text-dark">@item.mahoadon</strong></td>
                                 <td>
-                                    @(kh != null ? kh.hoten : "—")
+                                    @if (kh != null)
+                                    {
+                                        <a href="@Url.Action("ChiTiet", "KhachHang", new { area = "Admin", id = kh.makh })" class="text-decoration-none fw-medium text-primary">
+                                            @kh.hoten
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>—</span>
+                                    }
                                 </td>
                                 <td>@item.ngaydathang.ToString("dd/MM/yyyy")</td>
                                 <td>@item.ngaygiaohang.ToString("dd/MM/yyyy")</td>
