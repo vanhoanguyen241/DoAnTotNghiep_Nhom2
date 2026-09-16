@@ -61,15 +61,5 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
-
-        // Nạp dropdown khách hàng
-        private void NapDanhSachKhachHang(int? maKhachDaChon = null)
-        {
-            var dskh = db.khachhangs
-                .OrderBy(k => k.hoten)
-                .ToList();
-
-            ViewBag.makh = new SelectList(dskh, "makh", "hoten", maKhachDaChon);
-        }
     }
 }

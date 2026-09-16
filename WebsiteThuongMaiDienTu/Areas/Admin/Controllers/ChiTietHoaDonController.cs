@@ -24,15 +24,5 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 .ToList();
             return View(dsct);
         }
-
-        // Nạp dropdown sản phẩm
-        private void NapDanhSachSanPham(string maSpDaChon = null)
-        {
-            var dssp = db.sanphams
-                .OrderBy(x => x.tensanpham)
-                .ToList();
-
-            ViewBag.masanpham = new SelectList(dssp, "masanpham", "tensanpham", maSpDaChon);
-        }
     }
 }

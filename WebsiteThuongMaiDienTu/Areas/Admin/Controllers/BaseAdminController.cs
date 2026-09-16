@@ -16,7 +16,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 { "TaiKhoan", new[] { "DangXuat" } },
 
                 // Nhân viên được xem, thêm, sửa khách hàng; không xoá
-                { "KhachHang", new[] { "Index", "TaoMoi", "Sua", "ChiTiet" } },
+                { "KhachHang", new[] { "Index", "TaoMoi", "Sua" } },
 
                 // Nhân viên chỉ xem sản phẩm
                 { "SanPham", new[] { "Index" } },
@@ -37,7 +37,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     "DuyetDon",
                     new[]
                     {
-                        "Index",
                         "ChiTiet",
                         "XuLyDuyet",
                         "TuChoi",
@@ -47,7 +46,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 },
 
                 // Nhân viên xem giao hàng/đơn của mình, xác nhận giao hàng, thu tiền và lập phiếu giao
-                { "ChuyenHang", new[] { "Index", "XacNhanGiaoHang", "XacNhanThuTien", "ChoLapPhieu", "LapPhieu" } }
+                { "ChuyenHang", new[] { "Index", "XacNhanGiaoHang", "XacNhanThuTien", "ChoLapPhieu", "LapPhieu", "GanNhanVien" } }
             };
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
