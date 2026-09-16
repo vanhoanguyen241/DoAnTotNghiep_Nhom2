@@ -5,6 +5,7 @@
     var hoaDon = ViewBag.HoaDon as hoadon;
     bool isAdmin = ViewBag.IsAdmin == true;
 }
+
 @if (hoaDon == null)
 {
     <div class="container-fluid px-4 py-4">
@@ -28,20 +29,13 @@ else
                     <i class="bi bi-receipt-cutoff me-2 text-brand-yellow"></i> Chi tiết hóa đơn @hoaDon.mahoadon
                 </h2>
                 <div class="d-flex gap-2">
-                    @if (!hoaDon.dathanhtoan)
-                    {
-                        <a href="@Url.Action("DuyetThanhToan", "ThanhToan", new { area = "Admin", id = hoaDon.mahoadon })"
-                           class="btn btn-success shadow-sm d-inline-flex align-items-center"
-                           onclick="return confirm('Xác nhận khách hàng đã thanh toán hóa đơn @hoaDon.mahoadon?');">
-                            <i class="bi bi-cash-coin me-1"></i> Duyệt thanh toán
-                        </a>
-                    }
                     <a href="@Url.Action("Index", "HoaDon", new { area = "Admin" })"
                        class="btn btn-light border shadow-sm">
                         <i class="bi bi-arrow-left me-1"></i> Danh sách hóa đơn
                     </a>
                 </div>
             </div>
+
             @if (TempData["ThongBao"] != null)
             {
                 <div class="card-body pb-0">
@@ -51,6 +45,7 @@ else
                     </div>
                 </div>
             }
+
             <!-- Khu vực thông tin -->
             <div class="card-body p-4 pb-0">
                 <div class="alert alert-info mb-4">
@@ -86,18 +81,68 @@ else
                         </div>
                         <div class="col-md-3">
                             <strong>Thanh toán:</strong><br />
-                            @if (hoaDon.dathanhtoan)
-                            {
-                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">Đã thanh toán</span>
+                            @{
+                                bool coTheToggle = !hoaDon.dathanhtoan || isAdmin;
                             }
-                            else
+                            <div class="form-check form-switch d-inline-flex align-items-center gap-2 mb-0">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="chkThanhToan"
+                                       @(hoaDon.dathanhtoan ? "checked" : "")
+                                       @(coTheToggle ? "" : "disabled")
+                                       style="cursor:pointer; width:2.2em; height:1.2em;" />
+                                @if (hoaDon.dathanhtoan)
+                                {
+                                    <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2">Đã thanh toán</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Chưa thanh toán</span>
+                                }
+                            </div>
+
+                            @if (coTheToggle)
                             {
-                                <span class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2">Chưa thanh toán</span>
+                                <script>
+                                    (function () {
+                                        var chk = document.getElementById('chkThanhToan');
+                                        if (!chk) return;
+
+                                        var urlDuyet = '@Url.Action("DuyetThanhToan", "ThanhToan", new { area = "Admin", id = hoaDon.mahoadon })';
+                                        var urlHuy   = '@Url.Action("HuyThanhToan",   "ThanhToan", new { area = "Admin", id = hoaDon.mahoadon })';
+                                        var isAdmin  = ('@(isAdmin ? "true" : "false")' === 'true');
+
+                                        chk.addEventListener('change', function () {
+                                            var muonThanhToan = this.checked;
+                                            var url, msg;
+
+                                            if (muonThanhToan) {
+                                                url = urlDuyet;
+                                                msg = 'Xác nhận khách hàng đã thanh toán hóa đơn @hoaDon.mahoadon?';
+                                            } else {
+                                                if (!isAdmin) {
+                                                    this.checked = true;
+                                                    alert('Bạn không có quyền hủy thanh toán!');
+                                                    return;
+                                                }
+                                                url = urlHuy;
+                                                msg = 'Hủy xác nhận thanh toán cho hóa đơn @hoaDon.mahoadon?';
+                                            }
+
+                                            if (confirm(msg)) {
+                                                window.location.href = url;
+                                            } else {
+                                                this.checked = !muonThanhToan;
+                                            }
+                                        });
+                                    })();
+                                </script>
                             }
                         </div>
                         <div class="col-md-3">
                             <strong>Hình thức nhận:</strong><br />
-                                    @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
+                            @(hoaDon.giaotannoi ? "Giao tận nơi" : "Nhận tại cửa hàng")
                         </div>
                         @if (!string.IsNullOrEmpty(hoaDon.ghichu))
                         {
@@ -108,6 +153,7 @@ else
                     </div>
                 </div>
             </div>
+
             <!-- Bảng chi tiết sản phẩm -->
             @if (Model != null && Model.Any())
             {
@@ -136,6 +182,7 @@ else
                         </tbody>
                     </table>
                 </div>
+                <!-- Tổng tiền nằm ở cuối bảng -->
                 <div class="card-body">
                     <div class="text-end mt-2">
                         <h4 class="mb-0">

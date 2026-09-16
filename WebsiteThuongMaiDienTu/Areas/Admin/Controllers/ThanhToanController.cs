@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
@@ -34,32 +36,29 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
         public ActionResult HuyThanhToan(int id)
         {
             var hd = db.hoadons.Find(id);
-
             if (hd == null)
             {
                 TempData["ThongBao"] = "Không tìm thấy hóa đơn!";
-                return RedirectToAction("DaThanhToan");
+                return RedirectToAction("Index", "HoaDon");
             }
 
             if (!hd.dathanhtoan)
             {
                 TempData["ThongBao"] = "Hóa đơn " + id + " chưa được xác nhận thanh toán!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "ChiTietHoaDon", new { id = id });
             }
 
-            // Nếu đã có phiếu giao hàng thì không cho hủy thanh toán
             bool coPhieuGiao = db.chuyenhangs.Any(ch => ch.mahoadon == id);
             if (coPhieuGiao)
             {
                 TempData["ThongBao"] = "Không thể hủy thanh toán vì hóa đơn " + id + " đã có phiếu giao hàng!";
-                return RedirectToAction("DaThanhToan");
+                return RedirectToAction("Index", "ChiTietHoaDon", new { id = id });
             }
 
             hd.dathanhtoan = false;
             db.SaveChanges();
-
             TempData["ThongBao"] = "Đã hủy xác nhận thanh toán cho hóa đơn " + id + "!";
-            return RedirectToAction("DaThanhToan");
+            return RedirectToAction("Index", "ChiTietHoaDon", new { id = id });
         }
     }
 }

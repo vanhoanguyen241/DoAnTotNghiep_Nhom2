@@ -112,74 +112,70 @@
                                     <input type="checkbox" class="form-check-input" @(item.daxuli ? "checked" : "") disabled />
                                 </td>
                                 <td class="text-center">
-                                    @if (!item.daxuli)
-                                    {
-                                        <!-- Nút gán nhân viên: cả Admin và Nhân viên đều thấy -->
-                                        <a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                           class="btn btn-sm btn-light text-primary me-1"
-                                           title="Gán nhân viên giao">
-                                            <i class="bi bi-person-gear"></i>
-                                        </a>
-
-                                        <!-- Nút xác nhận nhanh: chỉ Admin -->
-                                        if (isAdmin)
-                                        {
-                                            <a href="@Url.Action("XacNhanDaGiao", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
-                                               class="btn btn-sm btn-success d-inline-flex align-items-center gap-1"
-                                               title="Xác nhận đã giao hàng"
-                                               onclick="return confirm('Xác nhận phiếu giao @item.machuyenhang đã giao hàng thành công?');">
-                                                <i class="bi bi-check-circle-fill"></i> Đã giao
-                                            </a>
-                                        }
+                                    @{
+                                        bool daGiao = item.daxuli;
+                                        bool daThuTien = hd != null && hd.dathanhtoan;
+                                        bool hoanThanh = daGiao && daThuTien;
                                     }
+
+                                    @* === TRẠNG THÁI 1: CHƯA GIAO === *@
+                                    @if (!daGiao)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1 d-block mb-1">Chờ giao</span>
+
+                                        <div class="d-flex flex-column gap-1 mt-1">
+                                            @if (item.manv == null)
+                                            {
+                                                if (isAdmin)
+                            {
+<a href="@Url.Action("GanNhanVien", "ChuyenHang", new { area = "Admin", id = item.machuyenhang })"
+   class="btn btn-sm btn-light text-primary" title="Gán nhân viên giao">
+    <i class="bi bi-person-gear"></i> Gán NV
+</a>
+                            }
+                                            }
+
+                                            @* Nút tự xác nhận của Nhân viên (chỉ hiện khi chưa giao + đúng NV được gán) *@
+                                            @if (!isAdmin && item.manv == maNV)
+                                            {
+                                                using (Html.BeginForm("XacNhanGiaoHang", "ChuyenHang", new { area = "Admin" }, FormMethod.Post, new { style = "display:inline;" }))
+                                                {
+                                                    <input type="hidden" name="id" value="@item.machuyenhang" />
+                                                    <button type="submit" class="btn btn-sm btn-brand"
+                                                            onsubmit="return confirm('Xác nhận đã giao hàng thành công cho khách hàng?');">
+                                                        <i class="bi bi-box-seam-fill me-1"></i> Xác nhận giao
+                                                    </button>
+                                                }
+                                            }
+                                        </div>
+                                    }
+
+                                    @* === TRẠNG THÁI 2: ĐÃ GIAO NHƯNG CHƯA THU TIỀN === *@
+                                    else if (daGiao && !daThuTien)
+                                    {
+                                        <span class="badge bg-info-subtle text-info-emphasis rounded-pill px-2 py-1 d-block mb-1">Đã giao - Chờ thu tiền</span>
+
+                                        <div class="d-flex flex-column gap-1 mt-1">
+                                            @* Nút xác nhận thu tiền của Nhân viên *@
+                                            @if (!isAdmin && item.manv == maNV)
+                                            {
+                                                using (Html.BeginForm("XacNhanThuTien", "ChuyenHang", new { area = "Admin" }, FormMethod.Post, new { style = "display:inline;" }))
+                                                {
+                                                    <input type="hidden" name="id" value="@item.machuyenhang" />
+                                                    <button type="submit" class="btn btn-sm btn-brand"
+                                                            onsubmit="return confirm('Xác nhận đã thu tiền thành công từ khách hàng?');">
+                                                        <i class="bi bi-cash-coin me-1"></i> Xác nhận thu tiền
+                                                    </button>
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                    @* === TRẠNG THÁI 3: HOÀN THÀNH (ĐÃ GIAO + ĐÃ THU TIỀN) === *@
                                     else
                                     {
-                                        <span class="text-muted small">Hoàn thành</span>
-                                    }
-
-                                    <!-- Nút tự xác nhận của Nhân viên (chỉ hiện khi chưa giao + đúng NV được gán + không phải Admin) -->
-                                    @if (!isAdmin && !item.daxuli && item.manv == maNV)
-                                    {
-                                        using (Html.BeginForm(
-                                            "XacNhanGiaoHang",
-                                            "ChuyenHang",
-                                            new { area = "Admin" },
-                                            FormMethod.Post,
-                                            new
-                                            {
-                                                style = "display:inline;",
-                                                onsubmit = "return confirm('Xác nhận đã giao hàng thành công cho khách hàng?');"
-                                            }))
-                                        {
-                                            <input type="hidden" name="id" value="@item.machuyenhang" />
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-brand">
-                                                <i class="bi bi-check-circle-fill me-1"></i> Đã giao
-                                            </button>
-                                        }
-                                    }
-
-                                    <!-- NÚT XÁC NHẬN THU TIỀN CHO NHÂN VIÊN -->
-                                    @if (!isAdmin && item.manv == maNV && hd != null && !hd.dathanhtoan)
-                                    {
-                                        using (Html.BeginForm(
-                                            "XacNhanThuTien",
-                                            "ChuyenHang",
-                                            new { area = "Admin" },
-                                            FormMethod.Post,
-                                            new
-                                            {
-                                                style = "display:inline;",
-                                                onsubmit = "return confirm('Xác nhận đã thu tiền từ khách hàng?');"
-                                            }))
-                                        {
-                                            <input type="hidden" name="id" value="@item.machuyenhang" />
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-success mt-1"
-                                                    title="Xác nhận đã thu tiền mặt">
-                                                <i class="bi bi-cash-coin me-1"></i> Đã thu tiền
-                                            </button>
-                                        }
+                                        <span class="badge bg-success-subtle text-success-emphasis rounded-pill px-2 py-1">
+                                            <i class="bi bi-check-all me-1"></i> Hoàn thành
+                                        </span>
                                     }
                                 </td>
                             </tr>
