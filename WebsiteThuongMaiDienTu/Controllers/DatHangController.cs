@@ -11,6 +11,24 @@ namespace WebsiteThuongMaiDienTu.Controllers
     {
         private QLBanHang_Model db = new QLBanHang_Model();
 
+        // Hàm kiểm tra tồn kho dùng chung, trả về null nếu hợp lệ, trả về chuỗi lỗi nếu vi phạm
+        private string KiemTraTonKho(List<sanpham> sanPhams, Dictionary<string, int> gioHang)
+        {
+            foreach (var sp in sanPhams)
+            {
+                int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
+                if (sp.soluonghienco <= 0)
+                {
+                    return "Sản phẩm \"" + sp.tensanpham + "\" hiện đã hết hàng.";
+                }
+                if (soLuong > sp.soluonghienco)
+                {
+                    return "Sản phẩm \"" + sp.tensanpham + "\" chỉ còn " + sp.soluonghienco + " sản phẩm.";
+                }
+            }
+            return null;
+        }
+
         // GET: /DatHang
         public ActionResult Index()
         {
@@ -32,21 +50,11 @@ namespace WebsiteThuongMaiDienTu.Controllers
             }
 
             // Kiểm tra tồn kho trước khi vào trang đặt hàng
-            foreach (var sp in sanPhams)
+            string loiTonKho = KiemTraTonKho(sanPhams, gioHang);
+            if (loiTonKho != null)
             {
-                int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
-
-                if (sp.soluonghienco <= 0)
-                {
-                    TempData["LoiGioHang"] = "Sản phẩm \"" + sp.tensanpham + "\" hiện đã hết hàng.";
-                    return RedirectToAction("Index", "GioHang");
-                }
-
-                if (soLuong > sp.soluonghienco)
-                {
-                    TempData["LoiGioHang"] = "Sản phẩm \"" + sp.tensanpham + "\" chỉ còn " + sp.soluonghienco + " sản phẩm.";
-                    return RedirectToAction("Index", "GioHang");
-                }
+                TempData["LoiGioHang"] = loiTonKho;
+                return RedirectToAction("Index", "GioHang");
             }
 
             if (Request.QueryString["focus"] == "1")
@@ -80,21 +88,11 @@ namespace WebsiteThuongMaiDienTu.Controllers
             }
 
             // Kiểm tra tồn kho lần cuối trước khi tạo phiếu đặt hàng
-            foreach (var sp in sanPhams)
+            string loiTonKho = KiemTraTonKho(sanPhams, gioHang);
+            if (loiTonKho != null)
             {
-                int soLuong = gioHang.ContainsKey(sp.masanpham) ? gioHang[sp.masanpham] : 0;
-
-                if (sp.soluonghienco <= 0)
-                {
-                    TempData["LoiGioHang"] = "Sản phẩm \"" + sp.tensanpham + "\" hiện đã hết hàng.";
-                    return RedirectToAction("Index", "GioHang");
-                }
-
-                if (soLuong > sp.soluonghienco)
-                {
-                    TempData["LoiGioHang"] = "Sản phẩm \"" + sp.tensanpham + "\" chỉ còn " + sp.soluonghienco + " sản phẩm.";
-                    return RedirectToAction("Index", "GioHang");
-                }
+                TempData["LoiGioHang"] = loiTonKho;
+                return RedirectToAction("Index", "GioHang");
             }
 
             ChuanBiViewDatHang(gioHang, sanPhams);
@@ -303,17 +301,7 @@ namespace WebsiteThuongMaiDienTu.Controllers
 
         private decimal TinhTongTien(List<sanpham> sanPhams, Dictionary<string, int> gioHang)
         {
-            decimal tongTien = 0;
-
-            foreach (var sp in sanPhams)
-            {
-                if (gioHang.ContainsKey(sp.masanpham))
-                {
-                    tongTien += sp.dongia * gioHang[sp.masanpham];
-                }
-            }
-
-            return tongTien;
+            return sanPhams.Sum(sp => gioHang.ContainsKey(sp.masanpham) ? sp.dongia * gioHang[sp.masanpham] : 0);
         }
 
         private void ChuanBiViewDatHang(Dictionary<string, int> gioHang, List<sanpham> sanPhams)
