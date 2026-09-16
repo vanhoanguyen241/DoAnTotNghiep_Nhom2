@@ -2,6 +2,7 @@
 @model List<taikhoan>
 @{
     ViewBag.Title = "Quản lý Tài khoản";
+    string tenDangNhapHienTai = Session["TenDangNhap"]?.ToString();
 }
 <div class="container-fluid px-4 py-4">
     <div class="card border-0 shadow-sm rounded-4">
@@ -37,8 +38,27 @@
                             <td><strong class="text-dark">@item.tendangnhap</strong></td>
                             <td>@(nv != null ? nv.hoten : "—")</td>
                             <td class="text-center">
-                                <a href="@Url.Action("Sua", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn btn-sm btn-light text-primary me-1" title="Đổi mật khẩu"><i class="bi bi-key-fill"></i></a>
-                                <a href="@Url.Action("Xoa", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })" class="btn btn-sm btn-light text-danger" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');"><i class="bi bi-trash-fill"></i></a>
+                                <a href="@Url.Action("Sua", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })"
+                                   class="btn btn-sm btn-light text-primary me-1" title="Đổi mật khẩu">
+                                    <i class="bi bi-key-fill"></i>
+                                </a>
+
+                                @* Kiểm tra nếu tài khoản trong danh sách trùng với tài khoản đang đăng nhập *@
+                                @if (item.tendangnhap != tenDangNhapHienTai)
+                                {
+                                    <a href="@Url.Action("Xoa", "TaiKhoan", new { area = "Admin", id = item.tendangnhap })"
+                                       class="btn btn-sm btn-light text-danger" title="Xóa"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này?');">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill px-2 py-1"
+                                          title="Không thể xóa tài khoản đang đăng nhập">
+                                        <i class="bi bi-shield-lock-fill me-1"></i> Đang dùng
+                                    </span>
+                                }
                             </td>
                         </tr>
                     }

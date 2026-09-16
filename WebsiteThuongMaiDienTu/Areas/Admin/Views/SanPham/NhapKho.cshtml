@@ -1,0 +1,44 @@
+﻿@model WebsiteThuongMaiDienTu.Models.sanpham
+@{
+    ViewBag.Title = "Nhập kho sản phẩm";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h2 class="h4 mb-0 fw-bold text-dark">
+                        <i class="bi bi-box-seam me-2 text-brand-yellow"></i> Nhập kho: @Model.tensanpham
+                    </h2>
+                </div>
+                <div class="card-body p-4 pt-2">
+                    @if (ViewBag.ThongBao != null)
+                    {
+                        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ThongBao</div>
+                    }
+
+                    <div class="alert alert-info mb-4">
+                        <div class="row g-2">
+                            <div class="col-md-6"><strong>Mã SP:</strong> <span class="font-monospace">@Model.masanpham</span></div>
+                            <div class="col-md-6"><strong>Tồn kho hiện tại:</strong> <span class="fw-bold text-danger">@Model.soluonghienco</span></div>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("NhapKho", "SanPham", new { area = "Admin" }, FormMethod.Post, new { id = "formNhapKho" }))
+                    {
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark">Số lượng nhập thêm <span class="text-danger ms-1">*</span></label>
+                            <input type="number" name="soluongthem" class="form-control" min="1" value="1" required autofocus />
+                            <small class="text-muted">Hệ thống sẽ tự động cộng dồn vào số lượng tồn kho hiện tại.</small>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-brand px-4"><i class="bi bi-check-circle me-1"></i> Xác nhận nhập kho</button>
+                            <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })" class="btn btn-light px-4 border shadow-sm">Hủy bỏ</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

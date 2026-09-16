@@ -2,6 +2,7 @@
 @model List<nhanvien>
 @{
     ViewBag.Title = "Quản lý Nhân viên";
+    int? maNVHienTai = Session["MaNV"] as int?;
 }
 <div class="container-fluid px-4 py-4">
     <div class="card border-0 shadow-sm rounded-4">
@@ -52,8 +53,27 @@
                                 }
                             </td>
                             <td class="text-center">
-                                <a href="@Url.Action("Sua", "NhanVien", new { area = "Admin", id = item.manv })" class="btn btn-sm btn-light text-primary me-1" title="Sửa"><i class="bi bi-pencil-fill"></i></a>
-                                <a href="@Url.Action("Xoa", "NhanVien", new { area = "Admin", id = item.manv })" class="btn btn-sm btn-light text-danger" title="Xóa" onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');"><i class="bi bi-trash-fill"></i></a>
+                                <a href="@Url.Action("Sua", "NhanVien", new { area = "Admin", id = item.manv })"
+                                   class="btn btn-sm btn-light text-primary me-1" title="Sửa">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+
+                                @* Kiểm tra nếu nhân viên trong danh sách trùng với nhân viên đang đăng nhập *@
+                                @if (maNVHienTai.HasValue && maNVHienTai.Value == item.manv)
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill px-2 py-1"
+                                          title="Không thể xóa nhân viên đang đăng nhập">
+                                        <i class="bi bi-shield-lock-fill me-1"></i> Đang dùng
+                                    </span>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Xoa", "NhanVien", new { area = "Admin", id = item.manv })"
+                                       class="btn btn-sm btn-light text-danger" title="Xóa"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }

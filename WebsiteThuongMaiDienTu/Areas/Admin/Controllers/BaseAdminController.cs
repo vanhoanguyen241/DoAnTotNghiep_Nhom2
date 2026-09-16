@@ -19,7 +19,7 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                 { "KhachHang", new[] { "Index", "TaoMoi", "Sua" } },
 
                 // Nhân viên chỉ xem sản phẩm
-                { "SanPham", new[] { "Index" } },
+                { "SanPham", new[] { "Index", "NhapKho" } },
 
                 // Nhân viên chỉ xem danh mục
                 { "LoaiSanPham", new[] { "Index" } },

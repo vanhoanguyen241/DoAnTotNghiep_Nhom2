@@ -138,6 +138,16 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
         public ActionResult Xoa(string id)
         {
+            // 1. Lấy tên đăng nhập hiện tại từ Session
+            string tenDangNhapHienTai = Session["TenDangNhap"]?.ToString();
+
+            // 2. Kiểm tra nếu Admin đang cố xóa chính mình
+            if (!string.IsNullOrEmpty(tenDangNhapHienTai) && tenDangNhapHienTai == id)
+            {
+                TempData["ThongBao"] = "Bạn không thể xóa tài khoản của chính mình!";
+                return RedirectToAction("Index");
+            }
+
             var tk = db.taikhoans.Find(id);
             if (tk != null)
             {

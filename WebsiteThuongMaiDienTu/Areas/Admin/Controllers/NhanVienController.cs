@@ -112,6 +112,14 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
 
         public ActionResult Xoa(int id)
         {
+            // 1. Chặn Admin xóa chính hồ sơ nhân viên của mình
+            int? maNVHienTai = Session["MaNV"] as int?;
+            if (maNVHienTai.HasValue && maNVHienTai.Value == id)
+            {
+                TempData["ThongBao"] = "Bạn không thể xóa nhân viên của chính mình!";
+                return RedirectToAction("Index");
+            }
+
             var nv = db.nhanviens.Find(id);
             if (nv != null)
             {

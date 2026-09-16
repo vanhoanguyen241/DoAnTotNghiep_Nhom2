@@ -100,6 +100,36 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Admin/SanPham/NhapKho/SP01
+        [HttpGet]
+        public ActionResult NhapKho(string id)
+        {
+            var sp = db.sanphams.Find(id);
+            if (sp == null) return HttpNotFound();
+            return View(sp);
+        }
+
+        // POST: Admin/SanPham/NhapKho
+        [HttpPost]
+        public ActionResult NhapKho(string id, int soluongthem)
+        {
+            var sp = db.sanphams.Find(id);
+            if (sp == null) return HttpNotFound();
+
+            if (soluongthem <= 0)
+            {
+                ViewBag.ThongBao = "Số lượng nhập thêm phải lớn hơn 0!";
+                return View(sp);
+            }
+
+            // Chỉ tăng số lượng, không động đến các trường khác
+            sp.soluonghienco += soluongthem;
+            db.SaveChanges();
+
+            TempData["ThongBao"] = $"Đã nhập thêm {soluongthem} sản phẩm \"{sp.tensanpham}\". Tồn kho hiện tại: {sp.soluonghienco}";
+            return RedirectToAction("Index");
+        }
+
         // GET: Admin/SanPham/Sua/SP01
         [HttpGet]
         public ActionResult Sua(string id)
