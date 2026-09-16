@@ -14,12 +14,40 @@
         </div>
         @if (TempData["ThongBao"] != null)
         {
+            // Đọc tín hiệu tự động đăng xuất từ Controller
+            bool tuDongDangXuat = TempData["TuDongDangXuat"] != null && (bool)TempData["TuDongDangXuat"];
+
             <div class="card-body pb-0">
-                <div class="alert alert-info alert-dismissible fade show mb-0" role="alert">
+                <div class="alert @(tuDongDangXuat ? "alert-success" : "alert-info") alert-dismissible fade show mb-0" role="alert">
                     @TempData["ThongBao"]
+
+                    @if (tuDongDangXuat)
+                    {
+                        <br /><i class="bi bi-clock-history"></i><span> Hệ thống sẽ tự động đăng xuất sau <strong id="countdown" class="text-danger">5</strong> giây...</span>
+                    }
+
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
+
+            if (tuDongDangXuat)
+            {
+                <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var seconds = 5;
+                var countdownEl = document.getElementById('countdown');
+                var interval = setInterval(function () {
+                    seconds--;
+                    if (countdownEl) countdownEl.textContent = seconds;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        // Gọi đến Action DangXuat của Admin
+                        window.location.href = '@Url.Action("DangXuat", "TaiKhoan", new { area = "Admin" })';
+                    }
+                }, 1000);
+            });
+                </script>
+            }
         }
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">

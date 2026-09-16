@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
@@ -116,7 +117,6 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
             if (tk == null) return HttpNotFound();
 
             string matkhaumoi = collection["txt_matkhaumoi"]?.Trim();
-
             if (!string.IsNullOrEmpty(matkhaumoi))
             {
                 if (matkhaumoi.Length < 6)
@@ -124,15 +124,28 @@ namespace WebsiteThuongMaiDienTu.Areas.Admin.Controllers
                     ViewBag.ThongBao = "Mật khẩu phải có ít nhất 6 ký tự!";
                     return View(tk);
                 }
+
+                // Kiểm tra có phải đang đổi mật khẩu chính mình không
+                bool isOwnAccount = string.Equals(tendangnhap, Session["TenDangNhap"]?.ToString(), StringComparison.OrdinalIgnoreCase);
+
                 tk.matkhau = matkhaumoi;
                 db.SaveChanges();
-                TempData["ThongBao"] = "Đổi mật khẩu thành công!";
+
+                // Phân nhánh thông báo
+                if (isOwnAccount)
+                {
+                    TempData["ThongBao"] = "Đổi mật khẩu thành công!";
+                    TempData["TuDongDangXuat"] = true; // Bắn tín hiệu xuống View
+                }
+                else
+                {
+                    TempData["ThongBao"] = "Đổi mật khẩu cho tài khoản \"" + tendangnhap + "\" thành công!";
+                }
             }
             else
             {
                 TempData["ThongBao"] = "Không có thay đổi nào được thực hiện!";
             }
-
             return RedirectToAction("Index");
         }
 
