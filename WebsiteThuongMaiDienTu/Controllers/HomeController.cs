@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using WebsiteThuongMaiDienTu.Models;
 
@@ -8,13 +9,22 @@ namespace WebsiteThuongMaiDienTu.Controllers
     {
         private QLBanHang_Model db = new QLBanHang_Model();
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            // Lấy sản phẩm nổi bật: có quảng cáo và còn hàng
-            var sanPhamNoiBat = db.sanphams
+            int pageSize = 12;
+            int pageNumber = page ?? 1;
+
+            var query = db.sanphams
                 .Where(sp => sp.quangcao == true && sp.soluonghienco > 0)
-                .OrderByDescending(sp => sp.masanpham)
-                .Take(12)
+                .OrderByDescending(sp => sp.masanpham);
+
+            int tongSoSanPham = query.Count();
+            ViewBag.TongSoTrang = (int)Math.Ceiling((double)tongSoSanPham / pageSize);
+            ViewBag.TrangHienTai = pageNumber;
+
+            var sanPhamNoiBat = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
             return View(sanPhamNoiBat);
